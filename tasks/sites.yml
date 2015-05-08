@@ -1,0 +1,8 @@
+---
+- name: (Re)Generate site-available configs
+  template:
+    src: etc/apache2/sites-available/supervio.conf.j2
+    dest: /etc/apache2/sites-available/supervio.conf
+    owner: "{{ ansible_ssh_user }}"
+    group: "{{ ansible_ssh_user }}"
+    mode: 0644

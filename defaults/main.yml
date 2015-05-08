@@ -1,0 +1,4 @@
+---
+rsync_user_id: vmware
+supervio_django_debug: False
+supervio_apache_loglevel: info

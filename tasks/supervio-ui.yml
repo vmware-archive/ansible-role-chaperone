@@ -1,0 +1,131 @@
+---
+- name: create supervio directory
+  file:
+    dest: "/opt/{{ supervio_django_app }}"
+    state: directory
+    owner: "{{ ansible_ssh_user }}"
+    group: "{{ ansible_ssh_user }}"
+    mode: 0755
+
+- name: create blackhole directory
+  file:
+    dest: "/opt/{{ supervio_django_app }}/.blackhole"
+    state: directory
+    owner: "{{ ansible_ssh_user }}"
+    group: "{{ ansible_ssh_user }}"
+    mode: 0755
+
+- name: recursively sync the ui code from local repos
+  command: "rsync -a --recursive --no-motd --exclude=.git the-ui2/ {{ rsync_user_id }}@{{ inventory_hostname }}:/opt/{{ supervio_django_app }}/"
+  args:
+    chdir: ../../../ui
+  sudo: no
+  delegate_to: localhost
+
+# Note -- name user and group as in Apache conf's WSGIDaemonProcess
+# $ sudo chown -R nicira:nicira /opt/vmosui/
+
+- name: Create local_settings.py.
+  copy:
+    src: ../../../ui/the-ui2/vmosui/local_settings.py.example
+    dest: /opt/{{ supervio_django_app }}/vmosui/local_settings.py
+    owner: "{{ ansible_ssh_user }}"
+    group: "{{ ansible_ssh_user }}"
+    force: no
+    mode: 0644
+  notify: Restart apache2
+
+# *_DIR directories need to be created if not already existing. All these
+#  directories and files underneath them must be owned by same user and group
+#  from Apache conf's WSGIDaemonProcess.
+#- Make sure ANSWER_FILE_BASE is in its appropriate location.
+
+- name: Create Answer files directory
+  file:
+    dest: "{{ supervio_answer_file_dir }}"
+    state: directory
+    owner: "{{ ansible_ssh_user }}"
+    group: "{{ ansible_ssh_user }}"
+    mode: 0755
+
+- name: Create Prepare files directory
+  file:
+    dest: "{{ supervio_prepare_files_dir }}"
+    state: directory
+    owner: "{{ ansible_ssh_user }}"
+    group: "{{ ansible_ssh_user }}"
+    mode: 0755
+
+- name: Create Logs directory
+  file:
+    dest: "{{ supervio_log_dir }}"
+    state: directory
+    owner: "{{ ansible_ssh_user }}"
+    group: "{{ ansible_ssh_user }}"
+    mode: 0755
+
+- name: Create database
+  command: touch "/opt/{{ supervio_django_app }}/{{ supervio_django_app }}.db"
+  args:
+    creates: "/opt/{{ supervio_django_app }}/supervio.db"
+  sudo: no
+  register: db
+
+- name: Initialize database
+  command: python manage.py syncdb --noinput
+  args:
+    chdir: "/opt/{{ supervio_django_app }}"
+  sudo: no
+  when: db.changed
+
+- name: Set DEBUG flag
+  lineinfile:
+    dest: "/opt/{{ supervio_django_app }}/vmosui/local_settings.py"
+    regexp: "^DEBUG ="
+    line: "DEBUG = '{{ supervio_django_debug }}'"
+  sudo: no
+  notify: Restart apache2
+
+- name: Set ALLOWED_HOSTS
+  lineinfile:
+    dest: "/opt/{{ supervio_django_app }}/vmosui/local_settings.py"
+    regexp: "^ALLOWED_HOSTS ="
+    line: "ALLOWED_HOSTS = ['{{ supervio_allowed_hosts }}']"
+  sudo: no
+  notify: Restart apache2
+
+- name: Set ANSWER_FILE_DIR
+  lineinfile:
+    dest: "/opt/{{ supervio_django_app }}/vmosui/local_settings.py"
+    regexp: "^ANSWER_FILE_DIR ="
+    line: "ANSWER_FILE_DIR = '{{ supervio_answer_file_dir }}'"
+  sudo: no
+  notify: Restart apache2
+
+- name: Set PREPARE_FILES_DIR
+  lineinfile:
+    dest: "/opt/{{ supervio_django_app }}/vmosui/local_settings.py"
+    regexp: "^PREPARE_FILES_DIR ="
+    line: "PREPARE_FILES_DIR = '{{ supervio_prepare_files_dir }}'"
+  sudo: no
+  notify: Restart apache2
+
+- name: Set log directory
+  lineinfile:
+    dest: "/opt/{{ supervio_django_app }}/vmosui/local_settings.py"
+    regexp: "^VMOS_LOG_DIR ="
+    line: "VMOS_LOG_DIR = '{{ supervio_log_dir }}'"
+  sudo: no
+  notify: Restart apache2
+
+- name: Disable 000-default site
+  command: a2dissite 000-default
+  notify: Restart apache2
+
+- name: Disable vhosts site
+  command: a2dissite vhosts
+  notify: Restart apache2
+
+- name: Enable supervio site
+  command: a2ensite {{ supervio_django_app }}
+  notify: Restart apache2

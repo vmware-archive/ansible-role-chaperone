@@ -1,0 +1,30 @@
+<VirtualHost *:{{ supervio_ui_port }}>
+    #ServerName www.example.com
+    #ServerAlias example.com
+    #ServerAdmin webmaster@example.com
+
+    DocumentRoot /opt/{{ supervio_django_app }}/.blackhole/
+    Alias /static/ /opt/{{ supervio_django_app }}/vmosui/static/
+
+    <Directory />
+        Options FollowSymLinks
+        AllowOverride None
+        Require all granted
+    </Directory>
+
+    <Directory /opt/{{ supervio_django_app }}/>
+        Options Indexes FollowSymLinks MultiViews
+        AllowOverride None
+        Order allow,deny
+        Allow from all
+        Require all granted
+    </Directory>
+
+    WSGIDaemonProcess {{ supervio_django_app }} user={{ ansible_ssh_user }} group={{ ansible_ssh_user }} processes=2 threads=15 display-name=%{GROUP}
+    WSGIProcessGroup {{ supervio_django_app }}
+    WSGIScriptAlias / /opt/{{ supervio_django_app }}/vmosui/wsgi/wsgi.py
+
+    ErrorLog /var/log/apache2/{{ supervio_django_app }}_error.log
+    LogLevel {{ supervio_apache_loglevel }}
+    CustomLog /var/log/apache2/{{ supervio_django_app }}_access.log combined
+</VirtualHost>

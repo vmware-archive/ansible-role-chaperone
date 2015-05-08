@@ -1,0 +1,35 @@
+---
+supervio_ui_port: 80
+supervio_allowed_hosts: "*"
+supervio_answer_file_dir: "/var/lib/supervio"
+supervio_prepare_files_dir: "/var/lib/supervio/prepare"
+supervio_log_dir: "/var/log/supervio"
+supervio_django_app: "supervio"
+
+django_latest_packages:
+  - bash
+  - openssl
+  - libssl-dev
+  - libssl-doc
+
+django_base_packages:
+  - build-essential
+  - ntp
+  - htop
+  - git
+  - libpq-dev
+  - python-dev
+  - python-lockfile
+  - python-pip
+  - python-pycurl
+  - supervisor
+  - libapache2-mod-wsgi
+  - sqlite3
+
+django_pip_packages:
+  - pyvmomi
+  - virtualenv
+  - django
+
+django_pip_versioned_packages:
+  - { name: "django", version: "1.6.5" }
