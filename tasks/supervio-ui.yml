@@ -16,9 +16,9 @@
     mode: 0755
 
 - name: recursively sync the ui code from local repos
-  command: "rsync -a --recursive --no-motd --exclude=.git the-ui2/ {{ rsync_user_id }}@{{ inventory_hostname }}:/opt/{{ supervio_django_app }}/"
+  command: "rsync -a --recursive --no-motd --exclude=.git ui/ {{ rsync_user_id }}@{{ inventory_hostname }}:/opt/{{ supervio_django_app }}/"
   args:
-    chdir: ../../../ui
+    chdir: ../../..
   sudo: no
   delegate_to: localhost
 
