@@ -1,7 +1,10 @@
 ---
 supervio_ui_port: 80
-supervio_allowed_hosts: "*"
-supervio_answer_file_dir: "/var/lib/supervio"
+supervio_allowed_hosts:
+  - '*.vmware.local'
+  - '*.vmware.com'
+  - '*.corp.local'
+supervio_answer_dir: "/var/lib/supervio"
 supervio_prepare_files_dir: "/var/lib/supervio/prepare"
 supervio_log_dir: "/var/log/supervio"
 supervio_django_app: "supervio"

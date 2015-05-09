@@ -4,7 +4,7 @@
     #ServerAdmin webmaster@example.com
 
     DocumentRoot /opt/{{ supervio_django_app }}/.blackhole/
-    Alias /static/ /opt/{{ supervio_django_app }}/vmosui/static/
+    Alias /static/ /opt/{{ supervio_django_app }}/{{ supervio_django_app }}/static/
 
     <Directory />
         Options FollowSymLinks
@@ -22,7 +22,7 @@
 
     WSGIDaemonProcess {{ supervio_django_app }} user={{ ansible_ssh_user }} group={{ ansible_ssh_user }} processes=2 threads=15 display-name=%{GROUP}
     WSGIProcessGroup {{ supervio_django_app }}
-    WSGIScriptAlias / /opt/{{ supervio_django_app }}/vmosui/wsgi/wsgi.py
+    WSGIScriptAlias / /opt/{{ supervio_django_app }}/{{ supervio_django_app }}/wsgi/wsgi.py
 
     ErrorLog /var/log/apache2/{{ supervio_django_app }}_error.log
     LogLevel {{ supervio_apache_loglevel }}

@@ -1,4 +1,6 @@
 ---
 rsync_user_id: vmware
 supervio_django_debug: False
+supervio_django_template_debug: False
 supervio_apache_loglevel: info
+supervio_vcenter_port: 443

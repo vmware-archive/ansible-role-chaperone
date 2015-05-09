@@ -1,0 +1,38 @@
+---
+- Prepare:
+  - Container1:
+    - Group1:
+      - Section1:
+        - id: 111
+          name: 'comp_vc'
+          default: 'def-111'
+          show: 'id, name'
+          optional: 1
+          help: 'Selection-111 Help'
+          options: comp_vc
+- Menu1:
+  - MenuGroup1-1:
+    - id: 211
+      name: 'action-211'
+      commands:
+        - "ls -l"
+        - "ansible --version"
+  - MenuGroup1-2:
+    - id: 212
+      name: 'action-212'
+      commands:
+        - "ls -l /opt"
+        - "ansible-playbook --version"
+- Menu2:
+  - MenuGroup2-1:
+    - id: 221
+      name: 'action-221'
+      commands:
+        - "ls -l"
+        - "ansible --version"
+  - MenuGroup1-2:
+    - id: 222
+      name: 'action-222'
+      commands:
+        - "ls -l /opt"
+        - "ansible-playbook --version"
