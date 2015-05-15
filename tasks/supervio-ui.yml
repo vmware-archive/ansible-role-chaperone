@@ -21,6 +21,8 @@
     chdir: ../../..
   sudo: no
   delegate_to: localhost
+  tags:
+    - rsync
 
 - name: Create local_settings.py
   template:

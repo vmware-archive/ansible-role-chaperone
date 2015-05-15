@@ -1,38 +1,206 @@
 ---
 - Prepare:
-  - Container1:
-    - Group1:
-      - Section1:
-        - id: 111
-          name: 'comp_vc'
-          default: 'def-111'
-          show: 'id, name'
-          optional: 1
-          help: 'Selection-111 Help'
+  - "Management vCenter":
+    - "Host Access":
+      - "vCenter Host":
+        - id: 100
+          name: "vCenter Hostname"
+          default: "localhost"
+          show: "name, optional"
+          optional: 0
+          help: "DNS Resolvable name or IP Address"
+          options: mgmt_vc
+      - Credentials:
+        - id: 101
+          name: "User ID"
+          default: "root"
+          show: "name, optional"
+          optional: 0
+          help: "vCenter Administrator User"
+          options: mgmt_vc_username
+        - id: 102
+          name: "Password"
+          show: "name, optional"
+          optional: 0
+          help: "vCenter Administrator User Password"
+          options: mgmt_vc_password
+    - "Resources":
+      - Datacenter:
+        - id: 103
+          name: "Virtual Datacenter"
+          show: "name, optional"
+          optional: 0
+          input: dropdown
+          help: "Datacenter in which to place OMS and Managment Servers"
+          options: mgmt_vc_datacenter
+        - id: 104
+          name: "vCenter Cluster"
+          show: "name, optional"
+          optional: 0
+          input: dropdown
+          help: "vCenter Cluster to use for OpenStack Management servers"
+          options: mgmt_vc_cluster
+        - id: 105
+          name: "Hosts"
+          show: "name, optional"
+          optional: 0
+          input: dropdown
+          help: "Hosts in Cluster?"
+          options: mgmt_vc_hosts
+      - Storage:
+        - id: 106
+          name: "Datastores"
+          show: "name, optional"
+          optional: 0
+          input: checkbox
+          help: "Data stores to use for Nova Store"
+          options: mgmt_vc_datastores
+      - Network:
+        - id: 107
+          name: "Networks"
+          show: "name, optional"
+          optional: 0
+          input: dropdown
+          help: "Networks for Compute Instances"
+          options: mgmt_vc_networks
+  - "Compute vCenter":
+    - "Host Access":
+      - "vCenter Host":
+        - id: 200
+          name: "vCenter Hostname"
+          default: "localhost"
+          show: "name, optional"
+          optional: 0
+          help: "DNS Resolvable name or IP Address"
           options: comp_vc
-- Menu1:
-  - MenuGroup1-1:
-    - id: 211
-      name: 'action-211'
+      - Credentials:
+        - id: 201
+          name: "User ID"
+          default: "root"
+          show: "name, optional"
+          optional: 0
+          help: "vCenter Administrator User"
+          options: comp_vc_username
+        - id: 202
+          name: "Password"
+          show: "name, optional"
+          optional: 0
+          help: "vCenter Administrator User Password"
+          options: comp_vc_password
+    - Resources:
+      - Datacenter:
+        - id: 203
+          name: "Virtual Datacenter"
+          show: "name, optional"
+          optional: 0
+          input: dropdown
+          help: "Datacenter in which to place OMS and Managment Servers"
+          options: comp_vc_datacenter
+        - id: 204
+          name: "vCenter Cluster"
+          show: "name, optional"
+          optional: 0
+          input: dropdown
+          help: "vCenter Cluster to use for OpenStack Management servers"
+          options: comp_vc_cluster
+        - id: 205
+          name: "Hosts"
+          show: "name, optional"
+          optional: 0
+          input: dropdown
+          help: "Hosts in Cluster?"
+          options: comp_vc_hosts
+      - Storage:
+        - id: 206
+          name: "Datastores"
+          show: "name, optional"
+          input: checkbox
+          optional: 0
+          input: dropdown
+          help: "Data stores to use for Nova Store"
+          options: comp_vc_datastores
+      - Network:
+        - id: 207
+          name: "Networks"
+          show: "name, optional"
+          optional: 0
+          input: dropdown
+          help: "Networks for Compute Instances"
+          options: comp_vc_networks
+
+- SDDC:
+  - Install:
+    - id: 1000
+      name: "vRealize Operations"
       commands:
-        - "ls -l"
-        - "ansible --version"
-  - MenuGroup1-2:
-    - id: 212
-      name: 'action-212'
+        - "ansible-playbook"
+    - id: 1001
+      name: "vRealise Log Insight"
       commands:
-        - "ls -l /opt"
+        - "ansible-playbook"
+    - id: 1002
+      name: "NSX-V Manager"
+      commands:
+        - "ansible-playbook"
+    - id: 1003
+      name: "VIO"
+      commands:
+        - "ansible-playbook"
+  - View:
+    - id: 1100
+      name: "vRealize Operations"
+      commands:
+        - "ansible-playbook"
+    - id: 1101
+      name: "vRealise Log Insight"
+      commands:
+        - "ansible-playbook"
+    - id: 1102
+      name: "NSX-V Manager"
+      commands:
+        - "ansible-playbook"
+- VIO:
+  - "Install VIO":
+    - id: 2000
+      name: "Download OVA"
+      commands:
         - "ansible-playbook --version"
-- Menu2:
-  - MenuGroup2-1:
-    - id: 221
-      name: 'action-221'
+    - id: 2001
+      name: "Deploy OVA"
       commands:
-        - "ls -l"
-        - "ansible --version"
-  - MenuGroup1-2:
-    - id: 222
-      name: 'action-222'
-      commands:
-        - "ls -l /opt"
         - "ansible-playbook --version"
+    - id: 2002
+      name: "Generate Configuration"
+      commands:
+        - "ansible-playbook --version"
+  - "OpenStack":
+    - id: 2100
+      name: "Start OMS"
+      commands:
+        - "ansible-playbook --version"
+    - id: 2101
+      name: "Deploy OpenStack"
+      commands:
+        - "ansible-playbook --version"
+- Validate:
+  - "Instances":
+    - id: 3000
+      name: "Start Default Instance"
+      input: checkbox
+    - id: 3001
+      name: "Stop Instance"
+      input: checkbox
+    - id: 3001
+      name: "Stop Instance"
+      input: button
+      commands:
+        - "/usr/bin/ansible-playbook --version"
+  - "HEAT":
+    - id: 3100
+      name: "Start HEAT Stack"
+      commands:
+        - "/usr/bin/ansible-playbook --version"
+    - id: 3101
+      name: "Stop HEAT Stack"
+      commands:
+        - "/usr/bin/ansible-playbook --version"
