@@ -25,6 +25,7 @@ django_base_packages:
   - python-lockfile
   - python-pip
   - python-pycurl
+  - python-yaml
   - supervisor
   - libapache2-mod-wsgi
   - sqlite3
