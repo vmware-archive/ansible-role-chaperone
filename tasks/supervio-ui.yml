@@ -32,6 +32,14 @@
     group: "{{ ansible_ssh_user }}"
   notify: Restart apache2
 
+- name: Create supervio working directory
+  file:
+    dest: "/var/lib/{{ supervio_django_app }}"
+    state: directory
+    owner: "{{ ansible_ssh_user }}"
+    group: "{{ ansible_ssh_user }}"
+    mode: 0755
+
 - name: Create base.yml
   template:
     src: "var/lib/{{ supervio_django_app }}/base.yml.j2"
