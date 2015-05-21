@@ -3,7 +3,7 @@
   - "Management vCenter":
     - "Host Access":
       - "vCenter Host":
-        - id: vc_host
+        - id: mgmt_vc
           name: "vCenter Hostname"
           default: "localhost"
           show: "name, optional"
@@ -11,14 +11,14 @@
           help: "DNS Resolvable name or IP Address"
           options: mgmt_vc
       - Credentials:
-        - id: userid
+        - id: mgmt_vc_username
           name: "User ID"
           default: "root"
           show: "name, optional"
           optional: 0
           help: "vCenter Administrator User"
           options: mgmt_vc_username
-        - id: 102
+        - id: mgmt_vc_password
           name: "Password"
           show: "name, optional"
           optional: 0
