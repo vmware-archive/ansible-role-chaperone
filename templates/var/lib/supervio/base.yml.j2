@@ -133,6 +133,9 @@
     - id: install_vro
       name: "vRealize Operations"
       commands:
+        - "echo Writing /tmp/checkmeout"
+        - "touch /tmp/checkmeout"
+        - "ls -al /tmp"
         - "echo running ansible playbook"
         - "ansible-playbook --version"
         - "echo printing process tree"

@@ -6,6 +6,8 @@
     owner: "{{ ansible_ssh_user }}"
     group: "{{ ansible_ssh_user }}"
     mode: 0755
+  tags:
+    - rsync
 
 - name: create blackhole directory
   file:
@@ -14,6 +16,8 @@
     owner: "{{ ansible_ssh_user }}"
     group: "{{ ansible_ssh_user }}"
     mode: 0755
+  tags:
+    - rsync
 
 - name: recursively sync the ui code from local repos
   command: "rsync -a --recursive --no-motd --exclude=.git ui/ {{ rsync_user_id }}@{{ inventory_hostname }}:/opt/{{ supervio_django_app }}/"
@@ -31,6 +35,8 @@
     owner: "{{ ansible_ssh_user }}"
     group: "{{ ansible_ssh_user }}"
     mode: 0755
+  tags:
+    - rsync
 
 - name: recursively sync the ansible roles from local repos
   command: "rsync -a --recursive --no-motd --exclude=.git ansible/roles ansible/library {{ rsync_user_id }}@{{ inventory_hostname }}:/opt/{{ supervio_django_app }}-ansible/"
@@ -48,6 +54,8 @@
     owner: "{{ ansible_ssh_user }}"
     group: "{{ ansible_ssh_user }}"
   notify: Restart apache2
+  tags:
+    - rsync
 
 - name: Create supervio working directory
   file:
@@ -56,6 +64,8 @@
     owner: "{{ ansible_ssh_user }}"
     group: "{{ ansible_ssh_user }}"
     mode: 0755
+  tags:
+    - rsync
 
 - name: Create base.yml
   template:
@@ -64,6 +74,8 @@
     owner: "{{ ansible_ssh_user }}"
     group: "{{ ansible_ssh_user }}"
   notify: Restart apache2
+  tags:
+    - rsync
 
 - name: Create Answer files directory
   file:
@@ -72,6 +84,8 @@
     owner: "{{ ansible_ssh_user }}"
     group: "{{ ansible_ssh_user }}"
     mode: 0755
+  tags:
+    - rsync
 
 - name: Create Prepare files directory
   file:
@@ -80,6 +94,8 @@
     owner: "{{ ansible_ssh_user }}"
     group: "{{ ansible_ssh_user }}"
     mode: 0755
+  tags:
+    - rsync
 
 - name: Create Logs directory
   file:
@@ -88,6 +104,8 @@
     owner: "{{ ansible_ssh_user }}"
     group: "{{ ansible_ssh_user }}"
     mode: 0755
+  tags:
+    - rsync
 
 - name: Create database
   command: touch "/opt/{{ supervio_django_app }}/{{ supervio_django_app }}.db"
@@ -106,7 +124,11 @@
 - name: Disable 000-default site
   command: a2dissite 000-default
   notify: Restart apache2
+  tags:
+    - rsync
 
 - name: Enable supervio site
   command: a2ensite {{ supervio_django_app }}
   notify: Restart apache2
+  tags:
+    - rsync
