@@ -24,6 +24,23 @@
   tags:
     - rsync
 
+- name: ensure ansible plays directory exists
+  file:
+    dest: "/opt/{{ supervio_django_app }}-ansible"
+    state: directory
+    owner: "{{ ansible_ssh_user }}"
+    group: "{{ ansible_ssh_user }}"
+    mode: 0755
+
+- name: recursively sync the ansible roles from local repos
+  command: "rsync -a --recursive --no-motd --exclude=.git ansible/roles ansible/library {{ rsync_user_id }}@{{ inventory_hostname }}:/opt/{{ supervio_django_app }}-ansible/"
+  args:
+    chdir: ../../..
+  sudo: no
+  delegate_to: localhost
+  tags:
+    - rsync
+
 - name: Create local_settings.py
   template:
     src: "opt/{{ supervio_django_app }}/{{ supervio_django_app }}/local_settings.py.j2"
