@@ -130,82 +130,25 @@
 
 - SDDC:
   - Install:
-    - id: install_vro
-      name: "vRealize Operations"
+    - id: install_datacenter
+      name: "Create vSphere Datacenter"
       commands:
-        - "echo Writing /tmp/checkmeout"
-        - "touch /tmp/checkmeout"
-        - "ls -al /tmp"
-        - "echo running ansible playbook"
-        - "ansible-playbook --version"
-        - "echo printing process tree"
-        - "pstree"
-        - "echo printing directory"
-        - "ls -al"
-    - id: install_vrli
-      name: "vRealise Log Insight"
+        - "/opt/supervio/supervio_play site_dc.yml"
+    - id: install_autodeploy
+      name: "Configure Autodeploy"
       commands:
-        - "ansible-playbook"
-    - id: install_nsx
-      name: "NSX-V Manager"
+        - "/opt/supervio/supervio_play site_autodeploy.yml"
+    - id: install_dhcp
+      name: "Enable TFTP and DHCP Services"
       commands:
-        - "ansible-playbook"
-  - View:
-    - id: view_vro
-      name: "vRealize Operations"
-      commands:
-        - "ansible-playbook"
-    - id: view_vrli
-      name: "vRealise Log Insight"
-      commands:
-        - "ansible-playbook"
-    - id: view_nsx
-      name: "NSX-V Manager"
-      commands:
-        - "ansible-playbook"
+        - "/opt/supervio/supervio_play site_dhcpd.yml"
 - VIO:
-  - "Install VIO":
-    - id: download_vio
-      name: "Download OVA"
+  - "Install NSX":
+    - id: install_nsx 
+      name: "Install and Configure NSX Manager"
       commands:
-        - "ansible-playbook --version"
-    - id: deploy_ova
-      name: "Deploy OVA"
+        - "/opt/supervio/supervio_play site_nsx.yml"
+    - id: install_vio
+      name: "Deploy VIO"
       commands:
-        - "ansible-playbook --version"
-    - id: generate_vio_config
-      name: "Generate Configuration"
-      commands:
-        - "ansible-playbook --version"
-  - "OpenStack":
-    - id: start_oms
-      name: "Start OMS"
-      commands:
-        - "ansible-playbook --version"
-    - id: deploy_openstack
-      name: "Deploy OpenStack"
-      commands:
-        - "ansible-playbook --version"
-- Validate:
-  - "Instances":
-    - id: start_instances
-      name: "Start Default Instance"
-      input: checkbox
-    - id: stop_instances
-      name: "Stop Instance"
-      input: checkbox
-    - id: do_instance_op
-      name: "Do Instance op"
-      input: button
-      commands:
-        - "ansible-playbook --version"
-        - "ansible-playbook --version"
-  - "HEAT":
-    - id: start_heat_stack
-      name: "Start HEAT Stack"
-      commands:
-        - "ansible-playbook --version"
-    - id: stop_heat_stack
-      name: "Stop HEAT Stack"
-      commands:
-        - "ansible-playbook --version"
+        - "/opt/supervio/supervio_play site_vio.yml"

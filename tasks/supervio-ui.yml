@@ -47,6 +47,17 @@
   tags:
     - rsync
 
+- name: create playbook convenience script
+  template:
+    src: "opt/{{ supervio_django_app }}/supervio_play.j2"
+    dest: "/opt/{{ supervio_django_app }}/supervio_play"
+    owner: "{{ ansible_ssh_user }}"
+    group: "{{ ansible_ssh_user }}"
+    mode: "0700"
+  tags:
+    - rsync
+
+
 - name: Create local_settings.py
   template:
     src: "opt/{{ supervio_django_app }}/{{ supervio_django_app }}/local_settings.py.j2"
