@@ -39,7 +39,7 @@
     - rsync
 
 - name: recursively sync the ansible roles from local repos
-  command: "rsync -a --recursive --no-motd --exclude=.git ansible/roles ansible/library {{ rsync_user_id }}@{{ inventory_hostname }}:/opt/{{ supervio_django_app }}-ansible/"
+  command: "rsync -a --recursive --no-motd --exclude=.git ansible/playbooks ansible/roles ansible/library {{ rsync_user_id }}@{{ inventory_hostname }}:/opt/{{ supervio_django_app }}-ansible/"
   args:
     chdir: ../../..
   sudo: no
