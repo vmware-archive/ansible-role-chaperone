@@ -24,7 +24,7 @@
           optional: 0
           help: "vCenter Administrator User Password"
           options: mgmt_vc_password
-    - "Resources":
+    - Resources:
       - Datacenter:
         - id: mgmt_vc_datacenter
           name: "Virtual Datacenter"
@@ -127,6 +127,118 @@
           input: dropdown
           help: "Networks for Compute Instances"
           options: comp_vc_networks
+  - SDDC:
+    - AutoDeploy:
+      - General:
+        - id: mem_size
+          name: "VM Memory Size"
+          optional: 0
+          input: dropdown
+          help: "RAM (MB) for AutoDeploy VM"
+          options:
+            - id: "12288"
+              name: "12288 MB"
+        - id: cli_pass
+          name: "PowerCLI Password"
+          optional: 0
+          help: "Password to use for PowerCLI Commands"
+      - "DHCP":
+        - id: ipallocationpolicy
+          name: "IP Allocation Policy"
+          optional: 0
+          input: dropdown
+          help: "DHCP IP Allocation Policy"
+          options:
+            - id: dhcpPolicy
+            - id: staticPolicy
+        - id: ipprotocol
+          name: "IP Protool"
+          optional: 0
+          input: dropdown
+          help: "DHCP IP protocol to use."
+          options:
+            - id:  'IPv4'
+            - id:  'IPv6'
+        - id: dhcp_conf_dest
+          name: "DHCP Configuration File"
+          optional: 0
+          help: "Where to generate the DHCP configuration."
+          #'/etc/dhcp/dhcpd.conf'
+      - "TFTP Settings":
+        - id: boot_filename
+          name: "Boot Image"
+          optional: 0
+          help: "Boot image file for ESXi hosts."
+          #undionly.kpxe.vmw-hardwired
+        - id: tftp_root
+          name: "Root Directory"
+          optional: 0
+          help: "Root (Download) Directory"
+          # /tftpboot
+        - id: tftp_ip
+          name: "IP Address"
+          optional: 0
+          help: "IP Address for ESXi boot images."
+          # 172.16.0.251
+        - id: tftp_zip
+          name: "Temporary Directory"
+          optional: 0
+          help: "Directory in which to store TFTP zips."
+          # '/opt/supervio-ansible/playbooks/supervio/tmp'
+        - id: iptables_mods
+          name: "IPTables Modules"
+          optional: 0
+          help: "IP Tables modules to load."
+          # ip_conntrack_tftp
+    - NSX:
+      - General:
+        - id: nsx_name
+          name: 'NSX Manager'
+          show: "name, optional"
+          optional: 0
+          help: "NXS Manager Name"
+      - Placement:
+        - id: nsx_datacenter
+          name: "NSX Datacenter"
+          input: dropdown
+          optional: 0
+          help: "Datacenter into which to deploy NSX"
+          options: mgmt_vc_datacenter
+        - id: nsx_cluster
+          name: "Cluster"
+          input: dropdown
+          optional: 0
+          help: "Cluster into which to deploy NSX"
+          options: mgmt_vc_cluster
+        - id: nsx_datastore
+          name: 'Datastore'
+          input: dropdown
+          optional: 0
+          help: "Datastore for the NSX Deployments"
+          options: comp_vc_datastores
+      - Network:
+        - id: nsx_network
+          name: "Management Network"
+          input: dropdown
+          optional: 0
+          help: "Management Network for NSX Communications"
+          options: comp_vc_networks
+        - id: nsx_ntp
+          name: "NTP Server"
+          optional: 0
+          help: "NTP Server for NSX Servers"
+      - Appliance:
+        - id: nsx_ova
+          name: "NSX OVA"
+          input: dropdown
+          optional: 0
+          help: "OVA to use to deploy NXS"
+          options:
+            - id: 'VMware-NSX-Manager-6.1.4-2691049.ova'
+        - id: nsx_dir
+          name: "Temp Directory"
+          optional: 0
+          help: "Temporary download (local) storage"
 
 - SDDC:
   - Install:
