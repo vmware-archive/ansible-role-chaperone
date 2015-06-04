@@ -1,148 +1,8 @@
 ---
 - Prepare:
-  - "Management vCenter":
-    - "Host Access":
-      - "vCenter Host":
-        - id: mgmt_vc
-          name: "vCenter Hostname"
-          default: "localhost"
-          show: "name, optional"
-          optional: 0
-          help: "DNS Resolvable name or IP Address"
-          options: mgmt_vc
-      - Credentials:
-        - id: mgmt_vc_username
-          name: "User ID"
-          default: "root"
-          show: "name, optional"
-          optional: 0
-          help: "vCenter Administrator User"
-          options: mgmt_vc_username
-        - id: mgmt_vc_password
-          name: "Password"
-          show: "name, optional"
-          optional: 0
-          help: "vCenter Administrator User Password"
-          options: mgmt_vc_password
-    - Resources:
-      - Datacenter:
-        - id: mgmt_vc_datacenter
-          name: "Virtual Datacenter"
-          show: "name, optional"
-          optional: 0
-          input: dropdown
-          help: "Datacenter in which to place OMS and Managment Servers"
-          options: mgmt_vc_datacenter
-        - id: mgmt_vc_cluster
-          name: "vCenter Cluster"
-          show: "name, optional"
-          optional: 0
-          input: dropdown
-          help: "vCenter Cluster to use for OpenStack Management servers"
-          options: mgmt_vc_cluster
-        - id: mgmt_vc_hosts
-          name: "Hosts"
-          show: "name, optional"
-          optional: 0
-          input: dropdown
-          help: "Hosts in Cluster?"
-          options: mgmt_vc_hosts
-      - Storage:
-        - id: mgmt_vc_datastores
-          name: "Datastores"
-          show: "name, optional"
-          optional: 0
-          input: checkbox
-          help: "Data stores to use for Nova Store"
-          options: mgmt_vc_datastores
-      - Network:
-        - id: mgmt_vc_networks
-          name: "Networks"
-          show: "name, optional"
-          optional: 0
-          input: dropdown
-          help: "Networks for Compute Instances"
-          options: mgmt_vc_networks
-  - "Compute vCenter":
-    - "Host Access":
-      - "vCenter Host":
-        - id: comp_vc
-          name: "vCenter Hostname"
-          default: "localhost"
-          show: "name, optional"
-          optional: 0
-          help: "DNS Resolvable name or IP Address"
-          options: comp_vc
-      - Credentials:
-        - id: comp_vc_username
-          name: "User ID"
-          default: "root"
-          show: "name, optional"
-          optional: 0
-          help: "vCenter Administrator User"
-          options: comp_vc_username
-        - id: comp_vc_password
-          name: "Password"
-          show: "name, optional"
-          optional: 0
-          help: "vCenter Administrator User Password"
-          options: comp_vc_password
-    - Resources:
-      - Datacenter:
-        - id: comp_vc_datacenter
-          name: "Virtual Datacenter"
-          show: "name, optional"
-          optional: 0
-          input: dropdown
-          help: "Datacenter in which to place OMS and Managment Servers"
-          options: comp_vc_datacenter
-        - id: comp_vc_cluster
-          name: "vCenter Cluster"
-          show: "name, optional"
-          optional: 0
-          input: dropdown
-          help: "vCenter Cluster to use for OpenStack Management servers"
-          options: comp_vc_cluster
-        - id: comp_vc_hosts
-          name: "Hosts"
-          show: "name, optional"
-          optional: 0
-          input: dropdown
-          help: "Hosts in Cluster?"
-          options: comp_vc_hosts
-      - Storage:
-        - id: comp_vc_datastores
-          name: "Datastores"
-          show: "name, optional"
-          input: checkbox
-          optional: 0
-          input: dropdown
-          help: "Data stores to use for Nova Store"
-          options: comp_vc_datastores
-      - Network:
-        - id: comp_vc_networks
-          name: "Networks"
-          show: "name, optional"
-          optional: 0
-          input: dropdown
-          help: "Networks for Compute Instances"
-          options: comp_vc_networks
-  - SDDC:
-    - AutoDeploy:
-      - General:
-        - id: mem_size
-          name: "VM Memory Size"
-          optional: 0
-          input: dropdown
-          help: "RAM (MB) for AutoDeploy VM"
-          options:
-            - id: "12288"
-              name: "12288 MB"
-        - id: cli_pass
-          name: "PowerCLI Password"
-          optional: 0
-          help: "Password to use for PowerCLI Commands"
-      - "DHCP":
+  - "ESXi Hosts":
+    - "Boot Services":
+      - DHCP:
         - id: ipallocationpolicy
           name: "IP Allocation Policy"
           optional: 0
@@ -163,7 +23,53 @@
           name: "DHCP Configuration File"
           optional: 0
           help: "Where to generate the DHCP configuration."
-          #'/etc/dhcp/dhcpd.conf'
+          # '/etc/dhcp/dhcpd.conf'
+        - id: dhcp_subnet
+          name: Subnet
+          optional: 0
+          help: "Subnet for DHCP clients."
+          # 172.16.0.0
+        - id: dhcp_sub_mask
+          name: "Subnet mask"
+          optional: 0
+          # 255.255.0.0
+          help: "Subnet mask for DHCP clients."
+        - id: dhcp_bast_addr
+          name: "Broadcast Address"
+          optional: 0
+          help: "Broadcast address for DHCP clients."
+          # 172.16.255.255
+        - id: dhcp_range_a
+          name: "Address Range Start"
+          optional: 0
+          help: "First address of the DHCP client range."
+          # 172.16.0.100
+        - id: dhcp_range_b
+          name: "Address Range End"
+          optional: 0
+          help: "Last address of the DHCP client range."
+          # 172.16.0.150
+        - id: dhcp_rout
+          name: "Default Route"
+          optional: 0
+          help: "Default route for DHCP clients."
+          # 172.16.0.1
+        - id: dom_name_svr
+          name: "DNS Server"
+          optional: 0
+          help: "DNS server for DHCP clients."
+          # 172.16.0.1
+        - id: dom_name
+          name: "DNS Domainname"
+          optional: 0
+          help: "Domain name for DHCP clients."
+          # vmware.local
+        - id: dhcp_next
+          name: "Boot Image Server"
+          optional: 0
+          help: "Address of the TFTP server for boot images."
+          # 172.16.0.251
+
       - "TFTP Settings":
         - id: boot_filename
           name: "Boot Image"
@@ -190,7 +96,79 @@
           optional: 0
           help: "IP Tables modules to load."
           # ip_conntrack_tftp
-    - NSX:
+
+    - AutoDeploy:
+      - General:
+        - id: mem_size
+          name: "VM Memory Size"
+          optional: 0
+          input: dropdown
+          help: "RAM (MB) for AutoDeploy VM"
+          options:
+            - id: "12288"
+              name: "12288 MB"
+        - id: cli_pass
+          name: "PowerCLI Password"
+          optional: 0
+          help: "Password to use for PowerCLI Commands"
+        - id: auto_deploy_src
+          name: "Rules Template"
+          optional: 0
+          help: "Full path to template file for generating the rules script."
+        # '/opt/supervio-ansible/roles/audodeploy/templates/windows/auto_rule.ps1'
+        - id: auto_deploy_ps
+          name: "Rules Script"
+          optional: 0
+          help: "Full path to file in which to generate the rules script."
+        # '/tmp/auto_rule.ps1'
+
+  - "vCenter Server":
+    - Appliance:
+      - Placement:
+        - id: vcsa_datacenter
+          name: "NSX Datacenter"
+          input: dropdown
+          optional: 0
+          help: "Datacenter into which to deploy vCenter."
+          options: mgmt_vc_datacenter
+        - id: vcsa_cluster
+          name: "Cluster"
+          input: dropdown
+          optional: 0
+          help: "Cluster into which to deploy vCenter."
+          options: mgmt_vc_cluster
+        - id: nsx_datastore
+          name: 'Datastore'
+          input: dropdown
+          optional: 0
+          help: "Datastore for the VCSA Deployment."
+          options: mgmt_vc_datastores
+      - Network:
+        - id: vcsa_network
+          name: "Management Network"
+          input: dropdown
+          optional: 0
+          help: "Management Network for vCenter Communications"
+          options: mgmt_vc_networks
+        - id: nsx_ntp
+          name: "NTP Server"
+          optional: 0
+          help: "NTP Server for vCenter."
+      - Appliance:
+        - id: vcsa_ova
+          name: "VCSA OVA"
+          input: dropdown
+          optional: 0
+          help: "OVA to use to deploy vCenter Server."
+          options:
+            - id: 'VMware-NSX-Manager-6.1.4-2691049.ova'
+        - id: vcsa_dir
+          name: "Temp Directory"
+          optional: 0
+          help: "Temporary download (local) storage."
+
+  - NSX:
+    - Appliance:
       - General:
         - id: nsx_name
           name: 'NSX Manager'
@@ -227,7 +205,7 @@
           name: "NTP Server"
           optional: 0
           help: "NTP Server for NSX Servers"
-      - Appliance:
+      - OVA:
         - id: nsx_ova
           name: "NSX OVA"
           input: dropdown
@@ -240,8 +218,98 @@
           optional: 0
           help: "Temporary download (local) storage"
 
-- SDDC:
-  - Install:
+  - VIO:
+    - Appliance:
+      - Placement:
+        - id: vio_datacenter
+          name: "VIO Datacenter"
+          input: dropdown
+          optional: 0
+          help: "Datacenter into which to deploy VIO."
+          options: mgmt_vc_datacenter
+        - id: vio_cluster
+          name: "Cluster"
+          input: dropdown
+          optional: 0
+          help: "Cluster into which to deploy the OVA."
+          options: comp_vc_cluster
+        - id: vio_ova
+          name: "OVA File"
+          input: dropdown
+          optional: 0
+          help: "OVA to use to deploy VIO OMS."
+          options:
+            - id: 'VMware-NSX-Manager-6.1.4-2691049.ova'
+        - id: vio_dir
+          name: "Temp Directory"
+          optional: 0
+          help: "Temporary download (local) storage."
+    - "OpenStack Deployment":
+      - General:
+        - id: vio_datacenter
+          name: "VIO Datacenter"
+          input: dropdown
+          optional: 0
+          help: "Datacenter into which to deploy VIO."
+          options: mgmt_vc_datacenter
+        - id: vio_cluster_mgmt
+          name: "Management Cluster"
+          input: dropdown
+          optional: 0
+          help: "Cluster for VIO Compute Services."
+          options: comp_vc_cluster
+        - id: vio_cluster_mgmt
+          name: "Management Cluster"
+          input: dropdown
+          optional: 0
+          help: "Cluster for VIO Management Services."
+          options: mgmt_vc_cluster
+          # 'Edge-02'
+        - id: vio_ova_datastore
+          name: 'Datastore'
+          input: dropdown
+          optional: 0
+          help: "Datastore for the VIO OVA Deployment."
+          options: comp_vc_datastores
+        - id: vio_cluster_compute
+          name: "Initial Compute Cluster" 
+          input: dropdown
+          optional: 0
+          help: "Cluster for Nova Compute Nodes."
+          options: comp_vc_cluster
+          # 'Compute-02'
+        - id: vio_comp_datastore
+          name: 'Datastore'
+          input: dropdown
+          optional: 0
+          help: "Datastore for the VCSA Deployment."
+          options: comp_vc_datastores
+      - Network:
+        - id: vcsa_network
+          name: "Management Network"
+          input: dropdown
+          optional: 0
+          help: "Management Network for vCenter Communications"
+          options: mgmt_vc_networks
+        - id: nsx_ntp
+          name: "NTP Server"
+          optional: 0
+          help: "NTP Server for vCenter."
+      - Appliance:
+        - id: vcsa_ova
+          name: "VCSA OVA"
+          input: dropdown
+          optional: 0
+          help: "OVA to use to deploy vCenter Server."
+          options:
+            - id: 'VMware-NSX-Manager-6.1.4-2691049.ova'
+        - id: vcsa_dir
+          name: "Temp Directory"
+          optional: 0
+          help: "Temporary download (local) storage."
+
+- Install:
+  - AutoDeploy:
     - id: install_datacenter
       name: "Create vSphere Datacenter"
       commands:
@@ -258,13 +326,13 @@
       name: "Deoploy NSX to vsphere Configure NSX manager"
       commands:
         - "/opt/supervio/supervio_play site_nsx.yml"
-- VIO:
-  - "Install NSX":
-    - id: install_nsx
-      name: "Install and Configure NSX Manager"
-      commands:
-        - "/opt/supervio/supervio_play site_nsx.yml"
-    - id: install_vio
-      name: "Deploy VIO"
-      commands:
-        - "/opt/supervio/supervio_play site_vio.yml"
+
+    - NSX:
+      - id: install_nsx
+        name: "Install and Configure NSX Manager"
+        commands:
+          - "/opt/supervio/supervio_play site_nsx.yml"
+      - id: install_vio
+        name: "Deploy VIO"
+        commands:
+          - "/opt/supervio/supervio_play site_vio.yml"
