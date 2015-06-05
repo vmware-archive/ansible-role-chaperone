@@ -1,312 +1,249 @@
 ---
 - Prepare:
-  - "ESXi Hosts":
-    - "Boot Services":
-      - DHCP:
-        - id: ipallocationpolicy
-          name: "IP Allocation Policy"
+  - "Datacenter Prep":
+    - "Datacenter Info":
+      - "vCenter Info":
+        - id: vcenter_host
+          name: "IP or hostname vcenter"
           optional: 0
-          input: dropdown
-          help: "DHCP IP Allocation Policy"
-          options:
-            - id: dhcpPolicy
-            - id: staticPolicy
-        - id: ipprotocol
-          name: "IP Protool"
+          help: "IP or hostname vcenter"
+        - id: vcenter_user
+          name: "vcenter admin username"
           optional: 0
-          input: dropdown
-          help: "DHCP IP protocol to use."
-          options:
-            - id:  'IPv4'
-            - id:  'IPv6'
-        - id: dhcp_conf_dest
-          name: "DHCP Configuration File"
+        - id: vcenter_password
+          name: "vcenter admin username"
           optional: 0
-          help: "Where to generate the DHCP configuration."
-          # '/etc/dhcp/dhcpd.conf'
-        - id: dhcp_subnet
-          name: Subnet
+        - id: vcenter_port
+          name: "vCenter Port"
+          optional: 1
+          help: "Port used to authenticate to vCenter"
+        - id: ntp_svr
+          name: "NTP server"
           optional: 0
-          help: "Subnet for DHCP clients."
-          # 172.16.0.0
-        - id: dhcp_sub_mask
-          name: "Subnet mask"
+          help: "NTP server for your network"
+      - "Datacenter Name":
+        - id: datacenter_name
+          name: "Name of datacenter"
           optional: 0
-          # 255.255.0.0
-          help: "Subnet mask for DHCP clients."
-        - id: dhcp_bast_addr
-          name: "Broadcast Address"
+      - "Managment Cluster":
+        - id: vio_cluster_mgmt
+          name: "Management cluster name"
           optional: 0
-          help: "Broadcast address for DHCP clients."
-          # 172.16.255.255
-        - id: dhcp_range_a
-          name: "Address Range Start"
+        - id: mgmt_esx_name
+          name: "mgmt hosts name"
           optional: 0
-          help: "First address of the DHCP client range."
-          # 172.16.0.100
-        - id: dhcp_range_b
-          name: "Address Range End"
+        - id: mgmt_esx_ip
+          name: "mgmt hosts ip"
+          optional: 1
+        - id: mgmt_esx_mac
+          name: "hosts mac"
           optional: 0
-          help: "Last address of the DHCP client range."
-          # 172.16.0.150
-        - id: dhcp_rout
-          name: "Default Route"
+      - "Edge Cluster":
+        - id: vio_cluster_edge
+          name: "Edge cluster name"
           optional: 0
-          help: "Default route for DHCP clients."
-          # 172.16.0.1
-        - id: dom_name_svr
-          name: "DNS Server"
+        - id: edge_esx_name
+          name: "edge esx name"
+          optional: 1
+        - id: edge_esx_ip
+          name: "edeg esx ip"
+          optional: 1
+        - id: edge_esx_mac
+          name: "edge esx mac"
+          optional: 1
+      - "Compute Cluster":
+        - id: vio_cluster_compute
+          name: "Compute cluster name"
           optional: 0
-          help: "DNS server for DHCP clients."
-          # 172.16.0.1
-        - id: dom_name
-          name: "DNS Domainname"
-          optional: 0
-          help: "Domain name for DHCP clients."
-          # vmware.local
-        - id: dhcp_next
-          name: "Boot Image Server"
-          optional: 0
-          help: "Address of the TFTP server for boot images."
-          # 172.16.0.251
-
-      - "TFTP Settings":
-        - id: boot_filename
-          name: "Boot Image"
-          optional: 0
-          help: "Boot image file for ESXi hosts."
-          #undionly.kpxe.vmw-hardwired
-        - id: tftp_root
-          name: "Root Directory"
-          optional: 0
-          help: "Root (Download) Directory"
-          # /tftpboot
-        - id: tftp_ip
-          name: "IP Address"
-          optional: 0
-          help: "IP Address for ESXi boot images."
-          # 172.16.0.251
-        - id: tftp_zip
-          name: "Temporary Directory"
-          optional: 0
-          help: "Directory in which to store TFTP zips."
-          # '/opt/supervio-ansible/playbooks/supervio/tmp'
-        - id: iptables_mods
-          name: "IPTables Modules"
-          optional: 0
-          help: "IP Tables modules to load."
-          # ip_conntrack_tftp
-
+        - id: compute_esx_name
+          name: "compute esx name"
+          optional: 1
+        - id: compute_esx_ip
+          name: "compute esx ip"
+          optional: 1
+        - id: compute_esx_mac
+          name: "compute esx mac"
+          optional: 1
+          
     - AutoDeploy:
       - General:
-        - id: mem_size
-          name: "VM Memory Size"
-          optional: 0
+        - id: win_url
+          name: "win url"
           input: dropdown
-          help: "RAM (MB) for AutoDeploy VM"
+          optional: 0
+          help: "url for depot zip upload to win"
           options:
-            - id: "12288"
-              name: "12288 MB"
-        - id: cli_pass
-          name: "PowerCLI Password"
+            - id: 'http://172.16.0.53/VMware-ESXi-6.0.0-2494585-depot.zip'
+        - id: win_path
+          name: "win path"
           optional: 0
-          help: "Password to use for PowerCLI Commands"
-        - id: auto_deploy_src
-          name: "Rules Template"
+          help: "destination for depot zip"
+        - id: esxi_host_profile
+          name: "esx host profile"
           optional: 0
-          help: "Full path to template file for generating the rules script."
-        # '/opt/supervio-ansible/roles/audodeploy/templates/windows/auto_rule.ps1'
-        - id: auto_deploy_ps
-          name: "Rules Script"
-          optional: 0
-          help: "Full path to file in which to generate the rules script."
-        # '/tmp/auto_rule.ps1'
-
-  - "vCenter Server":
-    - Appliance:
-      - Placement:
-        - id: vcsa_datacenter
-          name: "NSX Datacenter"
+          help: "esx host profile to use"
+        - id: esxi_img
+          name: "esx img name from software depot"
           input: dropdown
           optional: 0
-          help: "Datacenter into which to deploy vCenter."
-          options: mgmt_vc_datacenter
-        - id: vcsa_cluster
-          name: "Cluster"
-          input: dropdown
-          optional: 0
-          help: "Cluster into which to deploy vCenter."
-          options: mgmt_vc_cluster
-        - id: nsx_datastore
-          name: 'Datastore'
-          input: dropdown
-          optional: 0
-          help: "Datastore for the VCSA Deployment."
-          options: mgmt_vc_datastores
-      - Network:
-        - id: vcsa_network
-          name: "Management Network"
-          input: dropdown
-          optional: 0
-          help: "Management Network for vCenter Communications"
-          options: mgmt_vc_networks
-        - id: nsx_ntp
-          name: "NTP Server"
-          optional: 0
-          help: "NTP Server for vCenter."
-      - Appliance:
-        - id: vcsa_ova
-          name: "VCSA OVA"
-          input: dropdown
-          optional: 0
-          help: "OVA to use to deploy vCenter Server."
+          help: "select the img profile to use"
           options:
-            - id: 'VMware-NSX-Manager-6.1.4-2691049.ova'
-        - id: vcsa_dir
-          name: "Temp Directory"
+            - id: 'ESXi-*-no-tools'
+            - id: 'ESXi-*-standard'  
+        
+  - "Network Services":
+    - "Boot Services":
+      - DHCP:
+        - id: dhcp_subnet
+          name: "DHCP subnet"
           optional: 0
-          help: "Temporary download (local) storage."
+          help: "subnet for dhcp"
+        - id: dhcp_sub_mask
+          name: "DHCP subnet mask"
+          optional: 0
+          help: "subnet MASK for dhcp"
+        - id: dhcp_rout
+          name: "DHCP gateway"
+          optional: 0
+          help: "gateway for DHCP"
+        - id: dom_name
+          name: "Domain name"
+          optional: 0
+          help: "Domain name"
+        - id: dom_name_svr
+          name: "Domain name server"
+          optional: 0
+        - id: dhcp_range_a
+          name: "DHCP START range"
+          optional: 0
+          help: "Start of dhcp allocation"
+        - id: dhcp_range_b
+          name: "DHCP END range"
+          optional: 0
+          help: "END of dhcp allocation"
+        - id: tftp_ip
+          name: "TFTP server ip"
+          optional: 0
+          help: "TFTP server IP"
+        - id: boot_filename
+          name: "ESXi boot img"
+          input: dropdown
+          optional: 0
+          help: "Name of ESXi pxe boot img"
+          options:
+            - id: undionly.kpxe.vmw-hardwired
+            
+      - "TFTP Settings":
+        - id: tftp_root
+          name: "TFTP root"
+          optional: 0
+          help: "TFTP root directory for boot imge."
 
-  - NSX:
-    - Appliance:
-      - General:
-        - id: nsx_name
-          name: 'NSX Manager'
-          show: "name, optional"
+  - "vDS and Port groups":
+    - "vDS Settings":
+      - "vDS Info":
+        - id: vds_name
+          name: "vDS Name"
           optional: 0
-          help: "NXS Manager Name"
-      - Placement:
-        - id: nsx_datacenter
-          name: "NSX Datacenter"
           input: dropdown
+          help: "dvs"
+          options:
+            - id: VIO-VDS
+        - id: uplinks
+          name: "uplinks"
           optional: 0
-          help: "Datacenter into which to deploy NSX"
-          options: mgmt_vc_datacenter
-        - id: nsx_cluster
-          name: "Cluster"
+          help: "Number of uplinks"
+        - id: sw_ports
+          name: "Switch Ports"
+          optional: 0
+          help: "Number of ports on the vDS"
+        - id: productVersion
+          name: "Product Version"
+          optional: 0
           input: dropdown
+          options:
+            - id: '6.0.0'
+            - id: '5.5.0'
+            - id: '5.0.0'
+        - id: port_binding
+          name: "Port Binding"
           optional: 0
-          help: "Cluster into which to deploy NSX"
-          options: mgmt_vc_cluster
-        - id: nsx_datastore
-          name: 'Datastore'
           input: dropdown
+          help: "Port Binding Type"
+          options:
+            - id: 'static'
+            - id: 'dynamic'
+            - id: 'ephemeral'
+        - id: ports
+          name: "Port Group Ports "
           optional: 0
-          help: "Datastore for the NSX Deployments"
-          options: comp_vc_datastores
-      - Network:
-        - id: nsx_network
-          name: "Management Network"
+          help: "Number of Ports on individual port group"
+    - "Port Group Names":
+      - "Port Group Names":
+        - id: api_grp
+          name: "VIO API Network"
+          optional: 0
           input: dropdown
+          help: "VIO API Network"
+          options:
+            - id: 'VIO API Network'
+        - id: ext_grp
+          name: "VIO External Network"
           optional: 0
-          help: "Management Network for NSX Communications"
-          options: comp_vc_networks
-        - id: nsx_ntp
-          name: "NTP Server"
+          input: dropdown
+          help: "VIO External Network"
+          options:
+            - id: 'VIO External Network'
+        - id: mgmt_grp
+          name: "VIO Management"
           optional: 0
-          help: "NTP Server for NSX Servers"
+          input: dropdown
+          help: "VIO Management"
+          options:
+            - id: 'VIO Management'
+        - id: store_grp
+          name: "VIO Storage"
+          optional: 0
+          input: dropdown
+          help: "VIO Storage"
+          options:
+            - id: 'VIO Storage'
+        - id: vmotion_grp
+          name: "VIO vMotion"
+          optional: 0
+          input: dropdown
+          help: "VIO vMotion"
+          options:
+            - id: 'VIO vMotion'
+        
+  - "NSX Services":
+    - "NSX Options":
       - OVA:
-        - id: nsx_ova
-          name: "NSX OVA"
+        - id: nsx_ova_http
+          name: "NSX OVA upload"
           input: dropdown
           optional: 0
-          help: "OVA to use to deploy NXS"
+          help: "Upload OVA from asset server"
           options:
-            - id: 'VMware-NSX-Manager-6.1.4-2691049.ova'
+            - id: '/tmp/VMware-NSX-Manager-6.1.4-2691049.ova'
+        - id: nsx_name
+          name: "NSX Manager"
+          optional: 0
+          help: "nsx vm name"
+        - id: nsx_datastore
+          name: "NSX Datastore"
+          optional: 0
+          input: dropdown
+          options:
+            - id: datastore1
+        - id: cli_pass
+          name: "NSX ssh passwd"
+          optional: 0
+          help: "NSX ssh root passwd"
         - id: nsx_dir
-          name: "Temp Directory"
+          name: "tmp directory"
           optional: 0
           help: "Temporary download (local) storage"
-
-  - VIO:
-    - Appliance:
-      - Placement:
-        - id: vio_datacenter
-          name: "VIO Datacenter"
-          input: dropdown
-          optional: 0
-          help: "Datacenter into which to deploy VIO."
-          options: mgmt_vc_datacenter
-        - id: vio_cluster
-          name: "Cluster"
-          input: dropdown
-          optional: 0
-          help: "Cluster into which to deploy the OVA."
-          options: comp_vc_cluster
-        - id: vio_ova
-          name: "OVA File"
-          input: dropdown
-          optional: 0
-          help: "OVA to use to deploy VIO OMS."
-          options:
-            - id: 'VMware-NSX-Manager-6.1.4-2691049.ova'
-        - id: vio_dir
-          name: "Temp Directory"
-          optional: 0
-          help: "Temporary download (local) storage."
-    - "OpenStack Deployment":
-      - General:
-        - id: vio_datacenter
-          name: "VIO Datacenter"
-          input: dropdown
-          optional: 0
-          help: "Datacenter into which to deploy VIO."
-          options: mgmt_vc_datacenter
-        - id: vio_cluster_mgmt
-          name: "Management Cluster"
-          input: dropdown
-          optional: 0
-          help: "Cluster for VIO Compute Services."
-          options: comp_vc_cluster
-        - id: vio_cluster_mgmt
-          name: "Management Cluster"
-          input: dropdown
-          optional: 0
-          help: "Cluster for VIO Management Services."
-          options: mgmt_vc_cluster
-          # 'Edge-02'
-        - id: vio_ova_datastore
-          name: 'Datastore'
-          input: dropdown
-          optional: 0
-          help: "Datastore for the VIO OVA Deployment."
-          options: comp_vc_datastores
-        - id: vio_cluster_compute
-          name: "Initial Compute Cluster" 
-          input: dropdown
-          optional: 0
-          help: "Cluster for Nova Compute Nodes."
-          options: comp_vc_cluster
-          # 'Compute-02'
-        - id: vio_comp_datastore
-          name: 'Datastore'
-          input: dropdown
-          optional: 0
-          help: "Datastore for the VCSA Deployment."
-          options: comp_vc_datastores
-      - Network:
-        - id: vcsa_network
-          name: "Management Network"
-          input: dropdown
-          optional: 0
-          help: "Management Network for vCenter Communications"
-          options: mgmt_vc_networks
-        - id: nsx_ntp
-          name: "NTP Server"
-          optional: 0
-          help: "NTP Server for vCenter."
-      - Appliance:
-        - id: vcsa_ova
-          name: "VCSA OVA"
-          input: dropdown
-          optional: 0
-          help: "OVA to use to deploy vCenter Server."
-          options:
-            - id: 'VMware-NSX-Manager-6.1.4-2691049.ova'
-        - id: vcsa_dir
-          name: "Temp Directory"
-          optional: 0
-          help: "Temporary download (local) storage."
 
 - Install:
   - AutoDeploy:
@@ -327,12 +264,12 @@
       commands:
         - "/opt/supervio/supervio_play site_nsx.yml"
 
-    - NSX:
-      - id: install_nsx
-        name: "Install and Configure NSX Manager"
-        commands:
-          - "/opt/supervio/supervio_play site_nsx.yml"
-      - id: install_vio
-        name: "Deploy VIO"
-        commands:
-          - "/opt/supervio/supervio_play site_vio.yml"
+  - NSX:
+    - id: install_nsx
+      name: "Install and Configure NSX Manager"
+      commands:
+        - "/opt/supervio/supervio_play site_nsx.yml"
+    - id: install_vio
+      name: "Deploy VIO"
+      commands:
+        - "/opt/supervio/supervio_play site_vio.yml"
