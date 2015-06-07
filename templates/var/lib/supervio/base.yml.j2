@@ -4,19 +4,19 @@
     - "Datacenter Info":
       - "vCenter Info":
         - id: vcenter_host
-          name: "IP or hostname vcenter"
+          name: "vCenter IP"
           optional: 0
-          help: "IP or hostname vcenter"
+          help: "IP address of vCenter"
         - id: vcenter_user
-          name: "vcenter admin username"
+          name: "vCenter admin USERNAME"
           optional: 0
         - id: vcenter_password
-          name: "vcenter admin username"
+          name: "vCenter admin PASSWORD"
           optional: 0
         - id: vcenter_port
           name: "vCenter Port"
           optional: 1
-          help: "Port used to authenticate to vCenter"
+          help: "Port for authentication connection to vCenter default is 443"
         - id: ntp_svr
           name: "NTP server"
           optional: 0
@@ -25,45 +25,55 @@
         - id: datacenter_name
           name: "Name of datacenter"
           optional: 0
+          help: "Enter the name of the Datacenter being created ex: VIO-Datacenter"
       - "Managment Cluster":
         - id: vio_cluster_mgmt
           name: "Management cluster name"
           optional: 0
         - id: mgmt_esx_name
-          name: "mgmt hosts name"
+          name: "ESX hosts name"
           optional: 0
+          help: "Mangament Cluster ESXi hostname"
         - id: mgmt_esx_ip
-          name: "mgmt hosts ip"
-          optional: 1
-        - id: mgmt_esx_mac
-          name: "hosts mac"
+          name: "ESX hosts ip"
           optional: 0
+          help: "Mangament Cluster ESXi IP address"
+        - id: mgmt_esx_mac
+          name: "ESX MAC address"
+          optional: 0
+          help: "Mangament Cluster ESXi MAC address"
       - "Edge Cluster":
         - id: vio_cluster_edge
           name: "Edge cluster name"
           optional: 0
         - id: edge_esx_name
-          name: "edge esx name"
-          optional: 1
+          name: "ESX hosts name"
+          optional: 0
+          help: "Edge Cluster ESXi hostname"
         - id: edge_esx_ip
-          name: "edeg esx ip"
-          optional: 1
+          name: "ESX hosts ip"
+          optional: 0
+          help: "Edge Cluster ESXi IP address"
         - id: edge_esx_mac
-          name: "edge esx mac"
-          optional: 1
+          name: "ESX MAC address"
+          optional: 0
+          help: "Edge Cluster ESXi MAC address"
       - "Compute Cluster":
         - id: vio_cluster_compute
           name: "Compute cluster name"
           optional: 0
         - id: compute_esx_name
-          name: "compute esx name"
-          optional: 1
+          name: "ESX hosts name"
+          optional: 0
+          help: "Compute Cluster ESXi hostname"
         - id: compute_esx_ip
-          name: "compute esx ip"
-          optional: 1
+          name: "ESX hosts ip"
+          optional: 0
+          help: "Compute Cluster ESXi IP address"
         - id: compute_esx_mac
-          name: "compute esx mac"
-          optional: 1
+          name: "ESX MAC address"
+          optional: 0
+          help: "Compute Cluster ESXi MAC address"
           
     - AutoDeploy:
       - General:
@@ -71,22 +81,23 @@
           name: "win url"
           input: dropdown
           optional: 0
-          help: "url for depot zip upload to win"
+          help: "Enter URL for asset server"
           options:
             - id: 'http://172.16.0.53/VMware-ESXi-6.0.0-2494585-depot.zip'
+            - id: 'http://192.168.1.53/VMware-ESXi-6.0.0-2494585-depot.zip'
         - id: win_path
           name: "win path"
           optional: 0
-          help: "destination for depot zip"
+          help: "Local Full Directory Path on Windows Server for Software Depot Zip"
         - id: esxi_host_profile
-          name: "esx host profile"
+          name: "ESXi Host Profile"
           optional: 0
-          help: "esx host profile to use"
+          help: "Enter the ESXi Host Profile Name to Use"
         - id: esxi_img
-          name: "esx img name from software depot"
+          name: "ESX Image Profile Name"
           input: dropdown
           optional: 0
-          help: "select the img profile to use"
+          help: "Select the ESX Image Profile Name to use"
           options:
             - id: 'ESXi-*-no-tools'
             - id: 'ESXi-*-standard'  
@@ -121,10 +132,6 @@
           name: "DHCP END range"
           optional: 0
           help: "END of dhcp allocation"
-        - id: tftp_ip
-          name: "TFTP server ip"
-          optional: 0
-          help: "TFTP server IP"
         - id: boot_filename
           name: "ESXi boot img"
           input: dropdown
@@ -137,7 +144,11 @@
         - id: tftp_root
           name: "TFTP root"
           optional: 0
-          help: "TFTP root directory for boot imge."
+          help: "TFTP root directory for ESX boot imge."
+        - id: tftp_ip
+          name: "TFTP IP"
+          optional: 0
+          help: "TFTP Server IP to use"
 
   - "vDS and Port groups":
     - "vDS Settings":
@@ -259,17 +270,17 @@
       name: "Enable TFTP and DHCP Services"
       commands:
         - "/opt/supervio/supervio_play site_dhcpd.yml"
+
+  - "NSX VIO":
     - id: nsx_ova_deploy
-      name: "Deploy NSX to vsphere Configure NSX manager"
+      name: "Deploy NSX OVA"
       commands:
         - "/opt/supervio/supervio_play site_nsx.yml"
-
-  - NSX:
     - id: install_nsx
-      name: "Install and Configure NSX Manager"
+      name: "Configure NSX Manager"
       commands:
         - "/opt/supervio/supervio_play site_nsx.yml"
     - id: install_vio
-      name: "Deploy VIO"
+      name: "Deploy VIO OVA"
       commands:
         - "/opt/supervio/supervio_play site_vio.yml"
