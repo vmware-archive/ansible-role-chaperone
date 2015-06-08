@@ -23,5 +23,5 @@ supervio_vio_ova_md5: "d19beab8e7e86dc026a3472bf230ac67"
 supervio_vio_ova_url: "http://build-squid.eng.vmware.com/build/mts/release/bora-2567172/publish/openstack_vapp/exports/ova/VMware-OpenStack-1.0.0.0-2567172_OVF10.ova"
 
 supervio_ovftool_zip: "VMware-ovftool-4.1.0-2710377-lin.x86_64.zip"
-supervio_ofvtool_md5: "09d3e8c9b387af35e445e96c80816d66"
-supervio_ofvtool_url: "http://build-squid.eng.vmware.com/build/mts/release/bora-2710377/publish/VMware-ovftool-4.1.0-2710377-lin.x86_64.zip"
+supervio_ovftool_md5: "09d3e8c9b387af35e445e96c80816d66"
+supervio_ovftool_url: "http://build-squid.eng.vmware.com/build/mts/release/bora-2710377/publish/VMware-ovftool-4.1.0-2710377-lin.x86_64.zip"
