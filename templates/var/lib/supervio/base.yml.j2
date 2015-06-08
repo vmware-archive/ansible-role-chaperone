@@ -289,7 +289,7 @@
   - "NSX Services":
     - "NSX Options":
       - OVA:
-        - id: nsx_dir
+        - id: nsxdir
           name: "Temp Directory"
           optional: 0
           help: "Temp Directory for OVA"
@@ -335,26 +335,26 @@
             - id: transsientPolicy
             - id: fixedPolicy
       - "NSX Configuration Information":
-        - id: nsx_user
+        - id: nsxuser
           name: "NSX Manager USERNAME"
           optional: 0
           help: "Enter the NSX Manager USERNAME"
-        - id: nsx_password
+        - id: nsxpassword
           name: "NSX Manager PASSWORD"
           optional: 0
           help: "Enter the NSX Manager PASSWORD"
-        - id: nsx_host
+        - id: nsxhost
           name: "NSX Manager IP"
           optional: 0
           help: "Enter the IP address of the NSX Manager"
-        - id: nsx_sys
+        - id: nsxsys
           name: "NSX Syslog Server IP"
           optional: 0
           help: "Enter the Syslog server IP"
           input: dropdown
           options:
             - id: '192.168.110.79'
-        - id: nsx_sys_proto
+        - id: nsxsys_proto
           name: "NSX Syslog Port"
           optional: 0
           help: "Select the syslog port"
@@ -368,43 +368,43 @@
           options: 
             - id: 'INFO'
       - "NSX Network Preparation":
-        - id: controller_name
+        - id: controllername
           name: "Controller Name"
           optional: 0
           help: "Enter the name of the controller ex: controller-01"
-        - id: cntrl_pass
+        - id: cntrlpass
           name: "Controller Password"
           optional: 0
           help: "Enter Password for controller must be 12 or more chars ex: VMware1!VMware1!"
-        - id: segment_id_num
+        - id: segmentid_num
           name: "Segment ID number"
           optional: 0
           help: "Enter Segment ID int ex: 3"
-        - id: segment_name
+        - id: segmentname
           name: "Segment Name"
           optional: 0
           help: "Enter Segment Name ex: Segement_alpha"
-        - id: segment_desc
+        - id: segmentdesc
           name: "Segment Description"
           optional: 0
           help: "Enter the Segment Description"
-        - id: segment_rang_start
+        - id: segmentrang_start
           name: "Segment Range Start"
           optional: 0
           input: dropdown
           options:
             - id: '5000'
-        - id: segment_rang_end
+        - id: segmentrang_end
           name: "Segment Range End"
           optional: 0
           input: dropdown
           options:
             - id: '5900'
-        - id: vdn_scope_name
+        - id: vdnscope_name
           name: "vdn scope name"
           optional: 0
           help: "Enter a Name for the vdn scop"
-        - id: vdn_scope_cast
+        - id: vdnscope_cast
           name: "vdn scope replication mode"
           optional: 0
           input: dropdown
@@ -413,28 +413,28 @@
             - id: 'Multicast'
             - id: 'Hybrid'
       - "NSX Cluster Information":
-        - id: mgmt_name
+        - id: mgmtname
           name: "NSX Management Cluster"
           input: dropdown
           optional: 0
           help: "Select the Manage Cluster"
           options:
             - id: 'Management Cluster'
-        - id: compt_name
+        - id: comptname
           name: "NSX Compute Cluster Name"
           input: dropdown
           optional: 0
           help: "Select the Compute Cluster Name"
           options:
             - id: 'Compute Cluster 1'
-        - id: edge_name
+        - id: edgename
           name: "NSX Edge Cluster Name"
           optional: 0
           help: "Select the Edge Cluster Name"
           input: dropdown
           options:
             - id: 'Edge Cluster'
-        - id: nsx_data_store
+        - id: nsxdata_store
           name: "NSX Data Store"
           optional: 0
           help: "Select the Data Store"
