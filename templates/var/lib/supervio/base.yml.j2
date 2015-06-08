@@ -290,6 +290,13 @@
   - "NSX Services":
     - "NSX Options":
       - OVA:
+        - id: nsx_dir
+          name: "Temp Directory"
+          optional: 0
+          help: "Temp Directory for OVA"
+          input: dropdown
+          options:
+            - id: '/tmp'
         - id: nsx_ova_http
           name: "NSX OVA upload"
           input: dropdown
@@ -306,15 +313,27 @@
           optional: 0
           input: dropdown
           options:
-            - id: datastore1
+            - id: ds-nfs-01a
         - id: cli_pass
           name: "NSX ssh passwd"
           optional: 0
           help: "NSX ssh root passwd"
-        - id: nsx_dir
-          name: "tmp directory"
+        - id: ipprotocol
+          name: "IP Protocol"
           optional: 0
-          help: "Temporary download (local) storage"
+          help: "Choose IP Protocol"
+          input: dropdown
+          options:
+            - id: "IPv4"
+            - id: "IPv6"
+        - id: ipallocationpolicy
+          name: "IP Allocation Policy"
+          optional: 0
+          help: "IP Allocation Policy"
+          options:
+            - id: dhcpPolicy
+            - id: transsientPolicy
+            - id: fixedPolicy
 
 - Install:
   - AutoDeploy:
