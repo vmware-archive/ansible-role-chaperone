@@ -368,6 +368,7 @@
           input: dropdown
           options: 
             - id: 'INFO'
+      - "NSX Network Preparation":
         - id: controller_name
           name: "Controller Name"
           optional: 0
@@ -411,7 +412,36 @@
           options:
             - id: 'UNICAST_MODE'
             - id: 'Multicast'
-            - id: 'Hybrid'         
+            - id: 'Hybrid'
+      - "NSX Cluster Information":
+        - id: mgmt_name
+          name: "NSX Management Cluster"
+          input: dropdown
+          optional: 0
+          help: "Select the Manage Cluster"
+          options:
+            - id: mgmt_vc_cluster
+        - id: compt_name
+          name: "NSX Compute Cluster Name"
+          input: dropdown
+          optional: 0
+          help: "Select the Compute Cluster Name"
+          options:
+            - id: comp_vc_cluster
+        - id: edge_name
+          name: "NSX Edge Cluster Name"
+          optional: 0
+          help: "Select the Edge Cluster Name"
+          input: dropdown
+          options:
+            - id: 'Edge Cluster'
+        - id: nsx_data_store
+          name: "NSX Data Store"
+          optional: 0
+          help: "Select the Data Store"
+          input: dropdown
+          options:
+            - id: 'input-datastore-here'
 
 - Install:
   - AutoDeploy:
