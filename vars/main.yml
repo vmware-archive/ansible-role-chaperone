@@ -32,6 +32,7 @@ django_base_packages:
 
 django_pip_packages:
   - pyvmomi
+  - pywinrm
   - virtualenv
   - django
 
