@@ -49,10 +49,25 @@
   tags:
     - downloads
 
-- name: (Re)Generate site-available configs
+- name: (Re)Generate site-available supervio-ui config
   template:
-    src: etc/apache2/sites-available/supervio.conf.j2
-    dest: /etc/apache2/sites-available/supervio.conf
+    src: "etc/apache2/sites-available/{{ supervio_django_app }}.conf.j2"
+    dest: "/etc/apache2/sites-available/{{ supervio_django_app }}.conf"
     owner: "{{ ansible_ssh_user }}"
     group: "{{ ansible_ssh_user }}"
     mode: 0644
+
+- name: (Re)Generate site-available supervio-download config
+  template:
+    src: "etc/apache2/sites-available/{{ supervio_django_app }}-downloads.conf.j2"
+    dest: "/etc/apache2/sites-available/{{ supervio_django_app }}-downloads.conf"
+    owner: "{{ ansible_ssh_user }}"
+    group: "{{ ansible_ssh_user }}"
+    mode: 0644
+  tags:
+    - downloads
+
+- name: enable the general supervio site (this is not the supervio-ui)
+  command: "a2ensite {{ supervio_django_app }}-downloads"
+  tags:
+    - downloads
