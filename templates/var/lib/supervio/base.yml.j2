@@ -330,10 +330,88 @@
           name: "IP Allocation Policy"
           optional: 0
           help: "IP Allocation Policy"
+          input: dropdown
           options:
             - id: dhcpPolicy
             - id: transsientPolicy
             - id: fixedPolicy
+      - "NSX Configuration Information":
+        - id: nsx_user
+          name: "NSX Manager USERNAME"
+          optional: 0
+          help: "Enter the NSX Manager USERNAME"
+        - id: nsx_password
+          name: "NSX Manager PASSWORD"
+          optional: 0
+          help: "Enter the NSX Manager PASSWORD"
+        - id: nsx_host
+          name: "NSX Manager IP"
+          optional: 0
+          help: "Enter the IP address of the NSX Manager"
+        - id: nsx_sys
+          name: "NSX Syslog Server IP"
+          optional: 0
+          help: "Enter the Syslog server IP"
+          input: dropdown
+          options:
+            - id: '192.168.110.42'
+        - id: nsx_sys_proto
+          name: "NSX Syslog Port"
+          optional: 0
+          help: "Select the syslog port"
+          input: dropdown
+          options:
+            - id: '514'
+        - id: level
+          name: "NSX Syslog log level"
+          optional: 0
+          input: dropdown
+          options: 
+            - id: 'INFO'
+        - id: controller_name
+          name: "Controller Name"
+          optional: 0
+          help: "Enter the name of the controller ex: controller-01"
+        - id: cntrl_pass
+          name: "Controller Password"
+          optional: 0
+          help: "Enter Password for controller must be 12 or more chars ex: VMware1!VMware1!"
+        - id: segment_id_num
+          name: "Segment ID number"
+          optional: 0
+          help: "Enter Segment ID int ex: 3"
+        - id: segment_name
+          name: "Segment Name"
+          optional: 0
+          help: "Enter Segment Name ex: Segement_alpha"
+        - id: segment_desc
+          name: "Segment Description"
+          optional: 0
+          help: "Enter the Segment Description"
+        - id: segment_rang_start
+          name: "Segment Range Start"
+          optional: 0
+          input: dropdown
+          options:
+            - id: '5000'
+        - id: segment_rang_end
+          name: "Segment Range End"
+          optional: 0
+          input: dropdown
+          options:
+            - id: '5900'
+        - id: vdn_scope_name
+          name: "vdn scope name"
+          optional: 0
+          help: "Enter a Name for the vdn scop"
+        - id: vdn_scope_cast
+          name: "vdn scope replication mode"
+          optional: 0
+          input: dropdown
+          options:
+            - id: 'UNICAST_MODE'
+            - id: 'Multicast'
+            - id: 'Hybrid'         
 
 - Install:
   - AutoDeploy:
