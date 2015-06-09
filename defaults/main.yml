@@ -5,4 +5,17 @@ supervio_django_template_debug: False
 supervio_apache_loglevel: info
 supervio_vcenter_port: 443
 
+supervio_download_files: false
+supervio_downloads_dir: /var/www/html/downloads
 
+supervio_depot_zip: "VMware-ESXi-6.0.0-2494585-depot.zip"
+supervio_depot_zip_md5: "bebc48450b9743c56073602931d63600"
+supervio_depot_zip_url: "http://build-squid.eng.vmware.com/build/mts/release/bora-2494585/publish/VMware-ESXi-6.0.0-2494585-depot.zip"
+
+supervio_nsx_ova: "VMware-NSX-Manager-6.1.4-2691049.ova"
+supervio_nsx_ova_md5: "972754d48346c469e3d32aea5e3d147b"
+supervio_nsx_ova_url: "http://build-squid.eng.vmware.com/build/mts/release/bora-2691049/publish/VMware-NSX-Manager-6.1.4-2691049.ova"
+
+supervio_vio_ova: "VMware-OpenStack-1.0.0.0-2567172_OVF10.ova"
+supervio_vio_ova_md5: "d19beab8e7e86dc026a3472bf230ac67"
+supervio_vio_ova_url: "http://build-squid.eng.vmware.com/build/mts/release/bora-2567172/publish/openstack_vapp/exports/ova/VMware-OpenStack-1.0.0.0-2567172_OVF10.ova"

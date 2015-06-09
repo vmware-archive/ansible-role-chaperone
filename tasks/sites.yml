@@ -1,4 +1,54 @@
 ---
+- name: create downloads directory
+  file:
+    dest: "{{ supervio_downloads_dir }}"
+    state: directory
+    owner: "{{ ansible_ssh_user }}"
+    group: "{{ ansible_ssh_user }}"
+    mode: 0755
+
+- name: get depot file stats
+  stat: path="{{ supervio_downloads_dir }}/{{ supervio_depot_zip }}"
+  register: depot
+  tags:
+    - downloads
+
+- name: pull nsx files for future downloads (may take many minutes)
+  get_url:
+    dest: "{{ supervio_downloads_dir }}/{{ supervio_depot_zip }}"
+    url: "{{ supervio_depot_zip_url }}"
+  when: supervio_download_files and depot.stat.exists and (depot.stat.md5 != "{{ supervio_depot_zip_md5 }}")
+  tags:
+    - downloads
+
+- name: get NSX OVA stats
+  stat: path="{{ supervio_downloads_dir }}/{{ supervio_nsx_ova }}"
+  register: nsxova
+  tags:
+    - downloads
+
+- name: pull vio files for future downloads (may take many minutes)
+  get_url:
+    dest: "{{ supervio_downloads_dir }}/{{ supervio_nsx_ova }}"
+    url: "{{ supervio_nsx_ova_url }}"
+  when: supervio_download_files and nsxova.stat.exists and (nsxova.stat.md5 != "{{ supervio_nsx_ova_md5 }}")
+  tags:
+    - downloads
+
+- name: get VIO OVA file stats
+  stat: path="{{ supervio_downloads_dir }}/{{ supervio_vio_ova }}"
+  register: vioova
+  tags:
+    - downloads
+
+- name: pull depot files for future downloads (may take many minutes)
+  get_url:
+    dest: "{{ supervio_downloads_dir }}/{{ supervio_depot_zip }}"
+    url: "{{ supervio_depot_zip_url }}"
+  when: supervio_download_files and vioova.stat.exists and (vioova.stat.md5 != "{{ supervio_vio_ova_md5 }}")
+  tags:
+    - downloads
+
 - name: (Re)Generate site-available configs
   template:
     src: etc/apache2/sites-available/supervio.conf.j2

@@ -39,6 +39,12 @@ AJAX callbacks for disploy in various UI pages.
 
 The name for the application.
 
+    spuervi_download_files: false
+
+Whether to download ova and depot files and make them available at
+http://<supervio-ui>/downloads. These are large and can take a very
+long time to pull.
+
 ## Example playbook
 
 ```
