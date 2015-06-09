@@ -5,6 +5,8 @@ supervio_django_template_debug: False
 supervio_apache_loglevel: info
 supervio_vcenter_port: 443
 
+supervio_django_domain: "vmware.local"
+
 supervio_download_files: false
 supervio_downloads_dir: /var/www/html/downloads
 
