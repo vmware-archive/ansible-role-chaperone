@@ -1,5 +1,5 @@
 <VirtualHost *:{{ supervio_ui_port }}>
-    ServerName {{ supervio_django_app }}-ui.vmware.local
+    ServerName {{ supervio_django_app }}-ui.{{ ansible_domain }}
     #ServerAlias example.com
     ServerAdmin webmaster@example.com
 
