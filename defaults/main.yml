@@ -1,11 +1,19 @@
 ---
 rsync_user_id: vmware
+
+supervio_django_app: "supervio"
+supervio_log_dir: "/var/log/supervio"
+supervio_answer_dir: "/var/lib/supervio"
+supervio_prepare_files_dir: "/var/lib/supervio/prepare"
+
 supervio_django_debug: False
 supervio_django_template_debug: False
 supervio_apache_loglevel: info
 supervio_vcenter_port: 443
 
 supervio_django_domain: "vmware.local"
+supervio_django_shortname: "SuperVIO"
+supervio_django_fullname: "VMware {{ supervio_django_shortname }}"
 
 supervio_download_files: false
 supervio_downloads_dir: /var/www/html/downloads

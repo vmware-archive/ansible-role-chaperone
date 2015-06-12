@@ -49,14 +49,23 @@
 
 - name: create playbook convenience script
   template:
-    src: "opt/{{ supervio_django_app }}/supervio_play.j2"
-    dest: "/opt/{{ supervio_django_app }}/supervio_play"
+    src: "opt/{{ supervio_django_app }}/{{ supervio_django_app }}_play.j2"
+    dest: "/opt/{{ supervio_django_app }}/{{ supervio_django_app }}_play"
     owner: "{{ ansible_ssh_user }}"
     group: "{{ ansible_ssh_user }}"
     mode: "0700"
   tags:
     - rsync
 
+- name: Create settings.py
+  template:
+    src: "opt/{{ supervio_django_app }}/{{ supervio_django_app }}/settings.py.j2"
+    dest: "/opt/{{ supervio_django_app }}/supervio/settings.py"
+    owner: "{{ ansible_ssh_user }}"
+    group: "{{ ansible_ssh_user }}"
+  notify: Restart apache2
+  tags:
+    - rsync
 
 - name: Create local_settings.py
   template:
@@ -121,7 +130,7 @@
 - name: Create database
   command: touch "/opt/{{ supervio_django_app }}/{{ supervio_django_app }}.db"
   args:
-    creates: "/opt/{{ supervio_django_app }}/supervio.db"
+    creates: "/opt/{{ supervio_django_app }}/{{ supervio_django_app }}.db"
   sudo: no
   register: db
 
