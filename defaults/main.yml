@@ -33,3 +33,7 @@ supervio_vio_ova_url: "http://build-squid.eng.vmware.com/build/mts/release/bora-
 supervio_ovftool_zip: "VMware-ovftool-4.1.0-2710377-lin.x86_64.zip"
 supervio_ovftool_md5: "09d3e8c9b387af35e445e96c80816d66"
 supervio_ovftool_url: "http://build-squid.eng.vmware.com/build/mts/release/bora-2710377/publish/VMware-ovftool-4.1.0-2710377-lin.x86_64.zip"
+
+supervio_esxi_iso: "VMware-VMvisor-Installer-6.0.0-5579746.x86_64.iso"
+supervio_esxi_md5: "8fb44ca52c28e7624904de4f7aa8da55"
+supervio_esxi_url: "http://build-squid.eng.vmware.com/build/mts/release/sb-5579746/publish/VMware-VMvisor-Installer-6.0.0-5579746.x86_64.iso"
