@@ -1,4 +1,11 @@
 #!/bin/bash
 
+# Arguments:
+# $1: inventory file to use for the play
+# $2: playbook (YAML) file
+
 cd /opt/{{ supervio_django_app }}-ansible/playbooks/supercna
-ansible-playbook -i inventory -v $1
+echo "------------------------------------------------------------------------"
+echo "Running: ansible-playbook -i $1 -v $2"
+echo "------------------------------------------------------------------------"
+ansible-playbook -i "$1" -v "$2"
