@@ -1,11 +1,52 @@
 ---
-- Install:
-  - Consul:
-    - id: install_base
+- Consul:
+  - Install:
+    - id: consul_base
       name: "Consul Hosts"
       commands:
         - "/opt/supercna/supercna_play inventory.base base.yml"
-    - id: install_consul
+    - id: consul_consul
       name: "Consul Cluster"
       commands:
         - "/opt/supercna/supercna_play inventory consul.yml"
+- Photon:
+  - Install:
+    - id: photon_base
+      name: "Photon Base"
+      commands:
+        - "/opt/supercna/supercna_play inventory.base photon_base.yml"
+    - id: photon_docker
+      name: "Docker Setup"
+      commands:
+        - "/opt/supercna/supercna_play inventory photon_docker.yml"
+- Swarm:
+  - Start:
+    - id: photon_swarm_start
+      name: "Start Swarm"
+      commands:
+        - "/opt/supercna/supercna_play inventory photon_swarm.yml"
+    - id: photon_swarm_start_manager
+      name: "Start Sarm Manager"
+      commands:
+        - "/opt/supercna/supercna_play inventory photon_swarm_manager.yml"
+  - Stop:
+    - id: photon_swarm_stop
+      name: "Stop Swarm"
+      commands:
+        - "/opt/supercna/supercna_play inventory photon_kill_swarm.yml"
+- "General Operations":
+  - Security:
+    - id: photon_sshkeys
+      name: "Rotate SSHKeys"
+      commands:
+        - "/opt/supercna/supercna_play inventory.base sshkeys.yml"
+  - Status:
+    - id: status_containers
+      name: "Show All Containers"
+      commands:
+        - "/opt/supercna/supercna_play inventory status_containers_all.yml"
+  - Consul:
+    - id: consul_ls_keys
+      name: "Show Consul Keys/Values"
+      commands:
+        - "/opt/supercna/supercna_play inventory status_consul_keys.yml"
