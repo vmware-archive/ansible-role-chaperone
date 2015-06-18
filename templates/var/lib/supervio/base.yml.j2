@@ -13,6 +13,7 @@
         - id: vcenter_password
           name: "vCenter admin PASSWORD"
           optional: 0
+          input: password
         - id: vcenter_port
           name: "vCenter Port"
           optional: 0
@@ -94,6 +95,31 @@
             optional: 0
             help: "Compute Cluster ESXi MAC address"
     - AutoDeploy:
+      - "Window Server Info":
+        - id: win_admin
+          name: "Windows Admin User"
+          optional: 0
+          help: "Enter Administrators Username"
+        - id: win_pass
+          name: "Administrator Password"
+          input: password
+          help: "Enter the Administrators Password"
+        - id: powercli_check
+          name: "PowerCli Installed"
+          input: checkbox
+          help: "Please check is powercli is installed"
+        - id: ps_remoting
+          name: "PowerShell Remoting"
+          input: checkbox
+          help: "Is Enable-PSRemoting?"
+        - id: set_exec
+          name: "PowerShell Execution Policy"
+          input: checkbox
+          help: "Is Set-ExecutionPolicy Unrestricted?"
+        - id: run_setup
+          name: "Setup Done?"
+          input: checkbox
+          help: "Has the ansible-setup.ps1 script been run?"
       - "Local Software Depot":
         - id: use_local
           name: "Use Local SoftwareDepot"
@@ -172,7 +198,7 @@
           help: "Name of ESXi pxe boot img"
           options:
             - id: undionly.kpxe.vmw-hardwired
-            
+
       - "TFTP Settings":
         - id: tftp_root
           name: "TFTP root"
@@ -259,7 +285,7 @@
           help: "VIO vMotion"
           options:
             - id: 'VIO vMotion'
-        
+
   - "NSX Services":
     - "NSX Options":
       - OVA:
@@ -290,6 +316,7 @@
         - id: cli_pass
           name: "NSX ssh passwd"
           optional: 0
+          input: password
           help: "NSX ssh root passwd"
         - id: ipprotocol
           name: "IP Protocol"
@@ -316,6 +343,7 @@
         - id: nsxpassword
           name: "NSX Manager PASSWORD"
           optional: 0
+          input: password
           help: "Enter the NSX Manager PASSWORD"
         - id: nsxhost
           name: "NSX Manager IP"
@@ -349,6 +377,7 @@
         - id: cntrlpass
           name: "Controller Password"
           optional: 0
+          input: password
           help: "Enter Password for controller must be 12 or more chars ex: VMware1!VMware1!"
         - id: segmentid_num
           name: "Segment ID number"
