@@ -13,6 +13,7 @@
         - id: vcenter_password
           name: "vCenter admin PASSWORD"
           optional: 0
+          input: password
         - id: vcenter_port
           name: "vCenter Port"
           optional: 0
@@ -172,7 +173,7 @@
           help: "Name of ESXi pxe boot img"
           options:
             - id: undionly.kpxe.vmw-hardwired
-            
+
       - "TFTP Settings":
         - id: tftp_root
           name: "TFTP root"
@@ -259,7 +260,7 @@
           help: "VIO vMotion"
           options:
             - id: 'VIO vMotion'
-        
+
   - "NSX Services":
     - "NSX Options":
       - OVA:
@@ -290,6 +291,7 @@
         - id: cli_pass
           name: "NSX ssh passwd"
           optional: 0
+          input: password
           help: "NSX ssh root passwd"
         - id: ipprotocol
           name: "IP Protocol"
@@ -316,6 +318,7 @@
         - id: nsxpassword
           name: "NSX Manager PASSWORD"
           optional: 0
+          input: password
           help: "Enter the NSX Manager PASSWORD"
         - id: nsxhost
           name: "NSX Manager IP"
@@ -349,6 +352,7 @@
         - id: cntrlpass
           name: "Controller Password"
           optional: 0
+          input: password
           help: "Enter Password for controller must be 12 or more chars ex: VMware1!VMware1!"
         - id: segmentid_num
           name: "Segment ID number"
