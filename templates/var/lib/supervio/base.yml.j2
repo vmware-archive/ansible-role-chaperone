@@ -94,18 +94,16 @@
             optional: 0
             help: "Compute Cluster ESXi MAC address"
     - AutoDeploy:
-      - General:
-        - id: win_url
-          name: "win url"
-          input: dropdown
-          optional: 0
-          help: "Enter URL for asset server"
-          options:
-            - id: 'http://192.168.110.14/asset/VMware-ESXi-6.0.0-2494585-depot.zip'
+      - "Local Software Depot":
+        - id: use_local
+          name: "Use Local SoftwareDepot"
+          input: checkbox
+          optional: 1
+          help: "Select if using Local Software Depot Zip provided"
         - id: win_path
-          name: "win path"
-          optional: 0
-          help: "Local Full Directory Path on Windows Server for Software Depot Zip"
+          name: "Local Directory"
+          optional: 1
+          help: "Local Full Directory Path on Windows Server to upload Software Depot Zip"
         - id: esxi_host_profile
           name: "ESXi Host Profile"
           optional: 0
@@ -117,8 +115,26 @@
           help: "Select the ESX Image Profile Name to use"
           options:
             - id: 'ESXi-*-no-tools'
-            - id: 'ESXi-*-standard'  
-        
+            - id: 'ESXi-*-standard'
+      - "Remote Software Depot":
+        - id: use_remote
+          name: "Use Remote Software Depot"
+          optional: 1
+          input: checkbox
+          help: "Select if using Remote Software Depot URL"
+        - id: remote_url
+          name: "Remote URL"
+          optional: 1
+          help: "Enter the Remote URL for the Software Depot"
+        - id: esxi_host_profile_remote
+          name: "ESX Host Profile"
+          optional: 1
+          help: "Enter the Host Profile to use"
+        - id: esxi_img_remote
+          name: "ESX Image Profile Name"
+          optional: 1
+          help: "Enter the ESX Image Profile Name to use"
+
   - "Network Services":
     - "Boot Services":
       - DHCP:
