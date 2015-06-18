@@ -1,5 +1,5 @@
 #!/bin/bash
 
+python prepare_variables.py
 cd /opt/{{ supervio_django_app }}-ansible/playbooks/supervio
-ansible-playbook -i inventory prepare_variables.yml
 ansible-playbook -i inventory -v $1
