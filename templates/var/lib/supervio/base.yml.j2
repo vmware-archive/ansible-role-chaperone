@@ -95,6 +95,31 @@
             optional: 0
             help: "Compute Cluster ESXi MAC address"
     - AutoDeploy:
+      - "Window Server Info":
+        - id: win_admin
+          name: "Windows Admin User"
+          optional: 0
+          help: "Enter Administrators Username"
+        - id: win_pass
+          name: "Administrator Password"
+          input: password
+          help: "Enter the Administrators Password"
+        - id: powercli_check
+          name: "PowerCli Installed"
+          input: checkbox
+          help: "Please check is powercli is installed"
+        - id: ps_remoting
+          name: "PowerShell Remoting"
+          input: checkbox
+          help: "Is Enable-PSRemoting?"
+        - id: set_exec
+          name: "PowerShell Execution Policy"
+          input: checkbox
+          help: "Is Set-ExecutionPolicy Unrestricted?"
+        - id: run_setup
+          name: "Setup Done?"
+          input: checkbox
+          help: "Has the ansible-setup.ps1 script been run?"
       - "Local Software Depot":
         - id: use_local
           name: "Use Local SoftwareDepot"
