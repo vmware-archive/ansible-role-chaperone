@@ -15,9 +15,10 @@
 
 - name: pull depot files for future downloads (may take many minutes)
   get_url:
+    force: yes
     dest: "{{ supervio_downloads_dir }}/{{ supervio_depot_zip }}"
     url: "{{ supervio_depot_zip_url }}"
-  when: supervio_download_files and depot.stat.exists and (depot.stat.md5 != "{{ supervio_depot_zip_md5 }}")
+  when: supervio_download_files and (not depot.stat.exists or (depot.stat.md5 != "{{ supervio_depot_zip_md5 }}"))
   tags:
     - downloads
 
@@ -29,9 +30,10 @@
 
 - name: pull NSX OVA for future downloads (may take many minutes)
   get_url:
+    force: yes
     dest: "{{ supervio_downloads_dir }}/{{ supervio_nsx_ova }}"
     url: "{{ supervio_nsx_ova_url }}"
-  when: supervio_download_files and nsxova.stat.exists and (nsxova.stat.md5 != "{{ supervio_nsx_ova_md5 }}")
+  when: supervio_download_files and (not nsxova.stat.exists or (nsxova.stat.md5 != "{{ supervio_nsx_ova_md5 }}"))
   tags:
     - downloads
 
@@ -43,9 +45,10 @@
 
 - name: pull VIO OVA for future downloads (may take many minutes)
   get_url:
+    force: yes
     dest: "{{ supervio_downloads_dir }}/{{ supervio_vio_ova }}"
     url: "{{ supervio_vio_ova_url }}"
-  when: supervio_download_files and vioova.stat.exists and (vioova.stat.md5 != "{{ supervio_vio_ova_md5 }}")
+  when: supervio_download_files and (not vioova.stat.exists or (vioova.stat.md5 != "{{ supervio_vio_ova_md5 }}"))
   tags:
     - downloads
 
@@ -57,9 +60,10 @@
 
 - name: pull OVFTool for future downloads (may take many minutes)
   get_url:
+    force: yes
     dest: "{{ supervio_downloads_dir }}/{{ supervio_ovftool_zip }}"
     url: "{{ supervio_ovftool_url }}"
-  when: supervio_download_files and ofvtool.stat.exists and (ofvtool.stat.md5 != "{{ supervio_ovftool_md5 }}")
+  when: supervio_download_files and (not ovftool.stat.exists or (ovftool.stat.md5 != "{{ supervio_ovftool_md5 }}"))
   tags:
     - downloads
 
