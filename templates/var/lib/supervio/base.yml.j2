@@ -163,7 +163,11 @@
           name: "ESX Image Profile Name"
           optional: 1
           help: "Enter the ESX Image Profile Name to use"
-
+      - "ESXi Software":
+        - id: supervio_esxi_url
+          name: "URL to ESXi Installer ISO"
+          optional: 0
+          default: "http://build-squid.eng.vmware.com/build/mts/release/sb-5579746/publish/VMware-VMvisor-Installer-6.0.0-5579746.x86_64.iso"
   - "Network Services":
     - "Boot Services":
       - DHCP:
