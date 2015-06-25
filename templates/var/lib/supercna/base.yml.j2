@@ -13,6 +13,11 @@
           optional: 0
           help: "IP address of Externally Exposed Consul Server."
     - Bonneville:
+      - Directory:
+        - id: bonneville_dir
+          name: "Bonneville Path"
+          optional: 1
+          help: "Path to bonneville install files (default: /tmp/bonneville)."
       - Target:
         - id: bonneville_target_host
           name: "ESX Target"
