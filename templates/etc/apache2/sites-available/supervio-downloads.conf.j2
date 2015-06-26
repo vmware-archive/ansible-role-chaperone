@@ -1,4 +1,4 @@
-<VirtualHost *:80>
+<VirtualHost *:{{ apache_listen_port }}>
 	ServerName {{ supervio_django_app }}-ui.{{ supervio_django_domain }}
 
 	ServerAdmin webmaster@localhost

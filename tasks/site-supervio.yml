@@ -9,6 +9,7 @@
 
 - name: get depot file stats
   stat: path="{{ supervio_downloads_dir }}/{{ supervio_depot_zip }}"
+  when: supervio_download_files
   register: depot
   tags:
     - downloads
@@ -25,6 +26,7 @@
 - name: get NSX OVA stats
   stat: path="{{ supervio_downloads_dir }}/{{ supervio_nsx_ova }}"
   register: nsxova
+  when: supervio_download_files
   tags:
     - downloads
 
@@ -40,6 +42,7 @@
 - name: get VIO OVA file stats
   stat: path="{{ supervio_downloads_dir }}/{{ supervio_vio_ova }}"
   register: vioova
+  when: supervio_download_files
   tags:
     - downloads
 
@@ -55,6 +58,7 @@
 - name: get OVFTool zip file stats
   stat: path="{{ supervio_downloads_dir }}/{{ supervio_ovftool_zip }}"
   register: ovftool
+  when: supervio_download_files
   tags:
     - downloads
 
