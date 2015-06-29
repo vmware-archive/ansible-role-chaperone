@@ -71,6 +71,21 @@
   tags:
     - downloads
 
+- name: get esx hypervisor iso file stats
+  stat: path="{{ supervio_downloads_dir }}/{{ supervio_esxi_iso }}"
+  register: esxiiso
+  tags:
+    - downloads
+
+- name: pull esxi iso for future downloads (may take many minutes)
+  get_url:
+    dest: "{{ supervio_downloads_dir }}/{{ supervio_esxi_iso }}"
+    url: "{{ supervio_esxi_url }}"
+  when: supervio_download_files and not (esxiiso.stat.exists and (esxiiso.stat.md5 == "{{ supervio_esxi_md5 }}"))
+  tags:
+    - downloads
+
+
 - name: (Re)Generate site-available supervio-ui config
   template:
     src: "etc/apache2/sites-available/{{ supervio_django_app }}.conf.j2"
