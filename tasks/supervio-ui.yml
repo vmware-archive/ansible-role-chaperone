@@ -20,11 +20,7 @@
     - rsync
 
 - name: recursively sync the ui code from local repos
-  command: "rsync -a --recursive --no-motd --exclude=.git ui/ {{ rsync_user_id }}@{{ inventory_hostname }}:/opt/{{ supervio_django_app }}/"
-  args:
-    chdir: ../../..
-  sudo: no
-  delegate_to: localhost
+  synchronize: src=../../../ui/ dest=/opt/{{ supervio_django_app }}/ recursive=yes rsync_opts=--no-motd,--exclude=.git
   tags:
     - rsync
 
@@ -38,12 +34,16 @@
   tags:
     - rsync
 
+- name: recursively sync the ansible playbooks from local repos
+  synchronize: src=../../../ansible/playbooks dest=/opt/{{ supervio_django_app }}-ansible/ recursive=yes rsync_opts=--no-motd,--exclude=.git
+  tags:
+    - rsync
 - name: recursively sync the ansible roles from local repos
-  command: "rsync -a --recursive --no-motd --exclude=.git ansible/playbooks ansible/roles ansible/library {{ rsync_user_id }}@{{ inventory_hostname }}:/opt/{{ supervio_django_app }}-ansible/"
-  args:
-    chdir: ../../..
-  sudo: no
-  delegate_to: localhost
+  synchronize: src=../../../ansible/roles dest=/opt/{{ supervio_django_app }}-ansible/ recursive=yes rsync_opts=--no-motd,--exclude=.git
+  tags:
+    - rsync
+- name: recursively sync the ansible library from local repos
+  synchronize: src=../../../ansible/library dest=/opt/{{ supervio_django_app }}-ansible/ recursive=yes rsync_opts=--no-motd,--exclude=.git
   tags:
     - rsync
 
