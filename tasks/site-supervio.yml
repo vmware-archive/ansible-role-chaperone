@@ -19,6 +19,7 @@
     force: yes
     dest: "{{ supervio_downloads_dir }}/{{ supervio_depot_zip }}"
     url: "{{ supervio_depot_zip_url }}"
+    timeout: "{{ supervio_downloads_timeout }}"
   when: supervio_download_files and (not depot.stat.exists or (depot.stat.md5 != "{{ supervio_depot_zip_md5 }}"))
   tags:
     - downloads
@@ -35,6 +36,7 @@
     force: yes
     dest: "{{ supervio_downloads_dir }}/{{ supervio_nsx_ova }}"
     url: "{{ supervio_nsx_ova_url }}"
+    timeout: "{{ supervio_downloads_timeout }}"
   when: supervio_download_files and (not nsxova.stat.exists or (nsxova.stat.md5 != "{{ supervio_nsx_ova_md5 }}"))
   tags:
     - downloads
@@ -51,6 +53,7 @@
     force: yes
     dest: "{{ supervio_downloads_dir }}/{{ supervio_vio_ova }}"
     url: "{{ supervio_vio_ova_url }}"
+    timeout: "{{ supervio_downloads_timeout }}"
   when: supervio_download_files and (not vioova.stat.exists or (vioova.stat.md5 != "{{ supervio_vio_ova_md5 }}"))
   tags:
     - downloads
@@ -67,6 +70,7 @@
     force: yes
     dest: "{{ supervio_downloads_dir }}/{{ supervio_ovftool_zip }}"
     url: "{{ supervio_ovftool_url }}"
+    timeout: "{{ supervio_downloads_timeout }}"
   when: supervio_download_files and (not ovftool.stat.exists or (ovftool.stat.md5 != "{{ supervio_ovftool_md5 }}"))
   tags:
     - downloads
@@ -81,10 +85,10 @@
   get_url:
     dest: "{{ supervio_downloads_dir }}/{{ supervio_esxi_iso }}"
     url: "{{ supervio_esxi_url }}"
+    timeout: "{{ supervio_downloads_timeout }}"
   when: supervio_download_files and not (esxiiso.stat.exists and (esxiiso.stat.md5 == "{{ supervio_esxi_md5 }}"))
   tags:
     - downloads
-
 
 - name: (Re)Generate site-available supervio-ui config
   template:

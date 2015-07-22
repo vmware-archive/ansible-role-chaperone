@@ -17,6 +17,7 @@ supervio_django_fullname: "VMware {{ supervio_django_shortname }}"
 
 supervio_download_files: false
 supervio_downloads_dir: /var/www/html/downloads
+supervio_downloads_timeout: 10
 
 supervio_depot_zip: "VMware-ESXi-6.0.0-2494585-depot.zip"
 supervio_depot_zip_md5: "bebc48450b9743c56073602931d63600"
