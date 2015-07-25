@@ -57,6 +57,16 @@
   tags:
     - rsync
 
+- name: create playbook convenience script for tags
+  template:
+    src: "opt/{{ supervio_django_app }}/{{ supervio_django_app }}_play_tags.j2"
+    dest: "/opt/{{ supervio_django_app }}/{{ supervio_django_app }}_play_tags"
+    owner: "{{ ansible_ssh_user }}"
+    group: "{{ ansible_ssh_user }}"
+    mode: "0700"
+  tags:
+    - rsync
+
 - name: create custom variables script
   template:
     src: "opt/{{ supervio_django_app }}/prepare_variables.py.j2"
