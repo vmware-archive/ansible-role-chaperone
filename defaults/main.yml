@@ -27,9 +27,13 @@ supervio_nsx_ova: "VMware-NSX-Manager-6.1.4-2691049.ova"
 supervio_nsx_ova_md5: "972754d48346c469e3d32aea5e3d147b"
 supervio_nsx_ova_url: "http://build-squid.eng.vmware.com/build/mts/release/bora-2691049/publish/VMware-NSX-Manager-6.1.4-2691049.ova"
 
-supervio_vio_ova: "VMware-OpenStack-1.0.0.0-2567172_OVF10.ova"
-supervio_vio_ova_md5: "d19beab8e7e86dc026a3472bf230ac67"
-supervio_vio_ova_url: "http://build-squid.eng.vmware.com/build/mts/release/bora-2567172/publish/openstack_vapp/exports/ova/VMware-OpenStack-1.0.0.0-2567172_OVF10.ova"
+#supervio_vio_ova: "VMware-OpenStack-1.0.0.0-2567172_OVF10.ova"
+#supervio_vio_ova_md5: "d19beab8e7e86dc026a3472bf230ac67"
+#supervio_vio_ova_url: "http://build-squid.eng.vmware.com/build/mts/release/bora-2567172/publish/openstack_vapp/exports/ova/VMware-OpenStack-1.0.0.0-2567172_OVF10.ova"
+
+supervio_vio_ova: "VMware-OpenStack-1.0.0.0-2824223_OVF10.ova"
+supervio_vio_ova_md5: "513772592bfd9bf30393a01aa1a15114"
+supervio_vio_ova_url: "http://build-squid.eng.vmware.com/build/mts/release/bora-2824223/publish/openstack_vapp/exports/ova/VMware-OpenStack-1.0.0.0-2824223_OVF10.ova"
 
 supervio_ovftool_zip: "VMware-ovftool-4.1.0-2459827-lin.x86_64.zip"
 supervio_ovftool_md5: "63698e602af6e24640146a6592348c99"
@@ -38,3 +42,7 @@ supervio_ovftool_url: "http://build-squid.eng.vmware.com/build/mts/release/bora-
 supervio_esxi_iso: "VMware-VMvisor-Installer-6.0.0-2494585.x86_64.iso"
 supervio_esxi_md5: "478e2c6f7a875dd3dacaaeb2b0b38228"
 supervio_esxi_url: "http://build-squid.eng.vmware.com/build/mts/release/bora-2494585/publish/VMware-VMvisor-Installer-6.0.0-2494585.x86_64.iso"
+
+supervio_vcsa_iso: "VMware-VCSA-all-6.0.0-2656757.iso"
+supervio_vcsa_md5: "a11928786b330e91f12f427c3f2df11f"
+supervio_vcsa_url: "http://build-squid.eng.vmware.com/build/mts/release/bora-2656757/publish/VMware-VCSA-all-6.0.0-2656757.iso"

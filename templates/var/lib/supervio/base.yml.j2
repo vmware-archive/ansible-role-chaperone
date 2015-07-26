@@ -503,6 +503,31 @@
             - id: 'ETHER_CHANNEL'
             - id: 'LACP_ACTIVE'
 
+  - "VMware Integrated OpenStack":
+    - "Options":
+      - OVA:
+        - id: vio_name
+          name: "Name"
+          optional: 0
+          help: "The vApp Name in vCenter"
+        - id: vio_datastore
+          name: "Datastore"
+          optional: 0
+          input: dropdown
+          help: "Datastore onto which to place the OVA"
+          options: mgmt_vc_datastores
+        - id: vio_network
+          name: "Network"
+          optional: 0
+          input: dropdown
+          help: "Network to use for VIO OMS Server"
+          options: mgmt_vc_networks
+        - id: vio_cluster_mgmt
+          Name: "Cluster"
+          help: "Cluster to run the OVA"
+          input: dropdown
+          options: mgmt_vc_cluster
+
 - Install:
   - AutoDeploy:
     - id: install_datacenter
@@ -560,11 +585,15 @@
       commands:
         - "/opt/supervio/supervio_play_tags site_nsx.yml mod_test"
   - "VIO":
-    - id: install_vio
-      name: "Deploy VIO OVA"
+    - id: vio_ova_deploy
+      name: "Deploy OVA"
       commands:
-        - "/opt/supervio/supervio_play site_vio.yml"
-    - id: config_vio
-      name: "Configure VIO"
+        - "/opt/supervio/supervio_play site_vio.yml --tags ova"
+    - id: vio_generate_config
+      name: "Generate Configs"
       commands:
-        - "/opt/supervio/supervio_play site_vio.yml"
+        - "/opt/supervio/supervio_play site_vio.yml --tags config"
+    - id: vio_start_oms
+      name: "Start OMS"
+      commands:
+        - "/opt/supervio/supervio_play site_vio.yml --tags oms"

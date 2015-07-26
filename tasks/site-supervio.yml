@@ -90,6 +90,23 @@
   tags:
     - downloads
 
+- name: get vCenter Appliance file stats
+  stat: path="{{ supervio_downloads_dir }}/{{ supervio_vcsa_iso }}"
+  register: vcsaiso
+  when: supervio_download_files
+  tags:
+    - downloads
+
+- name: pull vCenter Appliance ISO for future downloads (may take many minutes)
+  get_url:
+    force: yes
+    dest: "{{ supervio_downloads_dir }}/{{ supervio_vcsa_iso }}"
+    url: "{{ supervio_vcsa_url }}"
+    timeout: "{{ supervio_downloads_timeout }}"
+  when: supervio_download_files and (not vcsaiso.stat.exists or (vcsaiso.stat.md5 != "{{ supervio_vcsa_md5 }}"))
+  tags:
+    - downloads
+
 - name: (Re)Generate site-available supervio-ui config
   template:
     src: "etc/apache2/sites-available/{{ supervio_django_app }}.conf.j2"

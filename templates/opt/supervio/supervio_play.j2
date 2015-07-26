@@ -2,4 +2,4 @@
 
 python /opt/supervio/prepare_variables.py
 cd /opt/{{ supervio_django_app }}-ansible/playbooks/supervio
-ansible-playbook -i inventory -v $1
+ansible-playbook -i inventory -v "$@"
