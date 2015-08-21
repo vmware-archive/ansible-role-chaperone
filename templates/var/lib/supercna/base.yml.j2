@@ -89,6 +89,13 @@
       commands:
         - "/opt/supercna/supercna_play inventory photon_kill_swarm.yml"
 
+- Graphite API:
+  - Install:
+    - id: graphite-api_install
+      name: "Deploy Graphite API"
+      commands:
+        - "/opt/supercna/supercna_play inventory graphite_api.yml"
+
 - "General Operations":
   - Security:
     - id: photon_sshkeys

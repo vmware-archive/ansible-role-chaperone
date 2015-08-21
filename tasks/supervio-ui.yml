@@ -47,6 +47,11 @@
   tags:
     - rsync
 
+- name: recursively sync the containers built by ansible from local repos
+  synchronize: src=../../../containers dest=/opt/ recursive=yes rsync_opts=--no-motd,--exclude=.git
+  tags:
+    - rsync
+
 - name: create playbook convenience script
   template:
     src: "opt/{{ supervio_django_app }}/{{ supervio_django_app }}_play.j2"
