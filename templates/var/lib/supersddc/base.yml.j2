@@ -1,0 +1,28 @@
+---
+- Prepare:
+  - "Datacenter Prep":
+    - "Datacenter Info":
+      - "vCenter Info":
+        - id: vcenter_host
+          name: "vCenter IP"
+          optional: 0
+          help: "IP address of vCenter"
+        - id: vcenter_user
+          name: "vCenter admin USERNAME"
+          optional: 0
+        - id: vcenter_password
+          name: "vCenter admin PASSWORD"
+          optional: 0
+          input: password
+        - id: vcenter_port
+          name: "vCenter Port"
+          optional: 0
+          help: "Port for authentication connection to vCenter"
+          default: 443
+
+- Install:
+  - vRealize Operation Manager:
+    - id: install_vrops
+      name: "Create vRealize Operation Manager"
+      commands:
+        - "/opt/supersddc/supersddc_play site_dc.yml"
