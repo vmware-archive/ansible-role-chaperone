@@ -59,75 +59,75 @@
     - id: consul_base
       name: "Consul Hosts"
       commands:
-        - "/opt/supercna/supercna_play inventory.base base.yml"
+        - "/opt/supercna/supercna_play_inventory inventory.base base.yml"
     - id: consul_consul
       name: "Consul Cluster"
       commands:
-        - "/opt/supercna/supercna_play inventory consul.yml"
+        - "/opt/supercna/supercna_play consul.yml"
 
 - Photon:
   - Install:
     - id: photon_base
       name: "Photon Base"
       commands:
-        - "/opt/supercna/supercna_play inventory.base photon_base.yml"
+        - "/opt/supercna/supercna_play_inventory inventory.base photon_base.yml"
     - id: photon_docker
       name: "Docker Setup"
       commands:
-        - "/opt/supercna/supercna_play inventory photon_docker.yml"
+        - "/opt/supercna/supercna_play photon_docker.yml"
 
 - Bonneville:
   - Install:
     - id: bonneville_install
       name: "Deploy to ESXi"
       commands:
-        - "/opt/supercna/supercna_play inventory bonneville_install.yml"
+        - "/opt/supercna/supercna_play bonneville_install.yml"
 
 - Swarm:
   - Start:
     - id: photon_swarm_start
       name: "Start Swarm on Photon"
       commands:
-        - "/opt/supercna/supercna_play inventory photon_swarm.yml"
+        - "/opt/supercna/supercna_play photon_swarm.yml"
     - id: photon_swarm_start_manager
       name: "Start Swarm Manager"
       commands:
-        - "/opt/supercna/supercna_play inventory photon_swarm_manager.yml"
+        - "/opt/supercna/supercna_play photon_swarm_manager.yml"
     - id: bonneville_swarm_start
       name: "Start Swarm on Bonneville"
       commands:
-        - "/opt/supercna/supercna_play inventory bonneville_swarm.yml"
+        - "/opt/supercna/supercna_play bonneville_swarm.yml"
 
   - Stop:
     - id: photon_swarm_stop
       name: "Stop Swarm"
       commands:
-        - "/opt/supercna/supercna_play inventory photon_kill_swarm.yml"
+        - "/opt/supercna/supercna_play photon_kill_swarm.yml"
 
 - Graphite API:
   - Install:
     - id: graphite-api_install
       name: "Deploy Graphite API"
       commands:
-        - "/opt/supercna/supercna_play inventory graphite_api.yml"
+        - "/opt/supercna/supercna_play graphite_api.yml"
 
 - "General Operations":
   - Security:
     - id: photon_sshkeys
       name: "Rotate SSHKeys"
       commands:
-        - "/opt/supercna/supercna_play inventory.base sshkeys.yml"
+        - "/opt/supercna/supercna_play_inventory inventory.base sshkeys.yml"
   - Status:
     - id: status_containers
       name: "Show All Containers"
       commands:
-        - "/opt/supercna/supercna_play inventory status_containers_all.yml"
+        - "/opt/supercna/supercna_play status_containers_all.yml"
   - Consul:
     - id: consul_ls_keys
       name: "Show Consul Keys/Values"
       commands:
-        - "/opt/supercna/supercna_play inventory status_consul_keys.yml"
+        - "/opt/supercna/supercna_play status_consul_keys.yml"
     - id: consul_members
       name: "Show Consul Members"
       commands:
-        - "/opt/supercna/supercna_play inventory status_consul_members.yml"
+        - "/opt/supercna/supercna_play status_consul_members.yml"

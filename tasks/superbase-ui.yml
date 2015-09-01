@@ -14,9 +14,9 @@
 #  limitations under the License.
 #
 ---
-- name: create supervio directory
+- name: create application directory
   file:
-    dest: "/opt/{{ supervio_django_app }}"
+    dest: "/opt/{{ django_app }}"
     state: directory
     owner: "{{ ansible_ssh_user }}"
     group: "{{ ansible_ssh_user }}"
@@ -26,7 +26,7 @@
 
 - name: create blackhole directory
   file:
-    dest: "/opt/{{ supervio_django_app }}/.blackhole"
+    dest: "/opt/{{ django_app }}/.blackhole"
     state: directory
     owner: "{{ ansible_ssh_user }}"
     group: "{{ ansible_ssh_user }}"
@@ -35,13 +35,13 @@
     - rsync
 
 - name: recursively sync the ui code from local repos
-  synchronize: src=../../../ui/ dest=/opt/{{ supervio_django_app }}/ recursive=yes rsync_opts=--no-motd,--exclude=.git
+  synchronize: src=../../../ui/ dest=/opt/{{ django_app }}/ recursive=yes rsync_opts=--no-motd,--exclude=.git
   tags:
     - rsync
 
 - name: ensure ansible plays directory exists
   file:
-    dest: "/opt/{{ supervio_django_app }}-ansible"
+    dest: "/opt/{{ django_app }}-ansible"
     state: directory
     owner: "{{ ansible_ssh_user }}"
     group: "{{ ansible_ssh_user }}"
@@ -50,15 +50,15 @@
     - rsync
 
 - name: recursively sync the ansible playbooks from local repos
-  synchronize: src=../../../ansible/playbooks dest=/opt/{{ supervio_django_app }}-ansible/ recursive=yes rsync_opts=--no-motd,--exclude=.git
+  synchronize: src=../../../ansible/playbooks dest=/opt/{{ django_app }}-ansible/ recursive=yes rsync_opts=--no-motd,--exclude=.git
   tags:
     - rsync
 - name: recursively sync the ansible roles from local repos
-  synchronize: src=../../../ansible/roles dest=/opt/{{ supervio_django_app }}-ansible/ recursive=yes rsync_opts=--no-motd,--exclude=.git
+  synchronize: src=../../../ansible/roles dest=/opt/{{ django_app }}-ansible/ recursive=yes rsync_opts=--no-motd,--exclude=.git
   tags:
     - rsync
 - name: recursively sync the ansible library from local repos
-  synchronize: src=../../../ansible/library dest=/opt/{{ supervio_django_app }}-ansible/ recursive=yes rsync_opts=--no-motd,--exclude=.git
+  synchronize: src=../../../ansible/library dest=/opt/{{ django_app }}-ansible/ recursive=yes rsync_opts=--no-motd,--exclude=.git
   tags:
     - rsync
 
@@ -69,8 +69,8 @@
 
 - name: create playbook convenience script
   template:
-    src: "opt/{{ supervio_django_app }}/{{ supervio_django_app }}_play.j2"
-    dest: "/opt/{{ supervio_django_app }}/{{ supervio_django_app }}_play"
+    src: "opt/superbase_play.j2"
+    dest: "/opt/{{ django_app }}/{{ django_app }}_play"
     owner: "{{ ansible_ssh_user }}"
     group: "{{ ansible_ssh_user }}"
     mode: "0700"
@@ -79,8 +79,18 @@
 
 - name: create playbook convenience script for tags
   template:
-    src: "opt/{{ supervio_django_app }}/{{ supervio_django_app }}_play_tags.j2"
-    dest: "/opt/{{ supervio_django_app }}/{{ supervio_django_app }}_play_tags"
+    src: "opt/superbase_play_tags.j2"
+    dest: "/opt/{{ django_app }}/{{ django_app }}_play_tags"
+    owner: "{{ ansible_ssh_user }}"
+    group: "{{ ansible_ssh_user }}"
+    mode: "0700"
+  tags:
+    - rsync
+
+- name: create playbook convenience script for non-default inventory 
+  template:
+    src: "opt/superbase_play_inventory.j2"
+    dest: "/opt/{{ django_app }}/{{ django_app }}_play_inventory"
     owner: "{{ ansible_ssh_user }}"
     group: "{{ ansible_ssh_user }}"
     mode: "0700"
@@ -89,8 +99,8 @@
 
 - name: create custom variables script
   template:
-    src: "opt/{{ supervio_django_app }}/prepare_variables.py.j2"
-    dest: "/opt/{{ supervio_django_app }}/prepare_variables.py"
+    src: "opt/prepare_variables.py.j2"
+    dest: "/opt/{{ django_app }}/prepare_variables.py"
     owner: "{{ ansible_ssh_user }}"
     group: "{{ ansible_ssh_user }}"
     mode: "0700"
@@ -99,8 +109,8 @@
 
 - name: Create settings.py
   template:
-    src: "opt/{{ supervio_django_app }}/{{ supervio_django_app }}/settings.py.j2"
-    dest: "/opt/{{ supervio_django_app }}/supervio/settings.py"
+    src: "opt/superbase/settings.py.j2"
+    dest: "/opt/{{ django_app }}/supervio/settings.py"
     owner: "{{ ansible_ssh_user }}"
     group: "{{ ansible_ssh_user }}"
   notify: Restart apache2
@@ -109,17 +119,17 @@
 
 - name: Create local_settings.py
   template:
-    src: "opt/{{ supervio_django_app }}/{{ supervio_django_app }}/local_settings.py.j2"
-    dest: "/opt/{{ supervio_django_app }}/supervio/local_settings.py"
+    src: "opt/superbase/local_settings.py.j2"
+    dest: "/opt/{{ django_app }}/supervio/local_settings.py"
     owner: "{{ ansible_ssh_user }}"
     group: "{{ ansible_ssh_user }}"
   notify: Restart apache2
   tags:
     - rsync
 
-- name: Create supervio working directory
+- name: Create application working directory
   file:
-    dest: "/var/lib/{{ supervio_django_app }}"
+    dest: "/var/lib/{{ django_app }}"
     state: directory
     owner: "{{ ansible_ssh_user }}"
     group: "{{ ansible_ssh_user }}"
@@ -129,8 +139,8 @@
 
 - name: Create base.yml
   template:
-    src: "var/lib/{{ supervio_django_app }}/base.yml.j2"
-    dest: "/var/lib/{{ supervio_django_app }}/base.yml"
+    src: "var/lib/{{ django_app }}/base.yml.j2"
+    dest: "/var/lib/{{ django_app }}/base.yml"
     owner: "{{ ansible_ssh_user }}"
     group: "{{ ansible_ssh_user }}"
   notify: Restart apache2
@@ -139,7 +149,7 @@
 
 - name: Create Answer files directory
   file:
-    dest: "{{ supervio_answer_dir }}"
+    dest: "{{ app_answer_dir }}"
     state: directory
     owner: "{{ ansible_ssh_user }}"
     group: "{{ ansible_ssh_user }}"
@@ -149,7 +159,7 @@
 
 - name: Create Prepare files directory
   file:
-    dest: "{{ supervio_prepare_files_dir }}"
+    dest: "{{ app_prepare_files_dir }}"
     state: directory
     owner: "{{ ansible_ssh_user }}"
     group: "{{ ansible_ssh_user }}"
@@ -159,7 +169,7 @@
 
 - name: Create Logs directory
   file:
-    dest: "{{ supervio_log_dir }}"
+    dest: "{{ app_log_dir }}/{{ django_app }}"
     state: directory
     owner: "{{ ansible_ssh_user }}"
     group: "{{ ansible_ssh_user }}"
@@ -168,18 +178,36 @@
     - rsync
 
 - name: Create database
-  command: touch "/opt/{{ supervio_django_app }}/{{ supervio_django_app }}.db"
+  command: touch "/opt/{{ django_app }}/{{ django_app }}.db"
   args:
-    creates: "/opt/{{ supervio_django_app }}/{{ supervio_django_app }}.db"
+    creates: "/opt/{{ django_app }}/{{ django_app }}.db"
   sudo: no
   register: db
 
 - name: Initialize database
   command: python manage.py syncdb --noinput
   args:
-    chdir: "/opt/{{ supervio_django_app }}"
+    chdir: "/opt/{{ django_app }}"
   sudo: no
   when: db.changed
+
+- name: (Re)Generate site-available ui config
+  template:
+    src: "etc/apache2/sites-available/superbase.conf.j2"
+    dest: "/etc/apache2/sites-available/{{ django_app }}.conf"
+    owner: "{{ ansible_ssh_user }}"
+    group: "{{ ansible_ssh_user }}"
+    mode: 0644
+
+- name: (Re)Generate site-available download config
+  template:
+    src: "etc/apache2/sites-available/superbase-downloads.conf.j2"
+    dest: "/etc/apache2/sites-available/{{ django_app }}-downloads.conf"
+    owner: "{{ ansible_ssh_user }}"
+    group: "{{ ansible_ssh_user }}"
+    mode: 0644
+  tags:
+    - downloads
 
 - name: Disable 000-default site
   command: a2dissite 000-default
@@ -187,8 +215,14 @@
   tags:
     - rsync
 
-- name: Enable supervio site
-  command: a2ensite {{ supervio_django_app }}
+- name: Enable application site
+  command: a2ensite {{ django_app }}
   notify: Restart apache2
   tags:
     - rsync
+
+- name: enable the general application site (this is not the ui)
+  command: "a2ensite {{ django_app }}-downloads"
+  notify: Restart apache2
+  tags:
+    - downloads

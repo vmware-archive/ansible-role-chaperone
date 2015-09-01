@@ -14,8 +14,10 @@
 #  limitations under the License.
 #
 ---
-supervio_ui_port: 80
-supervio_allowed_hosts:
+apache_ui_port: 80
+apache_listen_port: 81
+
+allowed_hosts:
   - '*.vmware.local'
   - '*.vmware.com'
   - '*.corp.local'

@@ -14,7 +14,15 @@
 #  See the License for the specific language governing permissions and
 #  limitations under the License.
 #
+# Arguments:
+# $1: inventory file to use for the play
+# $2: playbook (YAML) file
 
-python /opt/supervio/prepare_variables.py
-cd /opt/{{ supervio_django_app }}-ansible/playbooks/supervio
-ansible-playbook -i inventory -v "$@"
+inventory="${1}"
+shift
+
+cd /opt/{{ django_app }}-ansible/playbooks/{{ django_app }}
+echo "------------------------------------------------------------------------"
+echo "Running: ansible-playbook -i ${inventory} -v $@"
+echo "------------------------------------------------------------------------"
+ansible-playbook -i "$inventory" -v "$@"

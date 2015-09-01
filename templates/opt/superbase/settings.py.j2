@@ -14,7 +14,7 @@
 #  limitations under the License.
 #
 """
-Django settings for supercna project.
+Django settings for superxxx project.
 
 For more information on this file, see
 https://docs.djangoproject.com/en/1.6/topics/settings/
@@ -88,7 +88,7 @@ STATIC_URL = '/static/'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': '/opt/{{ supervio_django_app }}/{{ supervio_django_app }}.db',
+        'NAME': '/opt/{{ django_app }}/{{ django_app }}.db',
     }
 }
 
@@ -108,7 +108,7 @@ LOGGING = {
         'file': {
             'level': 'DEBUG',
             'class': 'logging.FileHandler',
-            'filename': '/var/log/{{ supervio_django_app }}/{{ supervio_django_app }}.log',
+            'filename': '/var/log/{{ django_app }}/{{ django_app }}.log',
             'formatter': 'verbose'
         },
     },

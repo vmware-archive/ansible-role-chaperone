@@ -14,4 +14,4 @@
 #  limitations under the License.
 #
 ---
-- include: site-{{ supervio_django_app }}.yml
+- include: site-{{ django_app }}.yml

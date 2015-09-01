@@ -18,7 +18,7 @@ from jinja2 import Template
 import yaml
 
 roles = [ 'vcenter', 'net', 'autodeploy']
-answerfile = "{{answerfile|default('/var/lib/supervio/answerfile.yml')}}"
+answerfile = "{{ app_answer_dir }}/answerfile.yml"
 
 if __name__ == "__main__":
   context = yaml.load(file(answerfile,'r'))
@@ -63,5 +63,5 @@ if __name__ == "__main__":
       context['compute_hosts'].append(host)
 
   for role in roles:
-    template = Template(file("/opt/supervio-ansible/roles/%s/defaults/main.yml.j2" % role).read())
-    file("/opt/supervio-ansible/roles/%s/defaults/main.yml" % role,'w').write(template.render(context))
+    template = Template(file("/opt/{{ django_app }}-ansible/roles/%s/defaults/main.yml.j2" % role).read())
+    file("/opt/{{ django_app }}-ansible/roles/%s/defaults/main.yml" % role,'w').write(template.render(context))

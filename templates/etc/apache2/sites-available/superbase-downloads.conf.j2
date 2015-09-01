@@ -13,8 +13,9 @@
 #  See the License for the specific language governing permissions and
 #  limitations under the License.
 #
-<VirtualHost *:80>
-	ServerName {{ supervio_django_app }}.{{ supervio_django_domain }}
+<VirtualHost *:{{ apache_listen_port }}>
+	ServerName {{ django_app }}-ui.{{ django_domain }}
+
 	ServerAdmin webmaster@localhost
 	DocumentRoot /var/www/html
 
