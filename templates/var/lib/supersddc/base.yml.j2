@@ -15,7 +15,7 @@
 #
 ---
 - Prepare:
-  - "Datacenter Prep":
+  - "Datacenter Configuration":
     - "Datacenter Info":
       - "vCenter Info":
         - id: vcenter_host
@@ -34,10 +34,35 @@
           optional: 0
           help: "Port for authentication connection to vCenter"
           default: 443
+      - "Datacenter Name":
+        - id: datacenter_name
+          name: "Name of datacenter"
+          optional: 0
+          help: "Enter the name of the Datacenter being created ex: VIO-Datacenter"
+
+  - "vRealize Configurations":
+    - "Operations Manager":
+      - Deployment:
+        - id: vrops_ova
+          name: "OVA"
+          optional: 0
+          help: "The vApp Name in vCenter"
+        - id: vrops_datastore
+          name: "Datastore"
+          optional: 0
+          help: "The datastore on which to place the OVA"
+        - id: vrops_name
+          name: "VM Name"
+          optional: 0
+          help: "The VM name for the installed vRealize Operations Manager"
+        - id: vrops_cluster
+          name: "Management Cluster"
+          optional: 0
+          help: "The cluster to run the OVA"
 
 - Install:
   - vRealize Operation Manager:
     - id: install_vrops
       name: "Create vRealize Operation Manager"
       commands:
-        - "/opt/supersddc/supersddc_play site_dc.yml"
+        - "/opt/supersddc/supersddc_play site_vrops.yml"
