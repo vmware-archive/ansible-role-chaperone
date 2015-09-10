@@ -38,11 +38,23 @@
           name: "NTP server"
           optional: 0
           help: "NTP server for your network"
+        - id: hostprofile_name
+          name: "Host Profile name"
+          optional: 0
+          help: "Name the host profile"
       - "Datacenter Name":
         - id: datacenter_name
           name: "Name of datacenter"
           optional: 0
           help: "Enter the name of the Datacenter being created ex: VIO-Datacenter"
+        - id: vmo_cider
+          name: "vMotion Network cider"
+          optional: 0
+          help: "EX: 192.168.1.0/24"
+        - id: strg_cider
+          name: "Storage Network cider"
+          optional: 0
+          help: "EX: 192.168.2.0/24"
       - "Managment Cluster":
         - id: vio_cluster_mgmt
           name: "Management cluster name"
@@ -52,7 +64,7 @@
           optional: 0
           input: multiform
           readonly: 1
-          min_items: 3
+          min_items: 1
           items:
           - id: mgmt_esx_name
             name: "ESX hosts name"
@@ -66,6 +78,15 @@
             name: "ESX MAC address"
             optional: 0
             help: "Management Cluster ESXi MAC address"
+          - id: mgmt_esx_username
+            name: "ESX Username"
+            optional: 0
+            help: "ESX root username"
+          - id: mgmt_esx_password
+            name: "ESX Password"
+            optional: 0
+            input: password
+            help: "ESX root password"
       - "Edge Cluster":
         - id: vio_cluster_edge
           name: "Edge cluster name"
@@ -89,6 +110,15 @@
             name: "ESX MAC address"
             optional: 0
             help: "Edge Cluster ESXi MAC address"
+          - id: edge_esx_username
+            name: "ESX Username"
+            optional: 0
+            help: "ESX root username"
+          - id: edge_esx_password
+            name: "ESX Password"
+            optional: 0
+            input: password
+            help: "ESX root password"
       - "Compute Cluster":
         - id: vio_cluster_compute
           name: "Compute cluster name"
@@ -112,6 +142,24 @@
             name: "ESX MAC address"
             optional: 0
             help: "Compute Cluster ESXi MAC address"
+          - id: compute_esx_username
+            name: "ESX username"
+            optional: 0
+            help: "ESX root username"
+          - id: compute_esx_password
+            name: "ESX root password"
+            optional: 0
+            input: password
+      - "Add NFS datastore":
+        - id: nfs_name
+          name: "NFS Datastore name"
+          optional: 0
+        - id: nfs_host
+          name: "NFS host"
+          optional: 0
+        - id: nfs_path
+          name: "NFS path"
+          optional: 0
     - AutoDeploy:
       - "Window Server Info":
         - id: win_admin
@@ -183,6 +231,33 @@
           name: "URL to ESXi Installer ISO"
           optional: 0
           default: "http://build-squid.eng.vmware.com/build/mts/release/sb-5579746/publish/VMware-VMvisor-Installer-6.0.0-5579746.x86_64.iso"
+    - "Add Host":
+      - "Host Information":
+        - id: add_single_host
+          name: "Add single host"
+          optional: 0
+          input: dropdown
+          options:
+            - id: 'yes'
+            - id: 'no'
+        - id: host_ip_name
+          name: "Host ip or dns"
+          optional: 0
+        - id: host_username
+          name: "Host username"
+          optional: 0
+        - id: host_password
+          name: "Host password"
+          optional: 0
+          input: password
+        - id: addhost_cluster
+          name: "Select cluster"
+          optional: 0
+          input: dropdown
+          options:
+            - id: "vio-mgmt-1"
+            - id: "vio-edge-1"
+            - id: "vio-compute-1"
   - "Network Services":
     - "Boot Services":
       - DHCP:
@@ -518,45 +593,32 @@
             - id: 'ETHER_CHANNEL'
             - id: 'LACP_ACTIVE'
 
-  - "VMware Integrated OpenStack":
-    - "Options":
-      - OVA:
-        - id: vio_name
-          name: "Name"
-          optional: 0
-          help: "The vApp Name in vCenter"
-        - id: vio_datastore
-          name: "Datastore"
-          optional: 0
-          input: dropdown
-          help: "Datastore onto which to place the OVA"
-          options: mgmt_vc_datastores
-        - id: vio_network
-          name: "Network"
-          optional: 0
-          input: dropdown
-          help: "Network to use for VIO OMS Server"
-          options: mgmt_vc_networks
-        - id: vio_cluster_mgmt
-          Name: "Cluster"
-          help: "Cluster to run the OVA"
-          input: dropdown
-          options: mgmt_vc_cluster
-
 - Install:
-  - AutoDeploy:
+  - "Datacenter Deploy":
     - id: install_datacenter
-      name: "Create vSphere Datacenter"
+      name: "Create vSphere Datacenter Clusters"
       commands:
-        - "/opt/supervio/supervio_play site_dc.yml"
-    - id: install_autodeploy
-      name: "Configure Autodeploy"
+        - "/opt/supervio/supervio_play_tags site_dc.yml datacenter"
+    - id: install_vds
+      name: "Create VDS portgroups"
       commands:
-        - "/opt/supervio/supervio_play site_autodeploy.yml"
-    - id: install_dhcp
-      name: "Enable TFTP and DHCP Services"
+        - "/opt/supervio/supervio_play_tags site_dc.yml vds"
+    - id: install_datacenter_addhosts
+      name: "Add Hosts"
       commands:
-        - "/opt/supervio/supervio_play site_dhcpd.yml"
+        - "/opt/supervio/supervio_play_tags site_dc.yml addhosts"
+    - id: install_datacenter_confighosts
+      name: "Configure Hosts vds"
+      commands:
+        - "/opt/supervio/supervio_play_tags site_dc.yml confighosts"
+    - id: install_datacenter_hostprofile
+      name: "Create Host Profiles"
+      commands:
+        - "/opt/supervio/supervio_play_tags site_dc.yml hostprofile"
+    - id: install_applyprofiles
+      name: "Apply Host Profiles"
+      commands:
+        - "/opt/supervio/supervio_play_tags site_dc.yml applyprofile"
 
   - "NSX Deploy":
     - id: nsx_ova_deploy
@@ -600,15 +662,11 @@
       commands:
         - "/opt/supervio/supervio_play_tags site_nsx.yml mod_test"
   - "VIO":
-    - id: vio_ova_deploy
-      name: "Deploy OVA"
+    - id: install_vio
+      name: "Deploy VIO OVA"
       commands:
-        - "/opt/supervio/supervio_play site_vio.yml --tags ova"
-    - id: vio_generate_config
-      name: "Generate Configs"
+        - "/opt/supervio/supervio_play site_vio.yml"
+    - id: config_vio
+      name: "Configure VIO"
       commands:
-        - "/opt/supervio/supervio_play site_vio.yml --tags config"
-    - id: vio_start_oms
-      name: "Start OMS"
-      commands:
-        - "/opt/supervio/supervio_play site_vio.yml --tags oms"
+        - "/opt/supervio/supervio_play site_vio.yml"
