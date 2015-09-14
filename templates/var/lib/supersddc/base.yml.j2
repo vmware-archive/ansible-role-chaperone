@@ -46,19 +46,59 @@
         - id: vrops_ova
           name: "OVA"
           optional: 0
-          help: "The vApp Name in vCenter"
-        - id: vrops_datastore
-          name: "Datastore"
-          optional: 0
-          help: "The datastore on which to place the OVA"
+          help: "The name of the OVA file"
         - id: vrops_name
           name: "VM Name"
           optional: 0
           help: "The VM name for the installed vRealize Operations Manager"
         - id: vrops_cluster
-          name: "Management Cluster"
+          name: "Cluster"
           optional: 0
           help: "The cluster to run the OVA"
+        - id: vrops_datastore
+          name: "Datastore"
+          optional: 0
+          help: "The datastore on which to place the OVA"
+        - id: vrops_network
+          name: "Network"
+          optional: 0
+          help: "The network use for the OVA"
+        - id: vrops_gateway
+          name: "Gateway"
+          optional: 0
+          help: "The default gateway address for this VM"
+        - id: vrops_dns
+          name: "DNS"
+          optional: 0
+          help: "The domain name server(s) for this VM (comma seperated)"
+        - id: vrops_ip
+          name: "IP Address"
+          optional: 0
+          help: "The IP address for this interface"
+        - id: vrops_netmask
+          name: "Netmask"
+          optional: 0
+          help: "The netmask or prefix for this interface."
+        - id: vrops_deployment_option
+          name: "Deployment Option"
+          optional: 0
+          input: dropdown
+          help: "Indicates the size of the environment"
+          options:
+            - id: "small"
+            - id: "medium"
+            - id: "large"
+            - id: "smallrc"
+            - id: "largerc"
+            - id: "xsmall"
+        - id: vrops_poweron
+          name: "Power on"
+          optional: 0
+          input: dropdown
+          help: "If false selected must manually power on in vcenter"
+          options:
+            - id: "true"
+            - id: "false"
 
 - Install:
   - vRealize Operation Manager:
