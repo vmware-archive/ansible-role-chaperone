@@ -383,6 +383,93 @@
           options:
             - id: 'VIO vMotion'
 
+  - "vCenter Server":
+    - "Deploy Info":
+      - "Target Site":
+        - id: esx_hostname
+          name: "ESXi Host"
+          optional: 0
+          help: "Host into which to deploy."
+        - id: esx_username
+          name: "User"
+          optional: 0
+          help: "Host login name."
+        - id: esx_password
+          name: "Password"
+          optional: 0
+          input: password
+          help: "Host login password."
+        - id: appliance_deployment_option
+          name: "Deployment Type"
+          input: dropdown
+          optional: 0
+          help: "The deployment (size) type for this vCenter instance."
+          options:
+            - id: tiny
+            - id: small
+            - id: medium
+            - id: large
+        - id: ovftool_http_timeout
+          name: "OVFTool timeout"
+          optional: 0
+          help: "Number of seconds for OFV Tool HTTP timeout."
+      - Resources:
+        - id: esx_datastore
+          name: "Datastore"
+          optional: 0
+          help: "Data store into which to deploy the OVA."
+        - id: esx_network
+          name: "Network"
+          optional: 0
+          help: "Network name to use for the vCenter NIC (which MUST be set to Ephemeral binding)."
+        - id: appliance_thin_disk_mode
+          name: "Thin Disk Mode"
+          optional: 0
+          input: checkbox
+          help: "Disk provisioning mode."
+      - "SSO Information":
+        - id: sso_domain_name
+          name: "Domain Name"
+          optional: 0
+          help: "The single sign-on domain name for identity management."
+        - id: sso_site_name
+          name: "Site Name"
+          optional: 0
+          help: "The single sign-on site name for identity management."
+        - id: sso_password
+          name: "Password"
+          optional: 0
+          help: "The single sign-on admin password."
+      - "Appliance Information":
+        - id: vcsa_appliance_domain_name
+          name: "vCenter Domain Name"
+          optional: 0
+          help: "The domain name for this vCenter, e.g., corp.local"
+        - id: vcsa_appliance_vcenter_name
+          name: "vCenter name"
+          optional: 0
+          help: "The host (short) name for the vCenter instace."
+        - id: vcsa_appliance_root_password
+          name: "vCenter administrator password"
+          optional: 0
+          help: "The admin (not SSO admin) password for this vCenter instance."
+        - id: vcsa_appliance_ip_address
+          name: "IP Address"
+          optional: 0
+          help: "IP address to apply to the appliance NIC."
+        - id: vcsa_appliance_ip_prefix
+          name: "Mask bits"
+          optional: 0
+          help: "The Network netmask bits (count, e.g., 24)"
+        - id: vcsa_appliance_ip_gw
+          name: "Default gateway"
+          optional: 0
+          help: "The default network gateway vCenter should use."
+        - id: vcsa_appliance_dns_servers
+          name: "DNS Servers"
+          optional: 0
+          help: "The DNS servers vCenter should use (space separated)."
+
   - "NSX Services":
     - "NSX Deploy":
       - "Deploy NSX OVA Information":
@@ -594,6 +681,12 @@
             - id: 'LACP_ACTIVE'
 
 - Install:
+  - "vCenter Deploy":
+    - id: vcenter_ova_deploy
+      name: "Deploy vCenter Server"
+      commands:
+        - "/opt/supervio/supervio_play site_vcenter.yml"
+
   - "Datacenter Deploy":
     - id: install_datacenter
       name: "Create vSphere Datacenter Clusters"
