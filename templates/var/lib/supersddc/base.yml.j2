@@ -130,6 +130,42 @@
           name: " ITFM Root Password"
           optional: 0
           input: password
+    - "Automation":
+      - Deployment:
+        - id: vra_ova
+          name: "OVA"
+          optional: 0
+          help: "The vApp Name in vCenter"
+        - id: vra_host_name
+          name: "VRA Host Name"
+          optional: 0
+          help: "Host name for the VRA"
+        - id: vra_datastore
+          name: "Datastore"
+          optional: 0
+          help: "The datastore on which to place the OVA"
+        - id: vra_network
+          name: "Network"
+          optional: 0
+          help: "The Network  on which to place the OVA"
+        - id: vra_name
+          name: "VM Name"
+          optional: 0
+          help: "The VM name for the installed vRealize Automation"
+        - id: vra_cluster
+          name: "Management Cluster"
+          optional: 0
+        - id: vra_root_password
+          name: " VRA ` Root Password"
+          optional: 0
+          input: password
+        - id: vra_ssh_enabled
+          name:  "VRA Enable SSH"
+          optional: 0
+          input: dropdown
+          options:
+            - id: "True"
+            - id: "False"
 - Install:
   - vRealize Operation Manager:
     - id: install_vrops
@@ -141,3 +177,8 @@
       name: "Create vRealize Business Standard"
       commands:
         - "/opt/supersddc/supersddc_play site_vrealizeb.yml"
+  - vRealize Automation:
+    - id: install_vRA
+      name: "Create vRealize Automation"
+      commands:
+        - "/opt/supersddc/supersddc_play site_vra.yml"
