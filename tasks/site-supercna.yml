@@ -23,15 +23,15 @@
     mode: 0755
 
 - name: get esx hypervisor iso file stats
-  stat: path="{{ downloads_dir }}/{{ supervio_esxi_iso }}"
+  stat: path="{{ downloads_dir }}/{{ chaperone_esxi_iso }}"
   register: esxiiso
   tags:
     - downloads
 
 - name: pull esxi iso for future downloads (may take many minutes)
   get_url:
-    dest: "{{ downloads_dir }}/{{ supervio_esxi_iso }}"
-    url: "{{ supervio_esxi_url }}"
-  when: download_files and not (esxiiso.stat.exists and (esxiiso.stat.md5 == "{{ supervio_esxi_md5 }}"))
+    dest: "{{ downloads_dir }}/{{ chaperone_esxi_iso }}"
+    url: "{{ chaperone_esxi_url }}"
+  when: download_files and not (esxiiso.stat.exists and (esxiiso.stat.md5 == "{{ chaperone_esxi_md5 }}"))
   tags:
     - downloads

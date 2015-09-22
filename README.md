@@ -1,7 +1,7 @@
-# ansible-role-supervio
+# ansible-role-chaperone
 
 [Ansible](https://github.com/ansible/ansible) role for developing,
-testing and installing the SuperVIO UI (Django) application.
+testing and installing the Chaperone UI (Django) application.
 
 ## Requirements
 
@@ -11,53 +11,53 @@ This role currently supports only Debian/Ubuntu distros.
 
 Available variables are listed below, along with default values (see `defaults/main.yml`):
 
-    supervio_ui_port: 80
+    chaperone_ui_port: 80
 
-The port on which the SuperVIO UI should listen for inbound (HTTP) requests.
+The port on which the Chaperone UI should listen for inbound (HTTP) requests.
 
-    supervio_allowed_hosts:
+    chaperone_allowed_hosts:
       - '*.vmware.local'
       - '*.vmware.com'
       - '*.corp.local'
 
 The hostnames that the UI will serve (it will deny other connections).
 
-    supervio_answer_dir: "/var/lib/supervio"
+    chaperone_answer_dir: "/var/lib/{{ chaperone_django_app }}"
 
 The directory on which the UI should store the (YAML) answer files for inclusing in various plays.
 
-    supervio_prepare_files_dir: "/var/lib/supervio/prepare"
+    chaperone_prepare_files_dir: "/var/lib/{{ chaperone_django_app }}/prepare"
 
 The directory in which files for preparing (see the Prepare menu) systems should exist.
 
-    supervio_log_dir: "/var/log/supervio"
+    chaperone_log_dir: "/var/log/{{ chaperone_django_app }}"
 
 The directory into which the UI should log operations. Note that the logs are read via
 AJAX callbacks for disploy in various UI pages.
 
-    supervio_django_app: "supervio"
+    chaperone_django_app: "supervio"
 
 The name for the application.
 
-    spuervi_download_files: false
+    chaperone_download_files: false
 
 Whether to download ova and depot files and make them available at
-http://<supervio-ui>/downloads. These are large and can take a very
+http://<{{ chaperone_django_app }}-ui>/downloads. These are large and can take a very
 long time to pull.
 
 ## Example playbook
 
 ```
 ---
-- hosts: supervio-ui
+- hosts: chaperone-ui
   sudo: yes
   roles:
     - pip
     - apache
-    - supervio
+    - chaperone
   vars:
-    supervio_django_debug: "True"
-    #supervio_vcenter_port: 11443
+    chaperone_django_debug: "True"
+    #chaperone_vcenter_port: 11443
   vars_files:
     - vars/ui.yml
 

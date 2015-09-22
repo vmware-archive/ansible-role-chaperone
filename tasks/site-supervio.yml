@@ -23,7 +23,7 @@
     mode: 0755
 
 - name: get depot file stats
-  stat: path="{{ downloads_dir }}/{{ supervio_depot_zip }}"
+  stat: path="{{ downloads_dir }}/{{ chaperone_depot_zip }}"
   when: download_files
   register: depot
   tags:
@@ -32,15 +32,15 @@
 - name: pull depot files for future downloads (may take many minutes)
   get_url:
     force: yes
-    dest: "{{ downloads_dir }}/{{ supervio_depot_zip }}"
-    url: "{{ supervio_depot_zip_url }}"
+    dest: "{{ downloads_dir }}/{{ chaperone_depot_zip }}"
+    url: "{{ chaperone_depot_zip_url }}"
     timeout: "{{ downloads_timeout }}"
-  when: download_files and (not depot.stat.exists or (depot.stat.md5 != "{{ supervio_depot_zip_md5 }}"))
+  when: download_files and (not depot.stat.exists or (depot.stat.md5 != "{{ chaperone_depot_zip_md5 }}"))
   tags:
     - downloads
 
 - name: get NSX OVA stats
-  stat: path="{{ downloads_dir }}/{{ supervio_nsx_ova }}"
+  stat: path="{{ downloads_dir }}/{{ chaperone_nsx_ova }}"
   register: nsxova
   when: download_files
   tags:
@@ -49,15 +49,15 @@
 - name: pull NSX OVA for future downloads (may take many minutes)
   get_url:
     force: yes
-    dest: "{{ downloads_dir }}/{{ supervio_nsx_ova }}"
-    url: "{{ supervio_nsx_ova_url }}"
+    dest: "{{ downloads_dir }}/{{ chaperone_nsx_ova }}"
+    url: "{{ chaperone_nsx_ova_url }}"
     timeout: "{{ downloads_timeout }}"
-  when: download_files and (not nsxova.stat.exists or (nsxova.stat.md5 != "{{ supervio_nsx_ova_md5 }}"))
+  when: download_files and (not nsxova.stat.exists or (nsxova.stat.md5 != "{{ chaperone_nsx_ova_md5 }}"))
   tags:
     - downloads
 
 - name: get VIO OVA file stats
-  stat: path="{{ downloads_dir }}/{{ supervio_vio_ova }}"
+  stat: path="{{ downloads_dir }}/{{ chaperone_vio_ova }}"
   register: vioova
   when: download_files
   tags:
@@ -66,15 +66,15 @@
 - name: pull VIO OVA for future downloads (may take many minutes)
   get_url:
     force: yes
-    dest: "{{ downloads_dir }}/{{ supervio_vio_ova }}"
-    url: "{{ supervio_vio_ova_url }}"
+    dest: "{{ downloads_dir }}/{{ chaperone_vio_ova }}"
+    url: "{{ chaperone_vio_ova_url }}"
     timeout: "{{ downloads_timeout }}"
-  when: download_files and (not vioova.stat.exists or (vioova.stat.md5 != "{{ supervio_vio_ova_md5 }}"))
+  when: download_files and (not vioova.stat.exists or (vioova.stat.md5 != "{{ chaperone_vio_ova_md5 }}"))
   tags:
     - downloads
 
 - name: get OVFTool zip file stats
-  stat: path="{{ downloads_dir }}/{{ supervio_ovftool_zip }}"
+  stat: path="{{ downloads_dir }}/{{ chaperone_ovftool_zip }}"
   register: ovftool
   when: download_files
   tags:
@@ -83,30 +83,30 @@
 - name: pull OVFTool for future downloads (may take many minutes)
   get_url:
     force: yes
-    dest: "{{ downloads_dir }}/{{ supervio_ovftool_zip }}"
-    url: "{{ supervio_ovftool_url }}"
+    dest: "{{ downloads_dir }}/{{ chaperone_ovftool_zip }}"
+    url: "{{ chaperone_ovftool_url }}"
     timeout: "{{ downloads_timeout }}"
-  when: download_files and (not ovftool.stat.exists or (ovftool.stat.md5 != "{{ supervio_ovftool_md5 }}"))
+  when: download_files and (not ovftool.stat.exists or (ovftool.stat.md5 != "{{ chaperone_ovftool_md5 }}"))
   tags:
     - downloads
 
 - name: get esx hypervisor iso file stats
-  stat: path="{{ downloads_dir }}/{{ supervio_esxi_iso }}"
+  stat: path="{{ downloads_dir }}/{{ chaperone_esxi_iso }}"
   register: esxiiso
   tags:
     - downloads
 
 - name: pull esxi iso for future downloads (may take many minutes)
   get_url:
-    dest: "{{ downloads_dir }}/{{ supervio_esxi_iso }}"
-    url: "{{ supervio_esxi_url }}"
+    dest: "{{ downloads_dir }}/{{ chaperone_esxi_iso }}"
+    url: "{{ chaperone_esxi_url }}"
     timeout: "{{ downloads_timeout }}"
-  when: download_files and not (esxiiso.stat.exists and (esxiiso.stat.md5 == "{{ supervio_esxi_md5 }}"))
+  when: download_files and not (esxiiso.stat.exists and (esxiiso.stat.md5 == "{{ chaperone_esxi_md5 }}"))
   tags:
     - downloads
 
 - name: get vCenter Appliance file stats
-  stat: path="{{ downloads_dir }}/{{ supervio_vcsa_iso }}"
+  stat: path="{{ downloads_dir }}/{{ chaperone_vcsa_iso }}"
   register: vcsaiso
   when: download_files
   tags:
@@ -115,9 +115,9 @@
 - name: pull vCenter Appliance ISO for future downloads (may take many minutes)
   get_url:
     force: yes
-    dest: "{{ downloads_dir }}/{{ supervio_vcsa_iso }}"
-    url: "{{ supervio_vcsa_url }}"
+    dest: "{{ downloads_dir }}/{{ chaperone_vcsa_iso }}"
+    url: "{{ chaperone_vcsa_url }}"
     timeout: "{{ downloads_timeout }}"
-  when: download_files and (not vcsaiso.stat.exists or (vcsaiso.stat.md5 != "{{ supervio_vcsa_md5 }}"))
+  when: download_files and (not vcsaiso.stat.exists or (vcsaiso.stat.md5 != "{{ chaperone_vcsa_md5 }}"))
   tags:
     - downloads

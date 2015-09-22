@@ -19,7 +19,7 @@
     ServerAdmin webmaster@example.com
 
     DocumentRoot /opt/{{ django_app }}/.blackhole/
-    Alias /static/ /opt/{{ django_app }}/supervio/static/
+    Alias /static/ /opt/{{ django_app }}/chaperone/static/
 
     <Directory />
         Options FollowSymLinks
@@ -37,7 +37,7 @@
 
     WSGIDaemonProcess {{ django_app }} user={{ ansible_ssh_user }} group={{ ansible_ssh_user }} processes=2 threads=15 display-name=%{GROUP}
     WSGIProcessGroup {{ django_app }}
-    WSGIScriptAlias / /opt/{{ django_app }}/supervio/wsgi/wsgi.py
+    WSGIScriptAlias / /opt/{{ django_app }}/chaperone/wsgi/wsgi.py
 
     ErrorLog /var/log/apache2/{{ django_app }}_error.log
     LogLevel {{ apache_loglevel }}

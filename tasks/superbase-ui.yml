@@ -110,7 +110,7 @@
 - name: Create settings.py
   template:
     src: "opt/superbase/settings.py.j2"
-    dest: "/opt/{{ django_app }}/supervio/settings.py"
+    dest: "/opt/{{ django_app }}/chaperone/settings.py"
     owner: "{{ ansible_ssh_user }}"
     group: "{{ ansible_ssh_user }}"
   notify: Restart apache2
@@ -120,7 +120,7 @@
 - name: Create local_settings.py
   template:
     src: "opt/superbase/local_settings.py.j2"
-    dest: "/opt/{{ django_app }}/supervio/local_settings.py"
+    dest: "/opt/{{ django_app }}/chaperone/local_settings.py"
     owner: "{{ ansible_ssh_user }}"
     group: "{{ ansible_ssh_user }}"
   notify: Restart apache2
@@ -149,7 +149,7 @@
 
 - name: Create Answer files directory
   file:
-    dest: "{{ app_answer_dir }}"
+    dest: "{{ chaperone_answer_dir }}"
     state: directory
     owner: "{{ ansible_ssh_user }}"
     group: "{{ ansible_ssh_user }}"
@@ -159,7 +159,7 @@
 
 - name: Create Prepare files directory
   file:
-    dest: "{{ app_prepare_files_dir }}"
+    dest: "{{ chaperone_prepare_files_dir }}"
     state: directory
     owner: "{{ ansible_ssh_user }}"
     group: "{{ ansible_ssh_user }}"
@@ -169,7 +169,7 @@
 
 - name: Create Logs directory
   file:
-    dest: "{{ app_log_dir }}/{{ django_app }}"
+    dest: "{{ chaperone_log_dir }}/{{ django_app }}"
     state: directory
     owner: "{{ ansible_ssh_user }}"
     group: "{{ ansible_ssh_user }}"

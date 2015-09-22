@@ -14,7 +14,7 @@
 #  limitations under the License.
 #
 """
-Django settings for superxxx project.
+Django settings for Chaperone project.
 
 For more information on this file, see
 https://docs.djangoproject.com/en/1.6/topics/settings/
@@ -34,7 +34,7 @@ BASE_DIR = os.path.dirname(os.path.dirname(__file__))
 LOCAL_PATH = os.path.dirname(os.path.abspath(__file__))
 
 # SECURITY WARNING: keep the secret key used in production secret!
-from supervio.utils import secret_key
+from chaperone.utils import secret_key
 SECRET_KEY = secret_key.generate_or_read_from_file(os.path.join(
     LOCAL_PATH, '.secret_key_store'))
 
@@ -47,7 +47,7 @@ INSTALLED_APPS = (
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-    'supervio',
+    'chaperone',
     'prepare',
     'execute',
 )
@@ -61,9 +61,9 @@ MIDDLEWARE_CLASSES = (
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
 )
 
-ROOT_URLCONF = 'supervio.urls'
+ROOT_URLCONF = 'chaperone.urls'
 
-WSGI_APPLICATION = 'supervio.wsgi.application'
+WSGI_APPLICATION = 'chaperone.wsgi.application'
 
 
 # Internationalization
@@ -118,7 +118,11 @@ LOGGING = {
             'propagate': True,
             'level':'DEBUG',
         },
-        'supervio': {
+        '{{ django_app }}': {
+            'handlers': ['file'],
+            'level': 'DEBUG',
+        },
+        'chaperone': {
             'handlers': ['file'],
             'level': 'DEBUG',
         },
