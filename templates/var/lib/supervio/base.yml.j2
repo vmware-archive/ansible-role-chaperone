@@ -384,92 +384,196 @@
             - id: 'VIO vMotion'
 
   - "vCenter Server":
-    - "Deploy Info":
-      - "Target Site":
+    - "General Configuration":
+      - "Architectural Scheme":
+        - id: appliance_deployment_scheme
+          name: "Appliance deployment scheme"
+          optional: 0
+          input: dropdown
+          options:
+            - id: combined
+            - id: psc
+            - id: vcsa
+          help: "Determines whether to deploy a combined vCSA and PSC or dedicated appliance(s)"
+      - "Out-of-band Management vCenter Server":
+        - id: vcenter_host
+          name: "vCenter hostname"
+          optional: 0
+          help: "Out-of-band vCenter Server that manages the ESXi host the vCSA and/or PSC is deployed to"
+        - id: vcenter_user
+          name: "vCenter Admin User"
+          optional: 0
+        - id: vcenter_password
+          name: "vCenter Admin User Password"
+          optional: 0
+          input: password
+        - id: vcenter_port
+          name: "vCenter API Port"
+          optional: 0
+          default: 443
+      - "Deployment Target":
         - id: esx_hostname
           name: "ESXi Host"
           optional: 0
-          help: "Host into which to deploy."
+          help: "Host onto which to deploy."
         - id: esx_username
-          name: "User"
+          name: "ESXi User"
           optional: 0
           help: "Host login name."
         - id: esx_password
-          name: "Password"
+          name: "ESXi User Password"
           optional: 0
           input: password
           help: "Host login password."
-        - id: appliance_deployment_option
-          name: "Deployment Type"
-          input: dropdown
-          optional: 0
-          help: "The deployment (size) type for this vCenter instance."
-          options:
-            - id: tiny
-            - id: small
-            - id: medium
-            - id: large
-        - id: ovftool_http_timeout
-          name: "OVFTool timeout"
-          optional: 0
-          help: "Number of seconds for OFV Tool HTTP timeout."
-      - Resources:
+    - "Platform Services Controller":
+      - "Storage and Network Configuration (General)":
         - id: esx_datastore
           name: "Datastore"
           optional: 0
           help: "Data store into which to deploy the OVA."
-        - id: esx_network
-          name: "Network"
-          optional: 0
-          help: "Network name to use for the vCenter NIC (which MUST be set to Ephemeral binding)."
         - id: appliance_thin_disk_mode
           name: "Thin Disk Mode"
           optional: 0
           input: checkbox
           help: "Disk provisioning mode."
+      - "Network Configuration (General)":
+        - id: esx_network
+          name: "Network"
+          optional: 0
+          help: "Network name to use for the vCenter NIC (which MUST be set to Ephemeral binding)."
+        - id: appliance_networking_mode
+          name: "Networking mode"
+          input: dropdown
+          optional: 0
+          options:
+            - id: DHCP
+            - id: Static
+      - "Network Configuration":
+        - id: psc_appliance_vcenter_name
+          name: "PSC appliance vCenter name"
+          optional: 0
+          help: "vCenter display name of PSC appliance"
+        - id: psc_appliance_domain_name
+          name: "PSC domain name"
+          optional: 1
+          help: "DNS domain suffix for PSC"
+        - id: psc_appliance_ip_address
+          name: "PSC static IP address"
+          optional: 1
+          help: "(OPTIONAL) PSC IP address, required when Networking mode is set to static"
+        - id: psc_appliance_ip_prefix
+          name: "PSC VLSM"
+          optional: 1
+          help: "(OPTIONAL) PSC variable length subnet mask, required when Networking mode is set to static"
+        - id: psc_appliance_ip_gw
+          name: "PSC static IP gateway"
+          optional: 1
+          help: "(OPTIONAL) PSC IP gateway, required when Networking mode is set to static"
+        - id: psc_appliance_dns_servers
+          name: "PSC DNS servers"
+          optional: 1
+          help: "(OPTIONAL) PSC DNS server(s), required when Networking mode is set to static"
       - "SSO Information":
         - id: sso_domain_name
-          name: "Domain Name"
+          name: "SSO Domain Name"
           optional: 0
           help: "The single sign-on domain name for identity management."
         - id: sso_site_name
-          name: "Site Name"
+          name: "SSO Site Name"
           optional: 0
           help: "The single sign-on site name for identity management."
         - id: sso_password
-          name: "Password"
+          name: "SSO administrator password"
+          input: password
           optional: 0
           help: "The single sign-on admin password."
       - "Appliance Information":
-        - id: vcsa_appliance_domain_name
-          name: "vCenter Domain Name"
+        - id: psc_appliance_root_password
+          name: "PSC administrator password"
+          input: password
           optional: 0
-          help: "The domain name for this vCenter, e.g., corp.local"
+          help: "The admin (not SSO admin) password for this PSC instance."
+    - "vCenter Server Appliance":
+      - "Storage and Network Configuration (General)":
+        - id: esx_datastore
+          name: "Datastore"
+          optional: 0
+          help: "Data store into which to deploy the OVA."
+        - id: appliance_thin_disk_mode
+          name: "Thin Disk Mode"
+          optional: 0
+          input: checkbox
+          help: "Disk provisioning mode."
+        - id: esx_network
+          name: "Network"
+          optional: 0
+          help: "Network name to use for the vCenter NIC (which MUST be set to Ephemeral binding)."
+        - id: appliance_networking_mode
+          name: "Networking mode"
+          input: dropdown
+          optional: 0
+          options:
+            - id: DHCP
+            - id: Static
+      - "Network Configuration":
         - id: vcsa_appliance_vcenter_name
-          name: "vCenter name"
+          name: "vCSA vCenter name"
           optional: 0
-          help: "The host (short) name for the vCenter instace."
-        - id: vcsa_appliance_root_password
-          name: "vCenter administrator password"
-          optional: 0
-          help: "The admin (not SSO admin) password for this vCenter instance."
+          help: "vCenter display name of the vCSA instance"
+        - id: vcsa_appliance_domain_name
+          name: "vCSA domain name"
+          optional: 1
+          help: "DNS domain suffix of vCSA instance"
         - id: vcsa_appliance_ip_address
-          name: "IP Address"
-          optional: 0
-          help: "IP address to apply to the appliance NIC."
+          name: "vCSA static IP address"
+          optional: 1
+          help: "(OPTIONAL) vCSA IP address, required when Networking mode is set to static"
         - id: vcsa_appliance_ip_prefix
-          name: "Mask bits"
-          optional: 0
-          help: "The Network netmask bits (count, e.g., 24)"
+          name: "vCSA VLSM"
+          optional: 1
+          help: "(OPTIONAL) vCSA variable length subnet mask, required when Networking mode is set to static"
         - id: vcsa_appliance_ip_gw
-          name: "Default gateway"
-          optional: 0
-          help: "The default network gateway vCenter should use."
+          name: "vCSA static IP gateway"
+          optional: 1
+          help: "(OPTIONAL) vCSA IP gateway, required when Networking mode is set to static"
         - id: vcsa_appliance_dns_servers
-          name: "DNS Servers"
+          name: "vCSA DNS Servers"
+          optional: 1
+          help: "(OPTIONAL) vCSA DNS server(s), required when Networking mode is set to static"
+      - "SSO Information":
+        - id: psc_appliance_ip_address
+          name: "PSC static IP address"
+          optional: 1
+          help: "PSC IP address, required for SSO integration. Optional only when deployment architecture is Combined"
+        - id: sso_domain_name
+          name: "SSO Domain Name"
           optional: 0
-          help: "The DNS servers vCenter should use (space separated)."
-
+          help: "The single sign-on domain name for identity management."
+        - id: sso_site_name
+          name: "SSO Site Name"
+          optional: 0
+          help: "The single sign-on site name for identity management."
+        - id: sso_password
+          name: "SSO administrator password"
+          input: password
+          optional: 0
+          help: "The single sign-on admin password."
+      - "Appliance Information":
+        - id: appliance_deployment_option
+          name: "vCSA Deployment Type"
+          input: dropdown
+          optional: 0
+          options:
+            - id: tiny
+            - id: small
+            - id: medium
+            - id: large
+          help: "The size for this vCenter appliance."
+        - id: vcsa_appliance_root_password
+          name: "vCSA administrator password"
+          input: password
+          optional: 0
+          help: "The admin (not SSO admin) password for this vCSA instance."
   - "NSX Services":
     - "NSX Deploy":
       - "Deploy NSX OVA Information":
@@ -681,12 +785,34 @@
             - id: 'LACP_ACTIVE'
 
 - Install:
-  - "vCenter Deploy":
-    - id: vcenter_ova_deploy
-      name: "Deploy vCenter Server"
+  - "vCenter Services Deployment":
+    - id: psc_ova_deploy
+      name: "Deploy PSC"
       commands:
-        - "/opt/supervio/supervio_play site_vcenter.yml"
-
+        - "/opt/supervio/supervio_play_tags site_vcsa.yml create_psc_task"
+        - "/opt/supervio/supervio_play_tags site_vcsa.yml prereqs,debug,psc,cleanup"
+    - id: psc_ova_cleanup
+      name: "Destroy PSC"
+      commands:
+        - "/opt/supervio/supervio_play_tags site_vcsa.yml cleanup_psc"
+    - id: vcenter_ova_deploy
+      name: "Deploy vCSA"
+      commands:
+        - "/opt/supervio/supervio_play_tags site_vcsa.yml create_vcsa_task"
+        - "/opt/supervio/supervio_play_tags site_vcsa.yml prereqs,debug,vcsa,cleanup"
+    - id: vcsa_ova_cleanup
+      name: "Destroy vCSA"
+      commands:
+        - "/opt/supervio/supervio_play_tags site_vcsa.yml cleanup_vcsa"
+    - id: combined_ova_deploy
+      name: "Deploy combined vCSA and PSC"
+      commands:
+        - "/opt/supervio/supervio_play_tags site_vcsa.yml create_combined_task"
+        - "/opt/supervio/supervio_play_tags site_vcsa.yml prereqs,debug,combined,cleanup"
+    - id: combined_ova_cleanup
+      name: "Destroy combined vCSA and PSC"
+      commands:
+        - "/opt/supervio/supervio_play_tags site_vcsa.yml cleanup_combined"
   - "Datacenter Deploy":
     - id: install_datacenter
       name: "Create vSphere Datacenter Clusters"

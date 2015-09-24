@@ -58,3 +58,5 @@ chaperone_esxi_url: "http://build-squid.eng.vmware.com/build/mts/release/bora-24
 chaperone_vcsa_iso: "VMware-VCSA-all-6.0.0-2656757.iso"
 chaperone_vcsa_md5: "a11928786b330e91f12f427c3f2df11f"
 chaperone_vcsa_url: "http://build-squid.eng.vmware.com/build/mts/release/bora-2656757/publish/VMware-VCSA-all-6.0.0-2656757.iso"
+
+deploy_ovf_role_path: "/opt/supervio-ansible/roles/vcsa"
