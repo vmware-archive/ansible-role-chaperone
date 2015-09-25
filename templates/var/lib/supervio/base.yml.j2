@@ -411,7 +411,7 @@
           name: "vCenter API Port"
           optional: 0
           default: 443
-      - "Deployment Target":
+      - "ESX Deployment Target":
         - id: esx_hostname
           name: "ESXi Host"
           optional: 0
@@ -426,17 +426,16 @@
           input: password
           help: "Host login password."
     - "Platform Services Controller":
-      - "Storage and Network Configuration":
+      - "Storage and Network Configuration (General)":
         - id: esx_datastore
           name: "Datastore"
           optional: 0
-          help: "Data store into which to deploy the OVA."
+          help: "Datastore to deploy the OVA to"
         - id: appliance_thin_disk_mode
           name: "Thin Disk Mode"
           optional: 0
           input: checkbox
           help: "Disk provisioning mode."
-      - "Network Configuration":
         - id: esx_network
           name: "Network"
           optional: 0
@@ -448,6 +447,7 @@
           options:
             - id: DHCP
             - id: Static
+      - "Network Configuration":
         - id: psc_appliance_vcenter_name
           name: "PSC appliance vCenter name"
           optional: 0
@@ -497,7 +497,7 @@
         - id: esx_datastore
           name: "Datastore"
           optional: 0
-          help: "Data store into which to deploy the OVA."
+          help: "Datastore to deploy the OVA to"
         - id: appliance_thin_disk_mode
           name: "Thin Disk Mode"
           optional: 0
@@ -540,10 +540,10 @@
           optional: 1
           help: "(OPTIONAL) vCSA DNS server(s), required when Networking mode is set to static"
       - "SSO Information":
-        - id: psc_appliance_ip_address
-          name: "PSC static IP address"
+        - id: psc_appliance_dns_name_manual
+          name: "PSC FQDN"
           optional: 1
-          help: "PSC IP address, required for SSO integration. Optional only when deployment architecture is Combined"
+          help: "PSC FQDN, required for SSO integration. Optional only when deployment architecture is Combined"
         - id: sso_domain_name
           name: "SSO Domain Name"
           optional: 0
@@ -782,7 +782,58 @@
             - id: 'FAILOVER_ORDER'
             - id: 'ETHER_CHANNEL'
             - id: 'LACP_ACTIVE'
-
+  - "VIO Deploy and Config":
+    - "OMS OVF Deploy":
+      - "General":
+        - id: viouser_pwd
+          name: "viouser password"
+          optional: 0
+        - id: vio_oms_ntp_server
+          name: "VIO NTP server"
+          optional: 0
+      - "Target vCenter":
+        - id: vio_oms_vcenter_hostname
+          name: "vCenter name"
+          optional: 0
+        - id: vio_oms_vcenter_username
+          name: "vCenter user"
+          optional: 0
+        - id: vio_oms_vcenter_pwd
+          name: "vCenter user password"
+          optional: 0
+        - id: vio_oms_datacenter_name
+          name: "vCenter Datacenter name"
+          optional: 0
+        - id: vio_oms_cluster_name
+          name: "vCenter management cluster name"
+          optional: 0
+      - "Storage":
+        - id: vio_oms_datastore
+          name: "Datastore"
+          optional: 0
+      - "Network":
+        - id: vio_oms_network
+          name: "Network"
+          optional: 0
+        - id: vio_oms_networking_mode
+          name: "VIO OMS Networking Mode"
+          optional: 0
+          input: dropdown
+          options:
+            - id: "DHCP"
+            - id: "Static"
+        - id: vio_oms_ip_address
+          name: "(OPTIONAL) VIO OMS static IP address"
+          optional: 1
+        - id: vio_oms_ip_subnet
+          name: "(OPTIONAL) VIO OMS IP subnet"
+          optional: 1
+        - id: vio_oms_ip_gw
+          name: "(OPTIONAL) VIO OMS IP gateway"
+          optional: 1
+        - id: vio_oms_dns_server
+          name: "(OPTIONAL) VIO OMS DNS server"
+          optional: 1
 - Install:
   - "vCenter Services Deployment":
     - id: psc_ova_deploy
@@ -883,7 +934,8 @@
     - id: install_vio
       name: "Deploy VIO OVA"
       commands:
-        - "/opt/supervio/supervio_play site_vio.yml"
+        - "/opt/supervio/supervio_play_tags site_vio.yml create_vio_ovf_deploy_task"
+        - "/opt/supervio/supervio_play_tags site_vio.yml deploy_vio_oms"
     - id: config_vio
       name: "Configure VIO"
       commands:
