@@ -399,7 +399,7 @@
         - id: vcenter_host
           name: "vCenter hostname"
           optional: 0
-          help: "Out-of-band vCenter Server that manages the ESXi host the vCSA and/or PSC is deployed to"
+          help: "Out-of-band vCenter Server that manages the ESXi host into which vCSA and/or PSC gets deployed."
         - id: vcenter_user
           name: "vCenter Admin User"
           optional: 0
@@ -426,7 +426,7 @@
           input: password
           help: "Host login password."
     - "Platform Services Controller":
-      - "Storage and Network Configuration (General)":
+      - "Storage and Network Configuration":
         - id: esx_datastore
           name: "Datastore"
           optional: 0
@@ -436,7 +436,7 @@
           optional: 0
           input: checkbox
           help: "Disk provisioning mode."
-      - "Network Configuration (General)":
+      - "Network Configuration":
         - id: esx_network
           name: "Network"
           optional: 0
@@ -448,7 +448,6 @@
           options:
             - id: DHCP
             - id: Static
-      - "Network Configuration":
         - id: psc_appliance_vcenter_name
           name: "PSC appliance vCenter name"
           optional: 0
