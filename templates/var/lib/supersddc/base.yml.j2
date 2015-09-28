@@ -104,7 +104,20 @@
           name: "Netmask"
           optional: 0
           help: "The netmask or prefix for this interface."
-
+      - "Initialization":
+        - id: vrops_cluster_name
+          name: "Initial Cluster Name"
+          optional: 0
+          help: "The inital operations manager cluster name"
+        - id: vrops_slice_name
+          name: "Initial Slice Name"
+          optional: 0
+          help: "The inital operations manager slice name"
+        - id: vrops_license_key
+          name: "Licence Key"
+          optional: 0
+          help: "Product Licence Key"
+ 
     - "Business":
       - Deployment:
         - id: vrealizeb_ova
@@ -230,9 +243,17 @@
 - Install:
   - vRealize Operation Manager:
     - id: install_vrops
-      name: "Create vRealize Operation Manager"
+      name: "Install OVA"
       commands:
-        - "/opt/supersddc/supersddc_play site_vrops.yml"
+        - "/opt/supersddc/supersddc_play site_vrops.yml --tags vropsova_deploy"
+    - id: vrops_admin_init
+      name: "Initialize Admin User"
+      commands:
+        - "/opt/supersddc/supersddc_play site_vrops.yml --tags vrops_admin_init"
+    - id: vrops_cluster_init
+      name: "Initialize Cluster"
+      commands:
+        - "/opt/supersddc/supersddc_play site_vrops.yml --tags vrops_init"
   - vRealize Business:
     - id: install_vrealizeb
       name: "Create vRealize Business Standard"
