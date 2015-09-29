@@ -145,6 +145,10 @@
           input: password
     - "Automation":
       - Deployment:
+        - id: vra_ova_location
+          name: "OVA Location"
+          optional: 0
+          help: "Location of OVA "
         - id: vra_ova
           name: "OVA"
           optional: 0
@@ -179,6 +183,50 @@
           options:
             - id: "True"
             - id: "False"
+        - id: vra_delete
+          name:  "Replace VRA if Exists"
+          optional: 0
+          input: dropdown
+          options:
+            - id: "True"
+            - id: "False"
+      - General Configuration:
+        - id: vra_instance
+          name: "VRA Appliance instance name"
+          optional: 0
+          help: " VRA Appliance instance name"
+        - id: vra_port
+          name: "VRA Appliance Port"
+          optional: 0
+          help: " VRA Appliance Port"
+        - id: vra_user
+          name: "VRA User"
+          optional: 0
+          help: " VRA User"
+
+      - Postgres DB  Configuration:
+        - id: vra_postgres_host
+          name: "VRA Postgres DB host"
+          optional: 0
+          help: " VRA Appliance instance name"
+        - id: vra_postgres_port
+          name: "VRA Postgres DB  Port"
+          optional: 0
+          help: " VRA Postgres DB Port"
+        - id: vra_postgres_database
+          name: "VRA Postgres Database"
+          optional: 0
+          help: " VRA Postgres Database"
+        - id: vra_postgres_user
+          name: "VRA Postgres user"
+          optional: 0
+          help: " VRA Postgres User"
+        - id: vra_postgres_password
+          name: "VRA Postgres Password"
+          optional: 0
+          help: " VRA Postgres Password"
+          input: password
+
     - "Log Insight":
       - Deployment:
         - id: vrli_ova_location
@@ -260,14 +308,18 @@
       commands:
         - "/opt/supersddc/supersddc_play site_vrealizeb.yml"
   - vRealize Automation:
-    - id: install_vRA
+    - id: install_vra
       name: "Create vRealize Automation"
       commands:
-        - "/opt/supersddc/supersddc_play site_vra.yml"
+        - "/opt/supersddc/supersddc_play_tags site_vra.yml vra_deploy"
     - id: configure_vra
       name: "Configure vRealize Automation"
       commands:
-        - "/opt/supersddc/supersddc_play configure_vra.yml"
+        - "/opt/supersddc/supersddc_play_tags configure_vra.yml vra_configure"
+    - id: configure_postgresdb
+      name: "Configure Postgres Database"
+      commands:
+        - "/opt/supersddc/supersddc_play_tags site_vra.yml vra_configure_postgresdb"
   - vRealize Log Insight:
     - id: install_vrli
       name: "Create vRealize Log Insight"
