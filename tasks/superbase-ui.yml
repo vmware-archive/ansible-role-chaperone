@@ -184,12 +184,20 @@
   sudo: no
   register: db
 
+# Stat the db and if zero sized, rebuild it because either
+# the above 'touch' created it, or someone else truncated it.
+# either way, have to rebuild it.
+- name: Stat the database to determine if it's truncated to zero
+  stat: path="/opt/{{ django_app }}/{{ django_app }}.db" get_checksum=no get_md5=no
+  when: not db.changed
+  register: dbstat
+
 - name: Initialize database
   command: python manage.py syncdb --noinput
   args:
     chdir: "/opt/{{ django_app }}"
   sudo: no
-  when: db.changed
+  when: db.changed or dbstat.stat.size == 0
 
 - name: (Re)Generate site-available ui config
   template:
