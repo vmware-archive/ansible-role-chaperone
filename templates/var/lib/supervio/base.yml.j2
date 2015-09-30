@@ -55,10 +55,14 @@
           name: "Storage Network cider"
           optional: 0
           help: "EX: 192.168.2.0/24"
-      - "Managment Cluster":
+      - "Management Cluster":
         - id: vio_cluster_mgmt
           name: "Management cluster name"
           optional: 0
+        - id: mgmt_vsan
+          name: "VSAN"
+          optional: 0
+          input: checkbox
         - id: vio_cluster_mgmt_hosts
           name: "Management Cluster ESXi Hosts"
           optional: 0
@@ -91,6 +95,10 @@
         - id: vio_cluster_edge
           name: "Edge cluster name"
           optional: 0
+        - id: edge_vsan
+          name: "VSAN"
+          optional: 0
+          input: checkbox
         - id: vio_cluster_edge_hosts
           name: "Edge Cluster ESXi Hosts"
           optional: 0
@@ -123,6 +131,10 @@
         - id: vio_cluster_compute
           name: "Compute cluster name"
           optional: 0
+        - id: compute_vsan
+          name: "VSAN"
+          optional: 0
+          input: checkbox
         - id: vio_cluster_compute_hosts
           name: "Compute Cluster ESXi Hosts"
           optional: 0
@@ -350,54 +362,45 @@
         - id: api_grp
           name: "VIO API Network"
           optional: 0
-          input: dropdown
           help: "VIO API Network"
-          options:
-            - id: 'VIO API Network'
         - id: api_vlan
           name: "VIO API VLAN"
           optional: 1
         - id: ext_grp
           name: "VIO External Network"
           optional: 0
-          input: dropdown
           help: "VIO External Network"
-          options:
-            - id: 'VIO External Network'
         - id: ext_vlan
           name: "VIO External Network"
           optional: 1
         - id: mgmt_grp
           name: "VIO Management"
           optional: 0
-          input: dropdown
           help: "VIO Management"
-          options:
-            - id: 'VIO Management'
         - id: mgmt_vlan
           name: "VIO Management VLAN"
           optional: 1
         - id: store_grp
           name: "VIO Storage"
           optional: 0
-          input: dropdown
           help: "VIO Storage"
-          options:
-            - id: 'VIO Storage'
         - id: store_vlan
           name: "VIO Storage VLAN"
           optional: 1
         - id: vmotion_grp
           name: "VIO vMotion"
           optional: 0
-          input: dropdown
           help: "VIO vMotion"
-          options:
-            - id: 'VIO vMotion'
         - id: vmotion_vlan
           name: "VIO vMotion VLAN"
           optional: 1
-
+        - id: vsan_grp
+          name: "VIO VSAN"
+          optional: 0
+          help: "VIO VSAN"
+        - id: vsan_vlan
+          name: "VIO VSAN VLAN"
+          optional: 1
   - "vCenter Server":
     - "General Configuration":
       - "Architectural Scheme":
@@ -599,6 +602,20 @@
           name: "NSX Datastore"
           optional: 0
           help: "Name of the Datastore to use for VM deployment"
+          input: dropdown
+          options: comp_vc_datastores
+        - id: nsx_mgmt_net
+          name: "NSX Management Network"
+          optional: 0
+          help: "Management Network"
+          input: dropdown
+          options: comp_vc_networks
+        - id: nsx_cluster_deploy
+          name: "Deploy to Cluster"
+          optional: 0
+          help: "Select cluster to deploy to"
+          input: dropdown
+          options: comp_vc_cluster
         - id: nsx_hostname
           name: "NSX Manager Hostname"
           optional: 0
@@ -649,9 +666,6 @@
             - id: "OFF"
     - "NSX Configuration":
       - "NSX Manager Info":
-        - id: vcenter_auth
-          name: "vCenter certificate thumbprint"
-          optional: 0
         - id: nsx_sys
           name: "NSX Syslog Server IP"
           optional: 0
@@ -672,6 +686,8 @@
           name: "Controller Datastore"
           optional: 0
           help: "Name of the datastore for the Controller VM"
+          input: dropdown
+          options: comp_vc_datastores
         - id: controller_password
           name: "Controller Password"
           optional: 0
@@ -903,7 +919,7 @@
       name: "Apply Host Profiles"
       commands:
         - "/opt/supervio/supervio_play_tags site_dc.yml applyprofile"
-
+        
   - "NSX Deploy":
     - id: nsx_ova_deploy
       name: "Deploy NSX OVA"
@@ -930,9 +946,14 @@
       commands:
         - "/opt/supervio/supervio_play_tags site_nsx.yml vxlan"
     - id: install_nsx_netprep
-      name: "Network Prep"
+      name: "Segment ID"
       commands:
         - "/opt/supervio/supervio_play_tags site_nsx.yml segment_id"
+    - id: install_nsx_vdn
+      name: "Segment ID"
+      commands:
+        - "/opt/supervio/supervio_play_tags site_nsx.yml tzone"
+
   - "VIO":
     - id: install_vio
       name: "Deploy VIO OVA"
