@@ -903,14 +903,6 @@
       commands:
         - "/opt/supervio/supervio_play_tags site_nsx.yml install_virt"
     - id: install_nsx_instvirt_sync
-      name: "Host Sync"
-      commands:
-        - "/opt/supervio/supervio_play_tags site_nsx.yml sync"
-    - id: install_nsx_instvirt_resolve
-      name: "Resolve"
-      commands:
-        - "/opt/supervio/supervio_play_tags site_nsx.yml resolve"
-    - id: install_nsx_ippool
       name: "IP Pools"
       commands:
         - "/opt/supervio/supervio_play_tags site_nsx.yml ippools"
@@ -925,11 +917,7 @@
     - id: install_nsx_netprep
       name: "Network Prep"
       commands:
-        - "/opt/supervio/supervio_play_tags site_nsx.yml net_prep"
-    - id: mod_test
-      name: "MOD TEST"
-      commands:
-        - "/opt/supervio/supervio_play_tags site_nsx.yml mod_test"
+        - "/opt/supervio/supervio_play_tags site_nsx.yml segment_id"
   - "VIO":
     - id: install_vio
       name: "Deploy VIO OVA"
