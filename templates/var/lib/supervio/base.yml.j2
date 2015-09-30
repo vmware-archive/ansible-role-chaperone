@@ -354,6 +354,9 @@
           help: "VIO API Network"
           options:
             - id: 'VIO API Network'
+        - id: api_vlan
+          name: "VIO API VLAN"
+          optional: 1
         - id: ext_grp
           name: "VIO External Network"
           optional: 0
@@ -361,6 +364,9 @@
           help: "VIO External Network"
           options:
             - id: 'VIO External Network'
+        - id: ext_vlan
+          name: "VIO External Network"
+          optional: 1
         - id: mgmt_grp
           name: "VIO Management"
           optional: 0
@@ -368,6 +374,9 @@
           help: "VIO Management"
           options:
             - id: 'VIO Management'
+        - id: mgmt_vlan
+          name: "VIO Management VLAN"
+          optional: 1
         - id: store_grp
           name: "VIO Storage"
           optional: 0
@@ -375,6 +384,9 @@
           help: "VIO Storage"
           options:
             - id: 'VIO Storage'
+        - id: store_vlan
+          name: "VIO Storage VLAN"
+          optional: 1
         - id: vmotion_grp
           name: "VIO vMotion"
           optional: 0
@@ -382,6 +394,9 @@
           help: "VIO vMotion"
           options:
             - id: 'VIO vMotion'
+        - id: vmotion_vlan
+          name: "VIO vMotion VLAN"
+          optional: 1
 
   - "vCenter Server":
     - "General Configuration":
