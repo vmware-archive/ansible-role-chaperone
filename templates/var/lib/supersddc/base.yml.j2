@@ -15,33 +15,897 @@
 #
 ---
 - Prepare:
-  - "Datacenter Configuration":
-    - "Datacenter Info":
-      - "vCenter Info":
-        - id: vcenter_host
-          name: "vCenter IP"
-          optional: 0
-          help: "IP address of vCenter"
-        - id: vcenter_user
-          name: "vCenter admin USERNAME"
-          optional: 0
-        - id: vcenter_password
-          name: "vCenter admin PASSWORD"
-          optional: 0
+  - "Users and Groups":
+    - "Service Accounts":
+      - "AD Service Account":
+        - id: svc_domain_name
+          name: "Account"
+          default: 'svc-domain'
+          help: "Account used to join systems to the Active Directory Domain with delation for domain join function."
+        - id: svc_domain_password
+          name: "Password"
           input: password
-        - id: vcenter_port
-          name: "vCenter Port"
-          optional: 0
-          help: "Port for authentication connection to vCenter"
-          default: 443
-      - "Datacenter Name":
-        - id: datacenter_name
-          name: "Name of datacenter"
-          optional: 0
-          help: "Enter the name of the Datacenter being created ex: VIO-Datacenter"
+          default: 'VMware1!'
+          help: "Service Account password"
+        - id: svc_domain_is_service_account
+          name: "Service Account"
+          default: '1'
+          input: checkbox
+          help: "Checked if this is a service account."
+        - id: svc_domain_account_group
+          name: "Group Membership"
+          input: dropdown
+          default: service_account_operators
+          help: "Group to which this user belongs."
+          options:
+            - id: service_account_operators
+              name: "Account Operators (BuiltIn)"
+            - id: service_acccount_local_admins
+              name: "Local IaaS Administrators"
+            - id: service_account_orchestrator_admins
+              name: 'Orchestrator-Admins'
+            - id: service_account_sddc_admins
+              name: "SDDC-Admins"
+            - id: service_account_sddc_ops
+              name: "SDDC-Ops"
+            - id: service_account_sddc_both
+              name: "SDDC-Admins, SDDC-Ops"
+            - id: service_account_itac_tenantadmins
+              name: "ITAC-TenantAdmins"
+            - id: service_account_itac_tenantarchitects
+              name: "ITAC-TenantArchitects"
 
-  - "vRealize Configurations":
-    - "Operations Manager":
+      - "LDAP Service Account":
+        - id: svc_ldap_name
+          name: "Account"
+          default: 'svc-ldap'
+          help: "Service account for LDAP connectivity."
+        - id: svc_ldap_password
+          name: "Password"
+          input: password
+          default: 'VMware1!'
+          help: "Service account password."
+        - id: svc_ldap_is_service_account
+          name: "Service Account"
+          default: '1'
+          input: checkbox
+          help: "Checked if this is a service account."
+
+      - "vCenter Admin Account":
+        - id: svc_vcs_name
+          name: "Account"
+          default: 'svc-vcs'
+          help: "Service Account with vCenter Admin Privelages"
+        - id: svc_vcs_password
+          name: "Password"
+          input: password
+          default: 'VMware1!'
+          help: "Service account password."
+        - id: svc_vcs_is_service_account
+          name: "Service Account"
+          default: '1'
+          input: checkbox
+          help: "Checked if this is a service account."
+
+      - "NSX Service Account":
+        - id: svc_nsx_is_service_account
+          name: "Service Account"
+          default: 'svc-nsx'
+          help: "NSX Manager Service Account - Used for registration with vCenter Server."
+        - id: svc_nsx_password
+          name: "Password"
+          input: password
+          default: 'VMware1!'
+          help: "Service account password."
+        - id: svc_nsx_is_service_account
+          name: "Service Account"
+          default: '1'
+          input: checkbox
+          help: "Checked if this is a service account."
+
+      - "vRLI Service Account":
+        - id: svc_vrli_is_service_account
+          name: "Service Account"
+          default: 'svc-vrli'
+          help: "Readonly Service a/c for integrating LogInsight to vSphere Syslog"
+        - id: svc_vrli_password
+          name: "Password"
+          input: password
+          default: 'VMware1!'
+          help: "Service account password."
+        - id: svc_vrli_is_service_account
+          name: "Service Account"
+          default: '1'
+          input: checkbox
+          help: "Checked if this is a service account."
+
+      - "vROPS Service Account":
+        - id: svc_vrops_is_service_account
+          name: "Service Account"
+          default: 'svc-vrops'
+          help: "vROPS Read-Only Role for registration to vSphere"
+        - id: svc_vrops_password
+          name: "Password"
+          input: password
+          default: 'VMware1!'
+          help: "Service account password."
+        - id: svc_vrops_is_service_account
+          name: "Service Account"
+          default: '1'
+          input: checkbox
+          help: "Checked if this is a service account."
+
+      - "vRA Service Account":
+        - id: svc_vra_name
+          name: "Account"
+          default: 'svc-vra'
+          help: "vRealize Automation Service Account - Used to install vRA IaaS Components and SQL Database User"
+        - id: svc_vra_password
+          name: "Password"
+          input: password
+          default: 'VMware1!'
+          help: "Service Account password"
+        - id: svc_vra_is_service_account
+          name: "Service Account"
+          default: '1'
+          input: checkbox
+          help: "Checked if this is a service account."
+        - id: svc_vra_account_group
+          name: "Group Membership"
+          input: dropdown
+          default: service_account_local_admins
+          help: "Group to which this user belongs."
+          options:
+            - id: service_account_operators
+              name: "Account Operators (BuiltIn)"
+            - id: service_acccount_local_admins
+              name: "Local IaaS Administrators"
+            - id: service_account_orchestrator_admins
+              name: 'Orchestrator-Admins'
+            - id: service_account_sddc_admins
+              name: "SDDC-Admins"
+            - id: service_account_sddc_ops
+              name: "SDDC-Ops"
+            - id: service_account_sddc_both
+              name: "SDDC-Admins, SDDC-Ops"
+            - id: service_account_itac_tenantadmins
+              name: "ITAC-TenantAdmins"
+            - id: service_account_itac_tenantarchitects
+              name: "ITAC-TenantArchitects"
+
+      - "vRO Service Account":
+        - id: svc_vra_name
+          name: "Account"
+          default: 'svc-vro'
+          help: "vRealize Orechestrator Service Account"
+        - id: svc_vro_password
+          name: "Password"
+          input: password
+          default: 'VMware1!'
+          help: "Service Account password"
+        - id: svc_vro_is_service_account
+          name: "Service Account"
+          default: '1'
+          input: checkbox
+          help: "Checked if this is a service account."
+        - id: svc_vra_account_group
+          name: "Group Membership"
+          input: dropdown
+          default: service_account_orchestrator_admins
+          help: "Group to which this user belongs."
+          options:
+            - id: service_account_operators
+              name: "Account Operators (BuiltIn)"
+            - id: service_acccount_local_admins
+              name: "Local IaaS Administrators"
+            - id: service_account_orchestrator_admins
+              name: 'Orchestrator-Admins'
+            - id: service_account_sddc_admins
+              name: "SDDC-Admins"
+            - id: service_account_sddc_ops
+              name: "SDDC-Ops"
+            - id: service_account_sddc_both
+              name: "SDDC-Admins, SDDC-Ops"
+            - id: service_account_itac_tenantadmins
+              name: "ITAC-TenantAdmins"
+            - id: service_account_itac_tenantarchitects
+              name: "ITAC-TenantArchitects"
+
+      - "SSO Service Account":
+        - id: svc_sso_name
+          name: "Account"
+          default: 'svc-vss'
+          help: "Single-Sign-On Service Account - Used for registration with Active Directory"
+        - id: svc_sso_password
+          name: "Password"
+          input: password
+          default: 'VMware1!'
+          help: "Service Account password"
+        - id: svc_sso_is_service_account
+          name: "Service Account"
+          default: '1'
+          input: checkbox
+          help: "Checked if this is a service account."
+
+      - "SMTP Service Account":
+        - id: svc_smtp_name
+          name: "Account"
+          default: 'svc-smtp'
+          help: "SMTP Service Account - Used for auhtentication where required for SMTP services"
+        - id: svc_smtp_password
+          name: "Password"
+          input: password
+          default: 'VMware1!'
+          help: "Service Account password"
+        - id: svc_smtp_is_service_account
+          name: "Service Account"
+          default: '1'
+          input: checkbox
+          help: "Checked if this is a service account."
+
+      - "SRM Service Account":
+        - id: svc_srm_name
+          name: "Account"
+          default: 'svc-smtp'
+          help: "vCenter Site Recovery Manager Service Account - Used for installing on Windows"
+        - id: svc_srm_password
+          name: "Password"
+          input: password
+          default: 'VMware1!'
+          help: "Service Account password"
+        - id: svc_srm_is_service_account
+          name: "Service Account"
+          default: '1'
+          input: checkbox
+          help: "Checked if this is a service account."
+
+    - "General Accounts":
+      - "SDDC-Admin Account":
+        - id: svc_sddc_admin_name
+          name: "Account"
+          default: 'SDDC-Admin'
+          help: "Global administrative account for the Software-Defined Data Center"
+        - id: svc_sddc_admin_password
+          name: "Password"
+          input: password
+          default: 'VMware1!'
+          help: "Account password"
+        - id: svc_sddc_admin_is_service_account
+          name: "Service Account"
+          default: '0'
+          input: checkbox
+          help: "Checked if this is a service account."
+        - id: svc_sddc_account_group
+          name: "Group Membership"
+          input: dropdown
+          default: service_account_sddc_admins
+          help: "Group to which this user belongs."
+          options:
+            - id: service_account_operators
+              name: "Account Operators (BuiltIn)"
+            - id: service_acccount_local_admins
+              name: "Local IaaS Administrators"
+            - id: service_account_orchestrator_admins
+              name: 'Orchestrator-Admins'
+            - id: service_account_sddc_admins
+              name: "SDDC-Admins"
+            - id: service_account_sddc_ops
+              name: "SDDC-Ops"
+            - id: service_account_sddc_both
+              name: "SDDC-Admins, SDDC-Ops"
+            - id: service_account_itac_tenantadmins
+              name: "ITAC-TenantAdmins"
+            - id: service_account_itac_tenantarchitects
+              name: "ITAC-TenantArchitects"
+
+      - "vROPS-Admin Account":
+        - id: svc_vrops_admin_name
+          name: "Account"
+          default: 'vROPS-Admin'
+          help: "VROPS Admin Role"
+        - id: svc_vrops_admin_password
+          name: "Password"
+          input: password
+          default: 'VMware1!'
+          help: "Account password"
+        - id: svc_vrops_admin_is_service_account
+          name: "Service Account"
+          default: '0'
+          input: checkbox
+          help: "Checked if this is a service account."
+        - id: svc_vrops_admin_group
+          name: "Group Membership"
+          input: dropdown
+          default: service_account_sddc_both
+          help: "Group to which this user belongs."
+          options:
+            - id: service_account_operators
+              name: "Account Operators (BuiltIn)"
+            - id: service_acccount_local_admins
+              name: "Local IaaS Administrators"
+            - id: service_account_orchestrator_admins
+              name: 'Orchestrator-Admins'
+            - id: service_account_sddc_admins
+              name: "SDDC-Admins"
+            - id: service_account_sddc_ops
+              name: "SDDC-Ops"
+            - id: service_account_sddc_both
+              name: "SDDC-Admins, SDDC-Ops"
+            - id: service_account_itac_tenantadmins
+              name: "ITAC-TenantAdmins"
+            - id: service_account_itac_tenantarchitects
+              name: "ITAC-TenantArchitects"
+
+      - "vROPS-Power Account":
+        - id: svc_vrops_power_name
+          name: "Account"
+          default: 'vROPS-Power'
+          help: "vROPS Power user"
+        - id: svc_vrops_power_password
+          name: "Password"
+          input: password
+          default: 'VMware1!'
+          help: "Account password"
+        - id: svc_vrops_power_is_service_account
+          name: "Service Account"
+          default: '0'
+          input: checkbox
+          help: "Checked if this is a service account."
+        - id: svc_vrops_power_group
+          name: "Group Membership"
+          input: dropdown
+          default: service_account_sddc_ops
+          help: "Group to which this user belongs."
+          options:
+            - id: service_account_operators
+              name: "Account Operators (BuiltIn)"
+            - id: service_acccount_local_admins
+              name: "Local IaaS Administrators"
+            - id: service_account_orchestrator_admins
+              name: 'Orchestrator-Admins'
+            - id: service_account_sddc_admins
+              name: "SDDC-Admins"
+            - id: service_account_sddc_ops
+              name: "SDDC-Ops"
+            - id: service_account_sddc_both
+              name: "SDDC-Admins, SDDC-Ops"
+            - id: service_account_itac_tenantadmins
+              name: "ITAC-TenantAdmins"
+            - id: service_account_itac_tenantarchitects
+              name: "ITAC-TenantArchitects"
+
+      - "vROPS-user-01 Account":
+        - id: svc_vrops_user01_name
+          name: "Account"
+          default: 'vROPS-user-01'
+          help: "Test a/c"
+        - id: svc_vrops_user01_password
+          name: "Password"
+          input: password
+          default: 'VMware1!'
+          help: "Account password"
+        - id: svc_vrops_user01_is_service_account
+          name: "Service Account"
+          default: '0'
+          input: checkbox
+          help: "Checked if this is a service account."
+        - id: svc_vrops_user01_group
+          name: "Group Membership"
+          input: dropdown
+          default: service_account_sddc_ops
+          help: "Group to which this user belongs."
+          options:
+            - id: service_account_operators
+              name: "Account Operators (BuiltIn)"
+            - id: service_acccount_local_admins
+              name: "Local IaaS Administrators"
+            - id: service_account_orchestrator_admins
+              name: 'Orchestrator-Admins'
+            - id: service_account_sddc_admins
+              name: "SDDC-Admins"
+            - id: service_account_sddc_ops
+              name: "SDDC-Ops"
+            - id: service_account_sddc_both
+              name: "SDDC-Admins, SDDC-Ops"
+            - id: service_account_itac_tenantadmins
+              name: "ITAC-TenantAdmins"
+            - id: service_account_itac_tenantarchitects
+              name: "ITAC-TenantArchitects"
+
+      - "vRLI-SuperAdmin Account":
+        - id: svc_vrops_superadmin_name
+          name: "Account"
+          default: 'vLI-SuperAdmin'
+          help: "Log Insight Super Administrator"
+        - id: svc_vrops_superadmin_password
+          name: "Password"
+          input: password
+          default: 'VMware1!'
+          help: "Account password"
+        - id: svc_vrops_superadmin_is_service_account
+          name: "Service Account"
+          default: '0'
+          input: checkbox
+          help: "Checked if this is a service account."
+        - id: svc_vrops_superadmin_group
+          name: "Group Membership"
+          input: dropdown
+          default: service_account_sddc_ops
+          help: "Group to which this user belongs."
+          options:
+            - id: service_account_operators
+              name: "Account Operators (BuiltIn)"
+            - id: service_acccount_local_admins
+              name: "Local IaaS Administrators"
+            - id: service_account_orchestrator_admins
+              name: 'Orchestrator-Admins'
+            - id: service_account_sddc_admins
+              name: "SDDC-Admins"
+            - id: service_account_sddc_ops
+              name: "SDDC-Ops"
+            - id: service_account_sddc_both
+              name: "SDDC-Admins, SDDC-Ops"
+            - id: service_account_itac_tenantadmins
+              name: "ITAC-TenantAdmins"
+            - id: service_account_itac_tenantarchitects
+              name: "ITAC-TenantArchitects"
+
+      - "vRLI-ReadOnly Account":
+        - id: svc_vrli_readonly_name
+          name: "Account"
+          default: 'vLI-ReadOnly'
+          help: "Read-Only Operator"
+        - id: svc_vrli_readonly_password
+          name: "Password"
+          input: password
+          default: 'VMware1!'
+          help: "Account password"
+        - id: svc_vrli_readonly_is_service_account
+          name: "Service Account"
+          default: '0'
+          input: checkbox
+          help: "Checked if this is a service account."
+        - id: svc_vrli_readonly_group
+          name: "Group Membership"
+          input: dropdown
+          default: service_account_sddc_ops
+          help: "Group to which this user belongs."
+          options:
+            - id: service_account_operators
+              name: "Account Operators (BuiltIn)"
+            - id: service_acccount_local_admins
+              name: "Local IaaS Administrators"
+            - id: service_account_orchestrator_admins
+              name: 'Orchestrator-Admins'
+            - id: service_account_sddc_admins
+              name: "SDDC-Admins"
+            - id: service_account_sddc_ops
+              name: "SDDC-Ops"
+            - id: service_account_sddc_both
+              name: "SDDC-Admins, SDDC-Ops"
+            - id: service_account_itac_tenantadmins
+              name: "ITAC-TenantAdmins"
+            - id: service_account_itac_tenantarchitects
+              name: "ITAC-TenantArchitects"
+
+      - "vRLI-SuperAdmin Account":
+        - id: svc_vrli_user01_name
+          name: "Account"
+          default: 'vLI-SuperAdmin'
+          help: "Test user a/c"
+        - id: svc_vrli_user01_password
+          name: "Password"
+          input: password
+          default: 'VMware1!'
+          help: "Account password"
+        - id: svc_vrli_user01_is_service_account
+          name: "Service Account"
+          default: '0'
+          input: checkbox
+          help: "Checked if this is a service account."
+        - id: svc_vrli_user01_group
+          name: "Group Membership"
+          input: dropdown
+          default: service_account_sddc_ops
+          help: "Group to which this user belongs."
+          options:
+            - id: service_account_operators
+              name: "Account Operators (BuiltIn)"
+            - id: service_acccount_local_admins
+              name: "Local IaaS Administrators"
+            - id: service_account_orchestrator_admins
+              name: 'Orchestrator-Admins'
+            - id: service_account_sddc_admins
+              name: "SDDC-Admins"
+            - id: service_account_sddc_ops
+              name: "SDDC-Ops"
+            - id: service_account_sddc_both
+              name: "SDDC-Admins, SDDC-Ops"
+            - id: service_account_itac_tenantadmins
+              name: "ITAC-TenantAdmins"
+            - id: service_account_itac_tenantarchitects
+              name: "ITAC-TenantArchitects"
+
+      - "ITAC-TenantAdmin Account":
+        - id: svc_itac_tenantadmin_name
+          name: "Account"
+          default: 'ITAC-TenantAdmin'
+          help: "ITAC Tenant Admin Role"
+        - id: svc_itac_tenantadmin_password
+          name: "Password"
+          input: password
+          default: 'VMware1!'
+          help: "Account password"
+        - id: svc_itac_tenantadmin_is_service_account
+          name: "Service Account"
+          default: '0'
+          input: checkbox
+          help: "Checked if this is a service account."
+        - id: svc_itac_tenantacmins_group
+          name: "Group Membership"
+          input: dropdown
+          default: service_account_itac_tenantadmins
+          help: "Group to which this user belongs."
+          options:
+            - id: service_account_operators
+              name: "Account Operators (BuiltIn)"
+            - id: service_acccount_local_admins
+              name: "Local IaaS Administrators"
+            - id: service_account_orchestrator_admins
+              name: 'Orchestrator-Admins'
+            - id: service_account_sddc_admins
+              name: "SDDC-Admins"
+            - id: service_account_sddc_ops
+              name: "SDDC-Ops"
+            - id: service_account_sddc_both
+              name: "SDDC-Admins, SDDC-Ops"
+            - id: service_account_itac_tenantadmins
+              name: "ITAC-TenantAdmins"
+            - id: service_account_itac_tenantarchitects
+              name: "ITAC-TenantArchitects"
+
+      - "ITAC-TenantArchitect Account":
+        - id: svc_itac_tenantarchitect_name
+          name: "Account"
+          default: 'ITAC-TenantArchitect'
+          help: "ITAC Tenant Architect Role"
+        - id: svc_itac_tenantarchitect_password
+          name: "Password"
+          input: password
+          default: 'VMware1!'
+          help: "Account password"
+        - id: svc_itac_tenantarchitect_is_service_account
+          name: "Service Account"
+          default: '0'
+          input: checkbox
+          help: "Checked if this is a service account."
+        - id: svc_itac_tenantacmins_group
+          name: "Group Membership"
+          input: dropdown
+          default: service_account_itac_tenantarchitects
+          help: "Group to which this user belongs."
+          options:
+            - id: service_account_operators
+              name: "Account Operators (BuiltIn)"
+            - id: service_acccount_local_admins
+              name: "Local IaaS Administrators"
+            - id: service_account_orchestrator_admins
+              name: 'Orchestrator-Admins'
+            - id: service_account_sddc_admins
+              name: "SDDC-Admins"
+            - id: service_account_sddc_ops
+              name: "SDDC-Ops"
+            - id: service_account_sddc_both
+              name: "SDDC-Admins, SDDC-Ops"
+            - id: service_account_itac_tenantadmins
+              name: "ITAC-TenantAdmins"
+            - id: service_account_itac_tenantarchitects
+              name: "ITAC-TenantArchitects"
+
+  - "Infrastructure Services":
+    - "Infrastrucure":
+      - "Active Directory Server":
+        - id: infra_active_directory_server
+          name: "Active Directory Server"
+          default: 'dom-01'
+          optional: 0
+          help: "Hostname of Active Directory Server"
+      - "DNS Servers":
+        - id: infra_dns1_address
+          name: "DNS Server #1"
+          default: 'dom-01'
+          optional: 0
+          help: "Hostname of primary DNS"
+        - id: infra_dns2_address
+          name: "DNS Server #2"
+          optional: 1
+          help: "Hostname of secondary DNS"
+      - "NTP Servers":
+        - id: infra_ntp_esxi
+          name: "NTP Server - ESXi Hosts"
+          optional: 0
+          help: "Hostname for ESXi NTP services"
+        - id: infra_ntp_products
+          name: "NTP Server - Products"
+          optional: 0
+          help: "Hostname for ESXi NTP services"
+      - "EMail Services":
+        - id: infra_smtp_server
+          name: "SMTP Server"
+          optional: 0
+          help: "SMTP server to user for outgoging email"
+      - "ESXi Defaults":
+        - id: infra_default_esxi_user
+          name: "Default ESXi user"
+          default: root
+          optional: 0
+          help: "Default ESXi host login userid"
+        - id: infra_default_esxi_password
+          name: "Default ESXi password"
+          input: password
+          default: 'VMware1!'
+          optional: 0
+          help: "Default ESXi host login userid"
+    - "Storage":
+      - "Datastores":
+        - id: infra_default_storage_management
+          name: "Management Datatore"
+          default: 'Gold-DS'
+          optional: 0
+          help: "Default storage to use for Management servers"
+        - id: infra_default_storage_compute1
+          name: "Compute Tier 1 Datatore"
+          default: 'Gold-DS'
+          optional: 0
+          help: "Default storage to use for Tier 1 Compute services"
+        - id: infra_default_storage_compute2
+          name: "Compute Tier 2 Datatore"
+          default: 'Silver-DS'
+          optional: 0
+          help: "Default storage to use for Tier 2 Compute services"
+        - id: infra_default_storage_compute3
+          name: "Compute Tier 3 Datatore"
+          default: 'Bronze-DS'
+          optional: 0
+          help: "Default storage to use for Tier 3 Compute services"
+        - id: infra_default_storage_edge
+          name: "Edge Datastore"
+          default: 'Bronze-DS'
+          optional: 0
+          help: "Default storate to use for Edge services"
+
+  - "Management Cluster":
+    - "Networks":
+      - "Management":
+        - id: infra_network_management_vlan
+          name: "VLAN Id"
+          default: "0"
+          optional: 0
+          help: "VLAN for the Management Network"
+        - id: infra_network_management_address
+          name: "Network Address"
+          default: "172.22.39.0"
+          optional: 0
+          help: "Network address for the Management Network"
+        - id: infra_network_management_netmask
+          name: "Netmask"
+          default: "255.255.255.0"
+          optional: 0
+          help: "Netmask for the Management Network"
+        - id: infra_network_management_gateway
+          name: "Gateway"
+          default: "172.22.39.1"
+          optional: 0
+          help: "Default gateway for the Management Network"
+        - id: infra_network_management_mtu
+          name: "MTU"
+          default: "1500"
+          optional: 0
+          help: "MTU to use for the Management Network"
+
+      - "vMotion":
+        - id: infra_network_management_vmotion_vlan
+          name: "VLAN Id"
+          default: "1239"
+          optional: 0
+          help: "VLAN for the vMotion Network"
+        - id: infra_network_management_vmotion_address
+          name: "Network Address"
+          default: "192.168.0.0"
+          optional: 0
+          help: "Network address for the vMotion Network"
+        - id: infra_network_management_vmotion_netmask
+          name: "Netmask"
+          default: "255.255.255.0"
+          optional: 0
+          help: "Netmask for the vMotion Network"
+        - id: infra_network_management_vmotion_gateway
+          name: "Gateway"
+          default: ""
+          optional: 1
+          help: "Default gateway for the vMotion Network"
+        - id: infra_network_management_vmotion_mtu
+          name: "MTU"
+          default: "1500"
+          optional: 0
+          help: "MTU to use for the Management Network"
+
+      - "Replication":
+        - id: infra_network_management_replication_vlan
+          name: "VLAN Id"
+          default: "1239"
+          optional: 1
+          help: "VLAN for the Replication Network"
+        - id: infra_network_management_replication_address
+          name: "Network Address"
+          default: ''
+          optional: 0
+          help: "Network address for the Replication Network"
+        - id: infra_network_management_replication_netmask
+          name: "Netmask"
+          default: "255.255.255.0"
+          optional: 0
+          help: "Netmask for the Replication Network"
+        - id: infra_network_management_replication_gateway
+          name: "Gateway"
+          default: ""
+          optional: 1
+          help: "Default gateway for the Replication Network"
+        - id: infra_network_management_replication_mtu
+          name: "MTU"
+          default: "1500"
+          optional: 0
+          help: "MTU to use for the Management Network"
+
+      - "VXLAN (VTEP)":
+        - id: infra_network_management_vxlan_vlan
+          name: "VLAN Id"
+          default: "1339"
+          optional: 0
+          help: "VLAN for the VXLAN(VTEP) Network"
+        - id: infra_network_management_vxlan_address
+          name: "Network Address"
+          default: "172.22.103.0"
+          optional: 0
+          help: "Network address for the VXLAN Network"
+        - id: infra_network_management_vxlan_netmask
+          name: "Netmask"
+          default: "255.255.255.0"
+          optional: 0
+          help: "Netmask for the VXLAN(VTEP) Network"
+        - id: infra_network_management_vxlan_gateway
+          name: "Gateway"
+          default: "172.22.103.1"
+          optional: 0
+          help: "Default gateway for the VXLAN(VTEP) Network"
+        - id: infra_network_management_vxlan_mtu
+          name: "MTU"
+          default: "1500"
+          optional: 0
+          help: "MTU to use for the VXLAN(VTEP)anagement Network"
+
+      - "NFS":
+        - id: infra_network_management_nfs_vlan
+          name: "VLAN Id"
+          default: "1639"
+          optional: 0
+          help: "VLAN for the Management Network"
+        - id: infra_network_management_nfs_address
+          name: "Network Address"
+          default: "10.2.39.0/24"
+          optional: 0
+          help: "Network address for the Management Network"
+        - id: infra_network_management_nfs_netmask
+          name: "Netmask"
+          default: "255.255.255.0"
+          optional: 0
+          help: "Netmask for the Management Network"
+        - id: infra_network_management_nfs_gateway
+          name: "Gateway"
+          default: "10.2.39.1"
+          optional: 0
+          help: "Default gateway for the Management Network"
+        - id: infra_network_management_nfs_mtu
+          name: "MTU"
+          default: "1500"
+          optional: 0
+          help: "MTU to use for the Management Network"
+
+      - "VSAN":
+        - id: infra_network_management_vsan_vlan
+          name: "VLAN Id"
+          default: "3235"
+          optional: 0
+          help: "VLAN for the VSAN Network"
+        - id: infra_network_management_vsan_address
+          name: "Network Address"
+          default: ""
+          optional: 1
+          help: "Network address for the VSAN Network"
+        - id: infra_network_management_vsan_netmask
+          name: "Netmask"
+          default: ""
+          optional: 1
+          help: "Netmask for the VSAN Network"
+        - id: infra_network_management_vsan_gateway
+          name: "Gateway"
+          default: ""
+          optional: 1
+          help: "Default gateway for the VSAN Network"
+        - id: infra_network_management_vsan_mtu
+          name: "MTU"
+          default: "1500"
+          optional: 0
+          help: "MTU to use for the VSAN Network"
+
+      - "Ext-Management":
+        - id: infra_network_management_vsan_vlan
+          name: "VLAN Id"
+          default: "2239"
+          optional: 0
+          help: "VLAN for the External Management Network"
+        - id: infra_network_management_vsan_address
+          name: "Network Address"
+          default: "10.164.194.0"
+          optional: 0
+          help: "Network address for the External Management Network"
+        - id: infra_network_management_vsan_netmask
+          name: "Netmask"
+          default: "255.255.255.0"
+          optional: 0
+          help: "Netmask for the External Management Network"
+        - id: infra_network_management_vsan_gateway
+          name: "Gateway"
+          default: "10.164.194.1"
+          optional: 0
+          help: "Default gateway for the External Management Network"
+        - id: infra_network_management_vsan_mtu
+          name: "MTU"
+          default: "1500"
+          optional: 0
+          help: "MTU to use for the External Management Network"
+
+  - "SDDC Operations":
+    - "vRealize Operations Manager":
+      - Servers:
+        - id: vrops_loadbalancer_address
+          name: "Load Balancer"
+          optional: 0
+          default: vrops-cluster-01
+          help: "Hostname of the Load Balancer."
+        - id: vrops_master_node_address"
+          name: "Master Node"
+          optional: 0
+          default: vrops-mstrn-01
+          help: "Hostname of Master Node"
+        - id: vrops_replica_master_node_address"
+          name: "Replica Master Node"
+          optional: 0
+          default: vrops-repln-02
+          help: "Hostname of the Replica Master Node"
+        - id: vrops_data_node1
+          name: "Data Node #1"
+          optional: 0
+          default: vrops-datan-03
+          help: "Hostname of the Replica Master Node"
+        - id: vrops_data_node2
+          name: "Data Node #1"
+          optional: 0
+          default: vrops-datan-04
+          help: "Hostname of the Replica Master Node"
+
+      - Collectors:
+        - id: vrops_remote_collector1
+          name: "Remote Collector #1"
+          optional: 0
+          default: vrops-rmtcol-01
+          help: "Hostname of first collector."
+        - id: vrops_remote_collector2
+          name: "Remote Collector #2"
+          optional: 0
+          default: vrops-rmtcol-02
+          help: "Hostname of second collector."
+
       - Deployment:
         - id: vrops_ova
           name: "OVA"
@@ -68,6 +932,7 @@
           optional: 0
           input: checkbox
           help: "Whether to power up the vROps instance once deployed."
+
       - SDDC Info:
         - id: vrops_cluster
           name: "Cluster"
@@ -87,6 +952,7 @@
           input: dropdown
           options: mgmt_vc_networks
           help: "The network use for the OVA"
+
       - "Network Info":
         - id: vrops_gateway
           name: "Gateway"
@@ -117,8 +983,78 @@
           name: "Licence Key"
           optional: 0
           help: "Product Licence Key"
- 
-    - "Business":
+
+    - "vRealize Log Insight":
+      - Deployment:
+        - id: vrli_ova_location
+          name: "OVA Directory"
+          optional: 0
+          help: "The directory containing the vRLI OVA file"
+        - id: vrli_ova
+          name: "OVA Filename"
+          optional: 0
+          help: "The name of the vRLI OVA file"
+        - id: vrli_name
+          name: "VM Name"
+          optional: 0
+          help: "The vRealize Log Insight VM name"
+        - id: vrli_root_password
+          name: "VRLI Root Password"
+          optional: 0
+          input: password
+        - id: deployment_size
+          name: "Deployment Size"
+          input: dropdown
+          options:
+            - id: xsmall
+          help: "Determines the CPU and memory resources of the vRLI VM"
+        - id: start_vm
+          name: "Start VM after deployment"
+          input: checkbox
+          optional: 0
+      - Infrastructure:
+        - id: vrli_cluster
+          name: "Management Cluster"
+          input: dropdown
+          optional: 0
+          options: mgmt_vc_cluster
+          help: "The vCenter Cluster in which to place the OVA"
+        - id: vrli_datastore
+          name: "Datastore"
+          input: dropdown
+          optional: 0
+          options: mgmt_vc_datastores
+          help: "The datastore on which to place the OVA"
+      - Network:
+        - id: vrli_host_name
+          name: "VRLI Host Name"
+          optional: 0
+          help: "Host name for the vRLI VM"
+        - id: vrli_network
+          name: "Network"
+          input: dropdown
+          optional: 0
+          options: mgmt_vc_networks
+          help: "The network on which to place the OVA"
+        - id: vrli_gateway
+          name: "Gateway"
+          optional: 0
+          help: "The network gateway to be used by the vRLI VM"
+        - id: vrli_dns
+          name: "DNS"
+          optional: 0
+          help: "The domain name server to be used by the vRLI VM"
+        - id: vrli_netmask
+          name: "Netmask"
+          optional: 0
+          help: "The subnet mask to be used by the vRLI VM"
+        - id: vrli_ip
+          name: "IP Address"
+          optional: 0
+          help: "The IP address to assign the vRLI VM"
+
+  - "SDDC Automation":
+    - "vRealize Business":
       - Deployment:
         - id: vrealizeb_ova
           name: "OVA"
@@ -143,7 +1079,8 @@
           name: " ITFM Root Password"
           optional: 0
           input: password
-    - "Automation":
+
+    - "vRealize Automation":
       - Deployment:
         - id: vra_ova_location
           name: "OVA Location"
@@ -172,9 +1109,9 @@
         - id: vra_cluster
           name: "Management Cluster"
           optional: 0
-          help: "Cluster on which to install VRA"
+          help: "Cluster on which to install vRA"
         - id: vra_root_password
-          name: " VRA Root Password"
+          name: "vRA ` Root Password"
           optional: 0
           input: password
           help: "Root password"
@@ -185,18 +1122,19 @@
           options:
             - id: "True"
             - id: "False"
-          help: "Enable SSH on VRA"
+          help: "Enable SSH on vRA"
         - id: vra_delete
           name:  "Replace VRA if Exists"
           optional: 0
           input: checkbox
-          help: "Replace VRA if exists"
+          help: "Replace vRA if it exists"
         - id: vra_poweron
           name: "Power on"
           optional: 0
           input: checkbox
           help: "Power on VRA after deployment"
-      - General Configuration:
+
+      - "General Configuration":
         - id: vra_instance
           name: "VRA Appliance instance name"
           optional: 0
@@ -251,69 +1189,9 @@
           optional: 0
           help: " VRA Messaging Password"
           input: password
-    - "Log Insight":
-      - Deployment:
-        - id: vrli_ova_location
-          name: "OVA Directory"
-          optional: 0
-          help: "The directory containing the vRLI OVA file"
-        - id: vrli_ova
-          name: "OVA Filename"
-          optional: 0
-          help: "The name of the vRLI OVA file"
-        - id: vrli_host_name
-          name: "VRLI Host Name"
-          optional: 0
-          help: "Host name for the vRLI VM"
-        - id: vrli_datastore
-          name: "Datastore"
-          optional: 0
-          help: "The datastore on which to place the OVA"
-        - id: vrli_network
-          name: "Network"
-          optional: 0
-          help: "The network on which to place the OVA"
-        - id: vrli_gateway
-          name: "Gateway"
-          optional: 0
-          help: "The network gateway to be used by the vRLI VM"
-        - id: vrli_dns
-          name: "DNS"
-          optional: 0
-          help: "The domain name server to be used by the vRLI VM"
-        - id: vrli_netmask
-          name: "Netmask"
-          optional: 0
-          help: "The subnet mask to be used by the vRLI VM"
-        - id: vrli_ip
-          name: "IP Address"
-          optional: 0
-          help: "The IP address to assign the vRLI VM"
-        - id: vrli_name
-          name: "VM Name"
-          optional: 0
-          help: "The vRealize Log Insight VM name"
-        - id: vrli_cluster
-          name: "Management Cluster"
-          optional: 0
-          help: "The vCenter Cluster in which to place the OVA"
-        - id: vrli_root_password
-          name: "VRLI Root Password"
-          optional: 0
-          input: password
-        - id: deployment_size
-          name: "Deployment Size"
-          input: dropdown
-          options:
-            - id: xsmall
-          help: "Determines the CPU and memory resources of the vRLI VM"
-        - id: start_vm
-          name: "Start VM after deployment"
-          input: checkbox
-          optional: 0
 
 - Install:
-  - vRealize Operation Manager:
+  - "vRealize Operation Manager":
     - id: install_vrops
       name: "Install OVA"
       commands:
@@ -326,12 +1204,12 @@
       name: "Initialize Cluster"
       commands:
         - "/opt/supersddc/supersddc_play site_vrops.yml --tags vrops_init"
-  - vRealize Business:
+  - "vRealize Business":
     - id: install_vrealizeb
       name: "Create vRealize Business Standard"
       commands:
         - "/opt/supersddc/supersddc_play site_vrealizeb.yml"
-  - vRealize Automation:
+  - "vRealize Automation":
     - id: install_vra
       name: "Create vRealize Automation"
       commands:
@@ -356,7 +1234,7 @@
       name: "Configure Messaging"
       commands:
         - "/opt/supersddc/supersddc_play_tags site_vra.yml vra_configure_messaging"
-  - vRealize Log Insight:
+  - "vRealize Log Insight":
     - id: install_vrli
       name: "Create vRealize Log Insight"
       commands:
@@ -369,3 +1247,4 @@
       name: "Install Content Packs"
       commands:
        - "/opt/supersddc/supersddc_play content_packs_vrli.yml"
+

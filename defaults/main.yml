@@ -63,8 +63,8 @@ chaperone_vrops_ova: "vRealize-Operations-Manager-Appliance-6.0.2.2777062_OVF10.
 chaperone_vrops_md5: "cb4f67d9da7a131553efc9ba4377e9aa"
 chaperone_vrops_url: "http://build-squid.eng.vmware.com/build/mts/release/bora-2777062/publish/vRealize-Operations-Manager-Appliance-6.0.2.2777062_OVF10.ova"
 
-chaperone_vrli_ova: "VMware-vRealize-Log-Insight-2.5.0-2347850.ova"
-chaperone_vrli_md5: "e91d5eca177bdb836b02973da5df9a9b"
-chaperone_vrli_url: "http://build-squid.eng.vmware.com/build/mts/release/bora-2347850/publish/VMware-vRealize-Log-Insight-2.5.0-2347850.ova"
+chaperone_vrli_ova: "VMware-vRealize-Log-Insight-3.0.0-3021606.ova"
+chaperone_vrli_md5: "f6b773ae3f913709fc04eff1c36165e5"
+chaperone_vrli_url: "http://build-squid.eng.vmware.com/build/mts/release/bora-3021606/publish/VMware-vRealize-Log-Insight-3.0.0-3021606.ova"
 
 deploy_ovf_role_path: "/opt/supervio-ansible/roles/vcsa"
