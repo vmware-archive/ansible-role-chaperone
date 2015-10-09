@@ -21,3 +21,37 @@
     owner: "{{ ansible_ssh_user }}"
     group: "{{ ansible_ssh_user }}"
     mode: 0755
+
+- name: get vROps OVA file stats
+  stat: path="{{ downloads_dir }}/{{ chaperone_vrops_ova }}"
+  register: vropsova
+  when: download_files
+  tags:
+    - downloads
+
+- name: pull vROps OVA for future downloads (may take many minutes)
+  get_url:
+    force: yes
+    dest: "{{ downloads_dir }}/{{ chaperone_vrops_ova }}"
+    url: "{{ chaperone_vrops_url }}"
+    timeout: "{{ downloads_timeout }}"
+  when: download_files and (not vropsova.stat.exists or (vropsova.stat.md5 != "{{ chaperone_vrops_md5 }}"))
+  tags:
+    - downloads
+
+- name: get vRLI OVA file stats
+  stat: path="{{ downloads_dir }}/{{ chaperone_vrli_ova }}"
+  register: vrliova
+  when: download_files
+  tags:
+    - downloads
+
+- name: pull vRLI OVA for future downloads (may take many minutes)
+  get_url:
+    force: yes
+    dest: "{{ downloads_dir }}/{{ chaperone_vrli_ova }}"
+    url: "{{ chaperone_vrli_url }}"
+    timeout: "{{ downloads_timeout }}"
+  when: download_files and (not vrliova.stat.exists or (vrliova.stat.md5 != "{{ chaperone_vrli_md5 }}"))
+  tags:
+    - downloads
