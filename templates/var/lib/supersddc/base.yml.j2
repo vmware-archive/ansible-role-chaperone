@@ -172,10 +172,12 @@
         - id: vra_cluster
           name: "Management Cluster"
           optional: 0
+          help: "Cluster on which to install VRA"
         - id: vra_root_password
-          name: " VRA ` Root Password"
+          name: " VRA Root Password"
           optional: 0
           input: password
+          help: "Root password"
         - id: vra_ssh_enabled
           name:  "VRA Enable SSH"
           optional: 0
@@ -183,13 +185,17 @@
           options:
             - id: "True"
             - id: "False"
+          help: "Enable SSH on VRA"
         - id: vra_delete
           name:  "Replace VRA if Exists"
           optional: 0
-          input: dropdown
-          options:
-            - id: "True"
-            - id: "False"
+          input: checkbox
+          help: "Replace VRA if exists"
+        - id: vra_poweron
+          name: "Power on"
+          optional: 0
+          input: checkbox
+          help: "Power on VRA after deployment"
       - General Configuration:
         - id: vra_instance
           name: "VRA Appliance instance name"
@@ -227,6 +233,24 @@
           help: " VRA Postgres Password"
           input: password
 
+      - Messaging Configuration:
+        - id: vra_messaging_host
+          name: "VRA Messaging Host"
+          optional: 0
+          help: " VRA Messaging Host"
+        - id: vra_messaging_port
+          name: "VRA Messaging Port"
+          optional: 0
+          help: " VRA Messaging Port"
+        - id: vra_messaging_user
+          name: "VRA Messaging User"
+          optional: 0
+          help: " VRA Messaging User"
+        - id: vra_messaging_password
+          name: "VRA Messaging Password"
+          optional: 0
+          help: " VRA Messaging Password"
+          input: password
     - "Log Insight":
       - Deployment:
         - id: vrli_ova_location
@@ -312,6 +336,14 @@
       name: "Create vRealize Automation"
       commands:
         - "/opt/supersddc/supersddc_play_tags site_vra.yml vra_deploy"
+    - id: power_vra
+      name: "Power VRA"
+      commands:
+        - "/opt/supersddc/supersddc_play_tags site_vra.yml vra_poweron"
+    - id: delete_vra
+      name: "Delete  VRA"
+      commands:
+        - "/opt/supersddc/supersddc_play_tags site_vra.yml vra_delete"
     - id: configure_vra
       name: "Configure vRealize Automation"
       commands:
@@ -320,6 +352,10 @@
       name: "Configure Postgres Database"
       commands:
         - "/opt/supersddc/supersddc_play_tags site_vra.yml vra_configure_postgresdb"
+    - id: configure_messaging
+      name: "Configure Messaging"
+      commands:
+        - "/opt/supersddc/supersddc_play_tags site_vra.yml vra_configure_messaging"
   - vRealize Log Insight:
     - id: install_vrli
       name: "Create vRealize Log Insight"
