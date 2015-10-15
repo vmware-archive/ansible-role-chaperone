@@ -873,26 +873,43 @@
           optional: 0
           default: vrops-cluster-01
           help: "Hostname of the Load Balancer."
-        - id: vrops_master_node_address"
+        - id: vrops_master_node_address
           name: "Master Node"
           optional: 0
           default: vrops-mstrn-01
           help: "Hostname of Master Node"
-        - id: vrops_replica_master_node_address"
+        - id: vrops_master_node_ip
+          name: "IP Address"
+          optional: 0
+          help: "The IP address for the master node"
+        - id: vrops_replica_node_address
           name: "Replica Master Node"
           optional: 0
           default: vrops-repln-02
-          help: "Hostname of the Replica Master Node"
-        - id: vrops_data_node1
+          help: "Hostname of the Replica Node"
+        - id: vrops_replica_node_ip
+          name: "IP Address"
+          optional: 0
+          help: "The IP address for the Replica Node"
+        - id: vrops_data_node1_address
           name: "Data Node #1"
           optional: 0
           default: vrops-datan-03
-          help: "Hostname of the Replica Master Node"
-        - id: vrops_data_node2
-          name: "Data Node #1"
+          help: "Hostname of an additional Data Node"
+        - id: vrops_data_node1_ip
+          name: "IP Address"
+          optional: 0
+          help: "The IP address for an additional Data Node"
+        - id: vrops_data_node2_address
+          name: "Data Node #2"
           optional: 0
           default: vrops-datan-04
-          help: "Hostname of the Replica Master Node"
+          help: "Hostname of an additional Data Node"
+        - id: vrops_data_node2_ip
+          name: "IP Address"
+          optional: 0
+          help: "The IP address for the replica node"
+
 
       - Collectors:
         - id: vrops_remote_collector1
@@ -911,10 +928,6 @@
           name: "OVA"
           optional: 0
           help: "The name of the OVA file"
-        - id: vrops_name
-          name: "VM Name"
-          optional: 0
-          help: "The VM name for the installed vRealize Operations Manager"
         - id: vrops_deployment_option
           name: "Deployment Option"
           optional: 0
@@ -956,23 +969,12 @@
           name: "DNS"
           optional: 0
           help: "The domain name server(s) for this VM (comma seperated)"
-        - id: vrops_ip
-          name: "IP Address"
-          optional: 0
-          help: "The IP address for this interface"
         - id: vrops_netmask
           name: "Netmask"
           optional: 0
           help: "The netmask or prefix for this interface."
+
       - "Initialization":
-        - id: vrops_cluster_name
-          name: "Initial Cluster Name"
-          optional: 0
-          help: "The inital operations manager cluster name"
-        - id: vrops_slice_name
-          name: "Initial Slice Name"
-          optional: 0
-          help: "The inital operations manager slice name"
         - id: vrops_license_key
           name: "Licence Key"
           optional: 0
@@ -1187,17 +1189,21 @@
 - Install:
   - "vRealize Operation Manager":
     - id: install_vrops
-      name: "Install OVA"
+      name: "Install OVA's"
       commands:
         - "/opt/supersddc/supersddc_play site_vrops.yml --tags vropsova_deploy"
     - id: vrops_admin_init
       name: "Initialize Admin User"
       commands:
         - "/opt/supersddc/supersddc_play site_vrops.yml --tags vrops_admin_init"
+    - id: vrops_master_init
+      name: "Initialize Master Node"
+      commands:
+        - "/opt/supersddc/supersddc_play site_vrops.yml --tags vrops_master_init"
     - id: vrops_cluster_init
       name: "Initialize Cluster"
       commands:
-        - "/opt/supersddc/supersddc_play site_vrops.yml --tags vrops_init"
+        - "/opt/supersddc/supersddc_play site_vrops.yml --tags vrops_cluster_init"
   - "vRealize Business":
     - id: install_vrealizeb
       name: "Create vRealize Business Standard"
