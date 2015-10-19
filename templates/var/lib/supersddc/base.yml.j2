@@ -1882,13 +1882,37 @@
         - "/opt/supersddc/supersddc_play site_vrops.yml --tags vrops_cluster_init"
   - "vRealize Business":
     - id: install_vrealizeb
-      name: "Create vRealize Business Standard"
+      name: "Deploy to vCenter"
       commands:
         - "/opt/supersddc/supersddc_play site_vrealizeb.yml --tags vrbova_deploy"
     - id: register_vrealizeb
       name: "Register vRealize Business Standard"
       commands:
         - "/opt/supersddc/supersddc_play site_vrealizeb.yml --tags vrb_sso"
+    - id: vrealizeb_config_std_costs
+      name: "Configure standard costs"
+      commands:
+        - "echo Under Construction"
+    - id: vrealizeb_config_cost_profiles
+      name: "Configure cost profiles"
+      commands:
+        - "echo Under Construction"
+    - id: vrealizeb_config_blueprint_pricing
+      name: "Configure blueprint pricing"
+      commands:
+        - "echo Under Construction"
+    - id: vrealizeb_config_usage
+      name: "Configure demand & usage analysis"
+      commands:
+        - "echo Under Construction"
+    - id: vrealizeb_config_comparisons
+      name: "Configure Cost comparisons"
+      commands:
+        - "echo Under Construction"
+    - id: vrealizeb_config_visibility
+      name: "Configure Cost visibility"
+      commands:
+        - "echo Under Construction"
   - "vRealize Automation":
     - id: install_vra
       name: "Create vRealize Automation"
