@@ -55,3 +55,21 @@
   when: download_files and (not vrliova.stat.exists or (vrliova.stat.md5 != "{{ chaperone_vrli_md5 }}"))
   tags:
     - downloads
+
+- name: get vRB OVA file stats
+  stat: path="{{ downloads_dir }}/{{ chaperone_vrb_ova }}"
+  register: vrbova
+  when: download_files
+  tags:
+    - downloads
+
+- name: pull vRB OVA for future downloads (may take many minutes)
+  get_url:
+    force: yes
+    dest: "{{ downloads_dir }}/{{ chaperone_vrb_ova }}"
+    url: "{{ chaperone_vrb_url }}"
+    timeout: "{{ downloads_timeout }}"
+  when: download_files and (not vrbova.stat.exists or (vrbova.stat.md5 != "{{ chaperone_vrli_md5 }}"))
+  tags:
+    - downloads
+

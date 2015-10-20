@@ -1059,18 +1059,19 @@
         - id: vrealizeb_datastore
           name: "Datastore"
           optional: 0
+          input: dropdown
+          options: mgmt_vc_datastores
           help: "The datastore on which to place the OVA"
         - id: vrealizeb_network
           name: "Network"
           optional: 0
+          input: dropdown
+          options: mgmt_vc_networks
           help: "The Network  on which to place the OVA"
         - id: vrealizeb_name
           name: "VM Name"
           optional: 0
           help: "The VM name for the installed vRealize Business Standard"
-        - id: vrealizeb_cluster
-          name: "Management Cluster"
-          optional: 0
         - id: vrealizeb_itfm_root_password
           name: " ITFM Root Password"
           optional: 0
