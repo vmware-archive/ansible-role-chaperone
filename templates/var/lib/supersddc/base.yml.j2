@@ -1640,9 +1640,18 @@
           optional: 0
           help: "The VM name for the installed vRealize Business Standard"
         - id: vrealizeb_itfm_root_password
-          name: " ITFM Root Password"
+          name: "Admin User Password"
           optional: 0
           input: password
+        - id: vrb_host_name
+          name: Host Name
+          optional: 0
+          help: DNS host entry for vRealize Business VM
+        - id: vrb_ip_address
+          name: Host Name
+          optional: 0
+          help: IP address for the vRealize Business VM
+
 
     - "vRealize Automation":
       - Deployment:
@@ -1862,7 +1871,11 @@
     - id: install_vrealizeb
       name: "Create vRealize Business Standard"
       commands:
-        - "/opt/supersddc/supersddc_play site_vrealizeb.yml"
+        - "/opt/supersddc/supersddc_play site_vrealizeb.yml --tags vrbova_deploy"
+    - id: register_vrealizeb
+      name: "Register vRealize Business Standard"
+      commands:
+        - "/opt/supersddc/supersddc_play site_vrealizeb.yml --tags vrb_sso"
   - "vRealize Automation":
     - id: install_vra
       name: "Create vRealize Automation"
