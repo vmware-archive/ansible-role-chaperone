@@ -69,7 +69,7 @@
     dest: "{{ downloads_dir }}/{{ chaperone_vrb_ova }}"
     url: "{{ chaperone_vrb_url }}"
     timeout: "{{ downloads_timeout }}"
-  when: download_files and (not vrbova.stat.exists or (vrbova.stat.md5 != "{{ chaperone_vrli_md5 }}"))
+  when: download_files and (not vrbova.stat.exists or (vrbova.stat.md5 != "{{ chaperone_vrb_md5 }}"))
   tags:
     - downloads
 
