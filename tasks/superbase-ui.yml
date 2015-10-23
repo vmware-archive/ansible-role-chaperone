@@ -35,7 +35,7 @@
     - rsync
 
 - name: recursively sync the ui code from local repos
-  synchronize: src=../../../ui/ dest=/opt/{{ django_app }}/ recursive=yes rsync_opts=--no-motd,--exclude=.git
+  synchronize: src=../../../ui/ dest=/opt/{{ django_app }}/ recursive=yes rsync_opts=--no-motd,--exclude=.git archive=no
   tags:
     - rsync
 
@@ -50,20 +50,20 @@
     - rsync
 
 - name: recursively sync the ansible playbooks from local repos
-  synchronize: src=../../../ansible/playbooks dest=/opt/{{ django_app }}-ansible/ recursive=yes rsync_opts=--no-motd,--exclude=.git
+  synchronize: src=../../../ansible/playbooks dest=/opt/{{ django_app }}-ansible/ recursive=yes rsync_opts=--no-motd,--exclude=.git archive=no
   tags:
     - rsync
 - name: recursively sync the ansible roles from local repos
-  synchronize: src=../../../ansible/roles dest=/opt/{{ django_app }}-ansible/ recursive=yes rsync_opts=--no-motd,--exclude=.git
+  synchronize: src=../../../ansible/roles dest=/opt/{{ django_app }}-ansible/ recursive=yes rsync_opts=--no-motd,--exclude=.git archive=no
   tags:
     - rsync
 - name: recursively sync the ansible library from local repos
-  synchronize: src=../../../ansible/library dest=/opt/{{ django_app }}-ansible/ recursive=yes rsync_opts=--no-motd,--exclude=.git
+  synchronize: src=../../../ansible/library dest=/opt/{{ django_app }}-ansible/ recursive=yes rsync_opts=--no-motd,--exclude=.git archive=no
   tags:
     - rsync
 
 - name: recursively sync the containers built by ansible from local repos
-  synchronize: src=../../../containers dest=/opt/ recursive=yes rsync_opts=--no-motd,--exclude=.git
+  synchronize: src=../../../containers dest=/opt/ recursive=yes rsync_opts=--no-motd,--exclude=.git archive=no
   tags:
     - rsync
 
