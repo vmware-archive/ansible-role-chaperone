@@ -15,6 +15,573 @@
 #
 ---
 - Prepare:
+  - "Datacenter Prep":
+    - "Datacenter Info":
+      - "vCenter Info":
+        - id: vcenter_host
+          name: "vCenter IP"
+          optional: 0
+          help: "IP address of vCenter"
+        - id: vcenter_user
+          name: "vCenter admin USERNAME"
+          optional: 0
+        - id: vcenter_password
+          name: "vCenter admin PASSWORD"
+          optional: 0
+          input: password
+        - id: vcenter_port
+          name: "vCenter Port"
+          optional: 0
+          help: "Port for authentication connection to vCenter"
+          default: 443
+        - id: ntp_svr
+          name: "NTP server"
+          optional: 0
+          help: "NTP server for your network"
+        - id: hostprofile_name
+          name: "Host Profile name"
+          optional: 0
+          help: "Name the host profile"
+      - "Datacenter Name":
+        - id: datacenter_name
+          name: "Name of datacenter"
+          optional: 0
+          help: "Enter the name of the Datacenter being created ex: VIO-Datacenter"
+        - id: vmo_cider
+          name: "vMotion Network cider"
+          optional: 0
+          help: "EX: 192.168.1.0/24"
+        - id: strg_cider
+          name: "Storage Network cider"
+          optional: 0
+          help: "EX: 192.168.2.0/24"
+      - "Management Cluster":
+        - id: vio_cluster_mgmt
+          name: "Management cluster name"
+          optional: 0
+        - id: mgmt_vsan
+          name: "VSAN"
+          optional: 0
+          input: checkbox
+        - id: vio_cluster_mgmt_hosts
+          name: "Management Cluster ESXi Hosts"
+          optional: 0
+          input: multiform
+          readonly: 1
+          min_items: 1
+          items:
+          - id: mgmt_esx_name
+            name: "ESX hosts name"
+            optional: 0
+            help: "Management Cluster ESXi hostname"
+          - id: mgmt_esx_ip
+            name: "ESX hosts ip"
+            optional: 0
+            help: "Management Cluster ESXi IP address"
+          - id: mgmt_esx_mac
+            name: "ESX MAC address"
+            optional: 0
+            help: "Management Cluster ESXi MAC address"
+          - id: mgmt_esx_username
+            name: "ESX Username"
+            optional: 0
+            help: "ESX root username"
+          - id: mgmt_esx_password
+            name: "ESX Password"
+            optional: 0
+            input: password
+            help: "ESX root password"
+      - "Edge Cluster":
+        - id: vio_cluster_edge
+          name: "Edge cluster name"
+          optional: 0
+        - id: edge_vsan
+          name: "VSAN"
+          optional: 0
+          input: checkbox
+        - id: vio_cluster_edge_hosts
+          name: "Edge Cluster ESXi Hosts"
+          optional: 0
+          min_items: 1
+          input: multiform
+          readonly: 1
+          items:
+          - id: edge_esx_name
+            name: "ESX hosts name"
+            optional: 0
+            help: "Edge Cluster ESXi hostname"
+          - id: edge_esx_ip
+            name: "ESX hosts ip"
+            optional: 0
+            help: "Edge Cluster ESXi IP address"
+          - id: edge_esx_mac
+            name: "ESX MAC address"
+            optional: 0
+            help: "Edge Cluster ESXi MAC address"
+          - id: edge_esx_username
+            name: "ESX Username"
+            optional: 0
+            help: "ESX root username"
+          - id: edge_esx_password
+            name: "ESX Password"
+            optional: 0
+            input: password
+            help: "ESX root password"
+      - "Compute Cluster":
+        - id: vio_cluster_compute
+          name: "Compute cluster name"
+          optional: 0
+        - id: compute_vsan
+          name: "VSAN"
+          optional: 0
+          input: checkbox
+        - id: vio_cluster_compute_hosts
+          name: "Compute Cluster ESXi Hosts"
+          optional: 0
+          min_items: 1
+          input: multiform
+          readonly: 1
+          items:
+          - id: compute_esx_name
+            name: "ESX hosts name"
+            optional: 0
+            help: "Compute Cluster ESXi hostname"
+          - id: compute_esx_ip
+            name: "ESX hosts ip"
+            optional: 0
+            help: "Compute Cluster ESXi IP address"
+          - id: compute_esx_mac
+            name: "ESX MAC address"
+            optional: 0
+            help: "Compute Cluster ESXi MAC address"
+          - id: compute_esx_username
+            name: "ESX username"
+            optional: 0
+            help: "ESX root username"
+          - id: compute_esx_password
+            name: "ESX root password"
+            optional: 0
+            input: password
+      - "Add NFS datastore":
+        - id: nfs_name
+          name: "NFS Datastore name"
+          optional: 0
+        - id: nfs_host
+          name: "NFS host"
+          optional: 0
+        - id: nfs_path
+          name: "NFS path"
+          optional: 0
+    - AutoDeploy:
+      - "Window Server Info":
+        - id: win_admin
+          name: "Windows Admin User"
+          optional: 0
+          help: "Enter Administrators Username"
+        - id: win_pass
+          name: "Administrator Password"
+          input: password
+          help: "Enter the Administrators Password"
+        - id: powercli_check
+          name: "PowerCli Installed"
+          input: checkbox
+          help: "Please check is powercli is installed"
+        - id: ps_remoting
+          name: "PowerShell Remoting"
+          input: checkbox
+          help: "Is Enable-PSRemoting?"
+        - id: set_exec
+          name: "PowerShell Execution Policy"
+          input: checkbox
+          help: "Is Set-ExecutionPolicy Unrestricted?"
+        - id: run_setup
+          name: "Setup Done?"
+          input: checkbox
+          help: "Has the ansible-setup.ps1 script been run?"
+      - "Local Software Depot":
+        - id: use_local
+          name: "Use Local SoftwareDepot"
+          input: checkbox
+          optional: 1
+          help: "Select if using Local Software Depot Zip provided"
+        - id: win_path
+          name: "Local Directory"
+          optional: 1
+          help: "Local Full Directory Path on Windows Server to upload Software Depot Zip"
+        - id: esxi_host_profile
+          name: "ESXi Host Profile"
+          optional: 0
+          help: "Enter the ESXi Host Profile Name to Use"
+        - id: esxi_img
+          name: "ESX Image Profile Name"
+          input: dropdown
+          optional: 0
+          help: "Select the ESX Image Profile Name to use"
+          options:
+            - id: 'ESXi-*-no-tools'
+            - id: 'ESXi-*-standard'
+      - "Remote Software Depot":
+        - id: use_remote
+          name: "Use Remote Software Depot"
+          optional: 1
+          input: checkbox
+          help: "Select if using Remote Software Depot URL"
+        - id: remote_url
+          name: "Remote URL"
+          optional: 1
+          help: "Enter the Remote URL for the Software Depot"
+        - id: esxi_host_profile_remote
+          name: "ESX Host Profile"
+          optional: 1
+          help: "Enter the Host Profile to use"
+        - id: esxi_img_remote
+          name: "ESX Image Profile Name"
+          optional: 1
+          help: "Enter the ESX Image Profile Name to use"
+      - "ESXi Software":
+        - id: chaperone_esxi_url
+          name: "URL to ESXi Installer ISO"
+          optional: 0
+          default: "http://build-squid.eng.vmware.com/build/mts/release/sb-5579746/publish/VMware-VMvisor-Installer-6.0.0-5579746.x86_64.iso"
+    - "Add Host":
+      - "Host Information":
+        - id: add_single_host
+          name: "Add single host"
+          optional: 0
+          input: dropdown
+          options:
+            - id: 'yes'
+            - id: 'no'
+        - id: host_ip_name
+          name: "Host ip or dns"
+          optional: 0
+        - id: host_username
+          name: "Host username"
+          optional: 0
+        - id: host_password
+          name: "Host password"
+          optional: 0
+          input: password
+        - id: addhost_cluster
+          name: "Destination ESX cluster"
+          optional: 0
+  - "Network Services":
+    - "Boot Services":
+      - DHCP:
+        - id: dhcp_subnet
+          name: "DHCP subnet"
+          optional: 0
+          help: "subnet for dhcp"
+        - id: dhcp_sub_mask
+          name: "DHCP subnet mask"
+          optional: 0
+          help: "subnet MASK for dhcp"
+        - id: dhcp_rout
+          name: "DHCP gateway"
+          optional: 0
+          help: "gateway for DHCP"
+        - id: dom_name
+          name: "Domain name"
+          optional: 0
+          help: "Domain name"
+        - id: dom_name_svr
+          name: "Domain name server"
+          optional: 0
+        - id: dhcp_range_a
+          name: "DHCP START range"
+          optional: 0
+          help: "Start of dhcp allocation"
+        - id: dhcp_range_b
+          name: "DHCP END range"
+          optional: 0
+          help: "END of dhcp allocation"
+        - id: boot_filename
+          name: "ESXi boot img"
+          input: dropdown
+          optional: 0
+          help: "Name of ESXi pxe boot img"
+          options:
+            - id: undionly.kpxe.vmw-hardwired
+
+      - "TFTP Settings":
+        - id: tftp_root
+          name: "TFTP root"
+          optional: 0
+          help: "TFTP root directory for ESX boot imge."
+        - id: tftp_ip
+          name: "TFTP IP"
+          optional: 0
+          help: "TFTP Server IP to use"
+
+  - "vDS and Port groups":
+    - "vDS Settings":
+      - "vDS Info":
+        - id: vds_name
+          name: "vDS Name"
+          optional: 0
+        - id: uplinks
+          name: "uplinks"
+          optional: 0
+          help: "Number of uplinks"
+        - id: sw_ports
+          name: "Switch Ports"
+          optional: 0
+          help: "Number of ports on the vDS"
+        - id: productVersion
+          name: "Product Version"
+          optional: 0
+          input: dropdown
+          options:
+            - id: '6.0.0'
+            - id: '5.5.0'
+            - id: '5.0.0'
+        - id: port_binding
+          name: "Port Binding"
+          optional: 0
+          input: dropdown
+          help: "Port Binding Type"
+          options:
+            - id: 'static'
+            - id: 'dynamic'
+            - id: 'ephemeral'
+        - id: ports
+          name: "Port Group Ports "
+          optional: 0
+          help: "Number of Ports on individual port group"
+    - "Port Group Names":
+      - "Port Group Names":
+        - id: api_grp
+          name: "VIO API Network"
+          optional: 0
+          help: "VIO API Network"
+        - id: api_vlan
+          name: "VIO API VLAN"
+          optional: 1
+        - id: ext_grp
+          name: "VIO External Network"
+          optional: 0
+          help: "VIO External Network"
+        - id: ext_vlan
+          name: "VIO External Network"
+          optional: 1
+        - id: mgmt_grp
+          name: "VIO Management"
+          optional: 0
+          help: "VIO Management"
+        - id: mgmt_vlan
+          name: "VIO Management VLAN"
+          optional: 1
+        - id: store_grp
+          name: "VIO Storage"
+          optional: 0
+          help: "VIO Storage"
+        - id: store_vlan
+          name: "VIO Storage VLAN"
+          optional: 1
+        - id: vmotion_grp
+          name: "VIO vMotion"
+          optional: 0
+          help: "VIO vMotion"
+        - id: vmotion_vlan
+          name: "VIO vMotion VLAN"
+          optional: 1
+        - id: vsan_grp
+          name: "VIO VSAN"
+          optional: 0
+          help: "VIO VSAN"
+        - id: vsan_vlan
+          name: "VIO VSAN VLAN"
+          optional: 1
+  - "vCenter Server":
+    - "General Configuration":
+      - "Architectural Scheme":
+        - id: appliance_deployment_scheme
+          name: "Appliance deployment scheme"
+          optional: 0
+          input: dropdown
+          options:
+            - id: combined
+            - id: psc
+            - id: vcsa
+          help: "Determines whether to deploy a combined vCSA and PSC or dedicated appliance(s)"
+      - "Out-of-band Management vCenter Server":
+        - id: vcenter_host
+          name: "vCenter hostname"
+          optional: 0
+          help: "Out-of-band vCenter Server that manages the ESXi host into which vCSA and/or PSC gets deployed."
+        - id: vcenter_user
+          name: "vCenter Admin User"
+          optional: 0
+        - id: vcenter_password
+          name: "vCenter Admin User Password"
+          optional: 0
+          input: password
+        - id: vcenter_port
+          name: "vCenter API Port"
+          optional: 0
+          default: 443
+      - "ESX Deployment Target":
+        - id: esx_hostname
+          name: "ESXi Host"
+          optional: 0
+          help: "Host onto which to deploy."
+        - id: esx_username
+          name: "ESXi User"
+          optional: 0
+          help: "Host login name."
+        - id: esx_password
+          name: "ESXi User Password"
+          optional: 0
+          input: password
+          help: "Host login password."
+    - "Platform Services Controller":
+      - "Storage and Network Configuration (General)":
+        - id: esx_datastore
+          name: "Datastore"
+          optional: 0
+          help: "Datastore to deploy the OVA to"
+        - id: appliance_thin_disk_mode
+          name: "Thin Disk Mode"
+          optional: 0
+          input: checkbox
+          help: "Disk provisioning mode."
+        - id: esx_network
+          name: "Network"
+          optional: 0
+          help: "Network name to use for the vCenter NIC (which MUST be set to Ephemeral binding)."
+        - id: appliance_networking_mode
+          name: "Networking mode"
+          input: dropdown
+          optional: 0
+          options:
+            - id: DHCP
+            - id: Static
+      - "Network Configuration":
+        - id: psc_appliance_vcenter_name
+          name: "PSC appliance vCenter name"
+          optional: 0
+          help: "vCenter display name of PSC appliance"
+        - id: psc_appliance_domain_name
+          name: "PSC domain name"
+          optional: 1
+          help: "DNS domain suffix for PSC"
+        - id: psc_appliance_ip_address
+          name: "PSC static IP address"
+          optional: 1
+          help: "(OPTIONAL) PSC IP address, required when Networking mode is set to static"
+        - id: psc_appliance_ip_prefix
+          name: "PSC VLSM"
+          optional: 1
+          help: "(OPTIONAL) PSC variable length subnet mask, required when Networking mode is set to static"
+        - id: psc_appliance_ip_gw
+          name: "PSC static IP gateway"
+          optional: 1
+          help: "(OPTIONAL) PSC IP gateway, required when Networking mode is set to static"
+        - id: psc_appliance_dns_servers
+          name: "PSC DNS servers"
+          optional: 1
+          help: "(OPTIONAL) PSC DNS server(s), required when Networking mode is set to static"
+      - "SSO Information":
+        - id: sso_domain_name
+          name: "SSO Domain Name"
+          optional: 0
+          help: "The single sign-on domain name for identity management."
+        - id: sso_site_name
+          name: "SSO Site Name"
+          optional: 0
+          help: "The single sign-on site name for identity management."
+        - id: sso_password
+          name: "SSO administrator password"
+          input: password
+          optional: 0
+          help: "The single sign-on admin password."
+      - "Appliance Information":
+        - id: psc_appliance_root_password
+          name: "PSC administrator password"
+          input: password
+          optional: 0
+          help: "The admin (not SSO admin) password for this PSC instance."
+    - "vCenter Server Appliance":
+      - "Storage and Network Configuration (General)":
+        - id: esx_datastore
+          name: "Datastore"
+          optional: 0
+          help: "Datastore to deploy the OVA to"
+        - id: appliance_thin_disk_mode
+          name: "Thin Disk Mode"
+          optional: 0
+          input: checkbox
+          help: "Disk provisioning mode."
+        - id: esx_network
+          name: "Network"
+          optional: 0
+          help: "Network name to use for the vCenter NIC (which MUST be set to Ephemeral binding)."
+        - id: appliance_networking_mode
+          name: "Networking mode"
+          input: dropdown
+          optional: 0
+          options:
+            - id: DHCP
+            - id: Static
+      - "Network Configuration":
+        - id: vcsa_appliance_vcenter_name
+          name: "vCSA vCenter name"
+          optional: 0
+          help: "vCenter display name of the vCSA instance"
+        - id: vcsa_appliance_domain_name
+          name: "vCSA domain name"
+          optional: 1
+          help: "DNS domain suffix of vCSA instance"
+        - id: vcsa_appliance_ip_address
+          name: "vCSA static IP address"
+          optional: 1
+          help: "(OPTIONAL) vCSA IP address, required when Networking mode is set to static"
+        - id: vcsa_appliance_ip_prefix
+          name: "vCSA VLSM"
+          optional: 1
+          help: "(OPTIONAL) vCSA variable length subnet mask, required when Networking mode is set to static"
+        - id: vcsa_appliance_ip_gw
+          name: "vCSA static IP gateway"
+          optional: 1
+          help: "(OPTIONAL) vCSA IP gateway, required when Networking mode is set to static"
+        - id: vcsa_appliance_dns_servers
+          name: "vCSA DNS Servers"
+          optional: 1
+          help: "(OPTIONAL) vCSA DNS server(s), required when Networking mode is set to static"
+      - "SSO Information":
+        - id: psc_appliance_dns_name_manual
+          name: "PSC FQDN"
+          optional: 1
+          help: "PSC FQDN, required for SSO integration. Optional only when deployment architecture is Combined"
+        - id: sso_domain_name
+          name: "SSO Domain Name"
+          optional: 0
+          help: "The single sign-on domain name for identity management."
+        - id: sso_site_name
+          name: "SSO Site Name"
+          optional: 0
+          help: "The single sign-on site name for identity management."
+        - id: sso_password
+          name: "SSO administrator password"
+          input: password
+          optional: 0
+          help: "The single sign-on admin password."
+      - "Appliance Information":
+        - id: appliance_deployment_option
+          name: "vCSA Deployment Type"
+          input: dropdown
+          optional: 0
+          options:
+            - id: tiny
+            - id: small
+            - id: medium
+            - id: large
+          help: "The size for this vCenter appliance."
+        - id: vcsa_appliance_root_password
+          name: "vCSA administrator password"
+          input: password
+          optional: 0
+          help: "The admin (not SSO admin) password for this vCSA instance."
   - "Users and Groups":
     - "Service Accounts":
       - "AD Service Account":
@@ -1188,6 +1755,92 @@
           input: password
 
 - Install:
+  - "vCenter Services Deployment":
+    - id: psc_ova_deploy
+      name: "Deploy PSC"
+      commands:
+        - "/opt/supervio/supervio_play_tags site_vcsa.yml create_psc_task"
+        - "/opt/supervio/supervio_play_tags site_vcsa.yml prereqs,debug,psc,cleanup"
+    - id: psc_ova_cleanup
+      name: "Destroy PSC"
+      commands:
+        - "/opt/supervio/supervio_play_tags site_vcsa.yml cleanup_psc"
+    - id: vcenter_ova_deploy
+      name: "Deploy vCSA"
+      commands:
+        - "/opt/supervio/supervio_play_tags site_vcsa.yml create_vcsa_task"
+        - "/opt/supervio/supervio_play_tags site_vcsa.yml prereqs,debug,vcsa,cleanup"
+    - id: vcsa_ova_cleanup
+      name: "Destroy vCSA"
+      commands:
+        - "/opt/supervio/supervio_play_tags site_vcsa.yml cleanup_vcsa"
+    - id: combined_ova_deploy
+      name: "Deploy combined vCSA and PSC"
+      commands:
+        - "/opt/supervio/supervio_play_tags site_vcsa.yml create_combined_task"
+        - "/opt/supervio/supervio_play_tags site_vcsa.yml prereqs,debug,combined,cleanup"
+    - id: combined_ova_cleanup
+      name: "Destroy combined vCSA and PSC"
+      commands:
+        - "/opt/supervio/supervio_play_tags site_vcsa.yml cleanup_combined"
+  - "Datacenter Deploy":
+    - id: install_datacenter
+      name: "Create vSphere Datacenter Clusters"
+      commands:
+        - "/opt/supervio/supervio_play_tags site_dc.yml datacenter"
+    - id: install_vds
+      name: "Create VDS portgroups"
+      commands:
+        - "/opt/supervio/supervio_play_tags site_dc.yml vds"
+    - id: install_datacenter_addhosts
+      name: "Add Hosts"
+      commands:
+        - "/opt/supervio/supervio_play_tags site_dc.yml addhosts"
+    - id: install_datacenter_confighosts
+      name: "Configure Hosts vds"
+      commands:
+        - "/opt/supervio/supervio_play_tags site_dc.yml confighosts"
+    - id: install_datacenter_hostprofile
+      name: "Create Host Profiles"
+      commands:
+        - "/opt/supervio/supervio_play_tags site_dc.yml hostprofile"
+    - id: install_applyprofiles
+      name: "Apply Host Profiles"
+      commands:
+        - "/opt/supervio/supervio_play_tags site_dc.yml applyprofile"
+  - "NSX Deploy":
+    - id: nsx_ova_deploy
+      name: "Deploy NSX OVA"
+      commands:
+        - "/opt/supervio/supervio_play_tags site_nsx.yml nsxdeploy"
+    - id: install_nsx
+      name: "Prepare NSX"
+      commands:
+        - "/opt/supervio/supervio_play_tags site_nsx.yml prep_nsxmanager"
+    - id: install_nsx_instvirt
+      name: "Host Prep"
+      commands:
+        - "/opt/supervio/supervio_play_tags site_nsx.yml install_virt"
+    - id: install_nsx_instvirt_sync
+      name: "IP Pools"
+      commands:
+        - "/opt/supervio/supervio_play_tags site_nsx.yml ippools"
+    - id: install_nsx_controller
+      name: "Controller"
+      commands:
+        - "/opt/supervio/supervio_play_tags site_nsx.yml create_controller"
+    - id: install_nsx_vxlan
+      name: "VXLAN"
+      commands:
+        - "/opt/supervio/supervio_play_tags site_nsx.yml vxlan"
+    - id: install_nsx_netprep
+      name: "Segment ID"
+      commands:
+        - "/opt/supervio/supervio_play_tags site_nsx.yml segment_id"
+    - id: install_nsx_vdn
+      name: "Segment ID"
+      commands:
+        - "/opt/supervio/supervio_play_tags site_nsx.yml tzone"
   - "vRealize Operation Manager":
     - id: install_vrops
       name: "Install OVA's"
@@ -1248,4 +1901,3 @@
       name: "Install Content Packs"
       commands:
        - "/opt/supersddc/supersddc_play content_packs_vrli.yml"
-
