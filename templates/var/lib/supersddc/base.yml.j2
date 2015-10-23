@@ -1629,29 +1629,42 @@
           input: dropdown
           options: mgmt_vc_datastores
           help: "The datastore on which to place the OVA"
+        - id: vrealizeb_name
+          name: "VM Name"
+          optional: 0
+          help: "The VM name for the installed vRealize Business Standard"
+      - "User Information":
+        - id: vrealizeb_itfm_root_password
+          name: "Admin User Password"
+          optional: 0
+          input: password
+      - "Networking":
         - id: vrealizeb_network
           name: "Network"
           optional: 0
           input: dropdown
           options: mgmt_vc_networks
           help: "The Network  on which to place the OVA"
-        - id: vrealizeb_name
-          name: "VM Name"
-          optional: 0
-          help: "The VM name for the installed vRealize Business Standard"
-        - id: vrealizeb_itfm_root_password
-          name: "Admin User Password"
-          optional: 0
-          input: password
         - id: vrb_host_name
-          name: Host Name
+          name: "Host Name"
           optional: 0
-          help: DNS host entry for vRealize Business VM
+          help: "DNS host name to use for vRealize Business VM"
         - id: vrb_ip_address
-          name: Host Name
+          name: "IP Address"
           optional: 0
-          help: IP address for the vRealize Business VM
-
+          help: "IP address to assign to the vRealize Business VM"
+        - id: vrb_ip_netmask
+          name: "Netmask"
+          optional: 0
+          help: "IP netmask for the vRealize Business VM"
+        - id: vrb_gateway_address
+          name: "Default Gateway"
+          optional: 0
+          help: "Default gateway address for the vRealize Business VM"
+        - id: vrb_dns_address
+          name: "DNS Server Address"
+          optional: 0
+          help: "IP address for the DNS Server vRealize Business VM shoould use"
 
     - "vRealize Automation":
       - Deployment:
