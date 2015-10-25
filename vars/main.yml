@@ -50,4 +50,4 @@ django_pip_packages:
   - django
 
 django_pip_versioned_packages:
-  - { name: "django", version: "1.6.5" }
+  - { name: "django", version: "1.8.5" }

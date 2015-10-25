@@ -35,11 +35,12 @@
     - rsync
 
 - name: recursively sync the ui code from local repos
+  sudo: no
   synchronize: src=../../../ui/ dest=/opt/{{ django_app }}/ recursive=yes rsync_opts=--no-motd,--exclude=.git archive=no
   tags:
     - rsync
 
-- name: ensure ansible plays directory exists
+- name: create plays directory
   file:
     dest: "/opt/{{ django_app }}-ansible"
     state: directory
@@ -50,19 +51,34 @@
     - rsync
 
 - name: recursively sync the ansible playbooks from local repos
+  sudo: no
   synchronize: src=../../../ansible/playbooks dest=/opt/{{ django_app }}-ansible/ recursive=yes rsync_opts=--no-motd,--exclude=.git archive=no
   tags:
     - rsync
+
 - name: recursively sync the ansible roles from local repos
+  sudo: no
   synchronize: src=../../../ansible/roles dest=/opt/{{ django_app }}-ansible/ recursive=yes rsync_opts=--no-motd,--exclude=.git archive=no
   tags:
     - rsync
+
 - name: recursively sync the ansible library from local repos
   synchronize: src=../../../ansible/library dest=/opt/{{ django_app }}-ansible/ recursive=yes rsync_opts=--no-motd,--exclude=.git archive=no
   tags:
     - rsync
 
+- name: create application directory
+  file:
+    dest: "/opt/containers"
+    state: directory
+    owner: "{{ ansible_ssh_user }}"
+    group: "{{ ansible_ssh_user }}"
+    mode: 0755
+  tags:
+    - rsync
+
 - name: recursively sync the containers built by ansible from local repos
+  sudo: no
   synchronize: src=../../../containers dest=/opt/ recursive=yes rsync_opts=--no-motd,--exclude=.git archive=no
   tags:
     - rsync
