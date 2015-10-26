@@ -1776,6 +1776,458 @@
           help: " VRA Messaging Password"
           input: password
 
+  - "NSX Services":
+    - "NSX Deploy":
+      - "NSX Management vCenter":
+        - id: nsx_vcenter_name
+          name: "NSX vCenter Name"
+          optional: 0
+          help: "Name of the vCenter to deploy NSX Manager appliance to. Normally this will be the OOB vCenter."
+        - id: nsx_vcenter_user
+          name: "NSX vCenter Admin User"
+          optional: 0
+        - id: nsx_vcenter_password
+          name: "NSX vCenter Admin User Password"
+          optional: 0
+          input: password
+        - id: nsx_vcenter_port
+          name: "NSX vCenter API Port"
+          optional: 0
+          default: 443
+        - id: nsx_datacenter_name
+          name: "NSX vCenter Datacenter"
+          optional: 0
+        - id: nsx_cluster_name
+          name: "NSX vCenter Cluster"
+          optional: 0
+
+      - "NSX Appliance Configuration":
+        - id: nsx_name
+          name: "NSX Manager Name"
+          optional: 0
+          help: "Name of the NSX Manager VM"
+        - id: nsx_datastore
+          name: "NSX Datastore"
+          optional: 0
+          help: "Name of the Datastore to use for VM deployment"
+        - id: nsx_mgmt_net
+          name: "NSX Management Network"
+          optional: 0
+          help: "Management Network"
+        - id: nsx_cluster_deploy
+          name: "Deploy to Cluster"
+          optional: 0
+          help: "Select cluster to deploy to"
+        - id: ntp_svr
+          name: "NSX Manager NTP"
+          optional: 0
+          help: "NTP Server for NSX Manager"
+        - id: nsx_ssh_enabled
+          name: "NSX Enable SSH"
+          optional: 0
+          input: dropdown
+          options:
+            - id: "True"
+            - id: "False"
+        - id: cli_pass
+          name: "NSX ssh passwd"
+          optional: 0
+          input: password
+          help: "NSX Manager default cli user admin"
+        - id: nsx_poweron
+          name: "Power on"
+          optional: 0
+          input: dropdown
+          help: "If OFF selected must manually power on in vcenter"
+          options:
+            - id: "ON"
+            - id: "OFF"
+
+      - "NSX Appliance Configuration - Network":
+        - id: nsx_hostname
+          name: "NSX Manager Hostname"
+          optional: 0
+          help: "NSX Manager Hostname ex: nsxmanager-01a"
+        - id: nsx_ip
+          name: "NSX Manager IP"
+          optional: 0
+          help: "IP address on management network for NSX Manager"
+        - id: nsx_netmask
+          name: "NSX Manager Netmask"
+          optional: 0
+          help: "Netmask for management network"
+        - id: nsx_gateway
+          name: "NSX Manager Gateway"
+          optional: 0
+          help: "Gateway for management network"
+        - id: nsx_dns
+          name: "NSX Manager DNS server"
+          optional: 0
+          help: "DNS server"
+        - id: nsx_domain
+          name: "Domain name"
+          optional: 0
+          help: "Domain information"
+
+    - "NSX Configuration":
+      - "NSX Manager Info":
+        - id: nsx_sys
+          name: "NSX Syslog Server IP"
+          optional: 0
+          help: "Enter the Syslog server IP"
+        - id: nsx_sys_port
+          name: "NSX Syslog Port"
+          optional: 0
+        - id: nsx_sys_proto
+          name: "NSX Syslog Protocol"
+          optional: 0
+          help: "UDP or TCP"
+
+      - "NSX Controller":
+        - id: controllername
+          name: "Controller Name"
+          optional: 0
+          help: "Enter the name of the controller ex: controller-01"
+        - id: controller_ds_name
+          name: "Controller Datastore"
+          optional: 0
+          help: "Name of the datastore for the Controller VM"
+          input: dropdown
+          options: comp_vc_datastores
+        - id: controller_password
+          name: "Controller Password"
+          optional: 0
+          input: password
+        - id: controller_deploy_size
+          name: "Deploy Size"
+          optional: 0
+          input: dropdown
+          help: "Choose the deploy type based on your environment"
+          options:
+            - id: 'small'
+            - id: 'medium'
+            - id: 'large'
+
+    - "NSX IP Pools":
+      - "NSX Controller IP Pool":
+        - id: controller_ippool_name
+          name: "Controller IP pool"
+          optional: 0
+          help: "Controller IP pool name ex: controller-pool-1"
+        - id: controller_ippool_gw
+          name: "Controller IP pool Gateway"
+          optional: 0
+        - id: controller_ippool_prefix
+          name: "Prefix"
+          optional: 0
+          help: "Controller pool ip prefix ex: 24"
+        - id: controller_ippool_range_start
+          name: "Controller IP pool Start:"
+          optional: 0
+          help: "Starting IP range for controller ip pool ex: 192.168.110.51"
+        - id: controller_ippool_range_end
+          name: "Controller IP pool End"
+          optional: 0
+          help: "Ending IP range for controller ip pool ex: 192.168.110.59"
+
+      - "NSX Edge VTEP IP Pool":
+        - id: edgevtep_ippool_name
+          name: "Edge VTEP IP pool Name"
+          optional: 0
+          help: "Edge VTEP pool name ex: VTEP-pool-1"
+        - id: edgevtep_ippool_gw
+          name: "Edge VTEP pool Gateway"
+          optional: 0
+        - id: edgevtep_ippool_prefix
+          name: "Prefix"
+          optional: 0
+          help: "Edge VTEP ip prefix ex: 24"
+        - id: edgevtep_ippool_range_start
+          name: "Edge VTEP IP pool Start:"
+          optional: 0
+          help: "Starting IP range for Edge VTEP ip pool ex: 192.168.110.51"
+        - id: edgevtep_ippool_range_end
+          name: "Controller IP pool End"
+          optional: 0
+          help: "Ending IP range for Edge VTEP ip pool ex: 192.168.110.59"
+
+      - "NSX Compute VTEP IP Pool":
+        - id: computevtep_ippool_name
+          name: "Compute VTEP IP pool Name"
+          optional: 0
+          help: "Compute VTEP pool name ex: VTEP-pool-2"
+        - id: computevtep_ippool_gw
+          name: "Compute VTEP pool Gateway"
+          optional: 0
+        - id: computevtep_ippool_prefix
+          name: "Prefix"
+          optional: 0
+          help: "Compute VTEP ip prefix ex: 24"
+        - id: computevtep_ippool_range_start
+          name: "Compute VTEP IP pool Start:"
+          optional: 0
+          help: "Starting IP range for Compute VTEP ip pool ex: 192.168.110.51"
+        - id: computevtep_ippool_range_end
+          name: "Controller IP pool End"
+          optional: 0
+          help: "Ending IP range for Compute VTEP ip pool ex: 192.168.110.59"
+
+    - "NSX Logical Network":
+      - "NSX Segment Range":
+        - id: segment_id
+          name: "Segment Range ID"
+          iptional: 0
+          help: "ID number for the segment range"
+        - id: segment_name
+          name: "Segment Range Name"
+          optional: 0
+          help: "Name for the Segment Range"
+        - id: segment_desc
+          name: "Segment Description"
+          optional: 0
+        - id: segment_begin
+          name: "Segment Begin"
+          optional: 0
+          help: "Starting Range for Segment ex 5000"
+        - id: segment_end
+          name: "Segment End"
+          optional: 0
+          help: "Ending Range for Segment ex 5900"
+
+      - "NSX Transport Zone":
+        - id: vdnscope_name
+          name: "Transport Zone Name"
+          optional: 0
+        - id: vdnscope_mode
+          name: "Replication Mode"
+          optional: 0
+          input: dropdown
+          options:
+            - id: 'MULTICAST_MODE'
+            - id: 'UNICAST_MODE'
+            - id: 'HYBRID_MODE'
+
+      - "NSX VXLAN":
+        - id: vxlan_vlanid
+          name: "VLAN ID"
+          optional: 0
+        - id: vxlan_vmnic
+          name: "vmnic count"
+          optional: 0
+        - id: vxlan_mtu
+          name: "MTU"
+          optional: 0
+        - id: vxlan_teaming
+          name: "vmknic teaming policy"
+          optional: 0
+          input: dropdown
+          options:
+            - id: 'FAILOVER_ORDER'
+            - id: 'ETHER_CHANNEL'
+            - id: 'LACP_ACTIVE'
+
+    - "NSX Edge":
+      - "Name and Description":
+        - id: nsx_edge_name
+          name: "Name"
+          optional: 0
+          help: "The name of the edge"
+        - id: nsx_edge_hostname
+          name: "Hostname"
+          optional: 1
+          help: "The hostname to use for the edge"
+        - id: nsx_edge_description
+          name: "Description"
+          optional: 1
+          help: "A description for the edge"
+        - id: nsx_edge_tenant
+          name: "Tenant"
+          optional: 1
+          help: "The tenant for the edge"
+
+      - "Settings":
+        - id: nsx_edge_username
+          name: "User Name"
+          optional: 0
+          help: "The user name for edge"
+        - id: nsx_edge_password
+          name: "Password"
+          optional: 0
+          input: password
+          help: "The password for the edge"
+        - id: nsx_edge_confirm_password
+          name: "Confirm Password"
+          input: password
+          optional: 0
+          help: "Confirmation of the password for the edge"
+        - id: nsx_edge_tenant
+          name: "Tenant"
+          optional: 1
+          help: "The tenant for the edge"
+        - id: nsx_edge_enable_ssh
+          name: "Enable SSH access"
+          optional: 1
+          input: checkbox
+        - id: nsx_edge_enable_auto_rule_generation
+          name: "Enable auto rule generation"
+          optional: 1
+          help: "Automatically generate service rules to allow flow of control traffic"
+          input: checkbox
+        - id: nsx_edge_level_logging
+          name: "Edge Control Level Logging"
+          optional: 0
+          help: "The logging level for the edge"
+          input: dropdown
+          options:
+            - id: 'EMERGENCY'
+            - id: 'ALERT'
+            - id: 'CRITICAL'
+            - id: 'ERROR'
+            - id: 'WARNING'
+            - id: 'NOTICE'
+            - id: 'INFO'
+            - id: 'DEBUG'
+
+      - "Configure Deployment":
+        - id: nsx_edge_datacenter
+          name: "Datacenter"
+          optional: 0
+          help: "The datacenter for the edge"
+        - id: nsx_edge_appliance_size
+          name: "Appliance Size"
+          optional: 0
+          help: The size of the edge appliance
+          input: dropdown
+          options:
+            - id: 'Compact'
+            - id: 'Large'
+            - id: 'X-Large'
+            - id: 'Quad Large'
+        - id: nsx_edge_deploy_edge
+          name: "Deploy NSX Edge"
+          optional: 1
+          help: "Create the edge in deployed mode"
+          input: checkbox
+        - id: nsx_edge_appliance_cluster
+          name: "Cluster/Resource Pool"
+          optional: 1
+          help: "The cluster/resource pool into which the edge will be placed"
+        - id: nsx_edge_appliance_datastore
+          name: "Datastore"
+          optional: 1
+          help: "The datastore for the appliance"
+        - id: nsx_edge_appliance_host
+          name: "Host"
+          optional: 0
+          help: "The host into which the appliance will be placed"
+        - id: nsx_edge_appliance_folder
+          name: "Folder"
+          optional: 0
+          help: "The folder on the host into which the appliance will be placed"
+
+      - "Configure Interfaces":
+        - id: nsx_edge_interface_name
+          name: "Name"
+          optional: 0
+          help: "The interface name"
+        - id: nsx_edge_interface_type
+          name: "Type"
+          optional: 0
+          help: "The type of interface"
+          input: dropdown
+          options:
+            - id: 'Internal'
+            - id: 'Uplink'
+        - id: nsx_edge_interface_connected_to
+          name: "Connected To"
+          optional: 1
+          help: "The network or portgroup to attach the edge to"
+        - id: nsx_edge_connectivity_status
+          name: "Connectivity Status"
+          optional: 0
+          input: dropdown
+          options:
+            - id: 'Connected'
+            - id: 'Disconnected'
+        - id: nsx_edge_interface_mac
+          name: "MAC Address"
+          optional: 1
+          help: "Specify the MAC address, or leave it blank to auto-generate one"
+        - id: nsx_edge_interface_mtu
+          name: "MTU"
+          optional: 1
+          help: "The MTU for the edge"
+        - id: nsx_edge_enable_proxy_arp
+          name: "Enable Proxy Arp"
+          optional: 1
+          help: "Enables proxy ARP for the edge"
+          input: checkbox
+        - id: nsx_edge_send_icmp_redirect
+          name: "Send ICMP Redirect"
+          optional: 1
+          help: "Enables the sending of ICMP redirect"
+          input: checkbox
+        - id: nsx_edge_fence_parameters
+          name: "Fence Parameters"
+          optional: 1
+          help: "Examples include:  ethernet0.filter1.param1=1"
+
+      - "Default Gateway Settings":
+        - id: nsx_edge_default_gateway_vnic
+          name: "vNIC"
+          optional: 1
+          help: "The vNIC for the default gateway"
+        - id: nsx_edge_default_gateway_ip
+          name: "Gateway IP"
+          optional: 1
+          help: "The IP address of the default gateway to use for the edge"
+        - id: nsx_edge_default_gateway_mtu
+          name: "MTU"
+          optional: 1
+          help: "The MTU for the default edge"
+
+      - "Firewall and HA":
+        - id: nsx_edge_default_traffic_policy
+          name: "Default Traffic Policy"
+          optional: 0
+          help: "The firewall default traffic policy"
+          input: dropdown
+          options:
+            - id: 'Deny'
+            - id: 'Allow'
+        - id: nsx_edge_firewall_logging
+          name: "Logging"
+          optional: 0
+          help: "Enable firewall logging"
+          input: dropdown
+          options:
+            - id: 'Disable'
+            - id: 'Enable'
+        - id: nsx_edge_enable_ha
+          name: "Enable High Availability"
+          optional: 1
+          help: "Enable HA for enabling and configuring high availability"
+          input: checkbox
+        - id: nsx_edge_ha_vnic
+          name: "vNIC"
+          optional: 0
+          help: "HA vNIC"
+          input: dropdown
+          options:
+            - id: 'any'
+        - id: nsx_edge_declare_dead_time
+          name: "Declare Dead Time"
+          optional: 1
+          help: "The declared dead time in seconds"
+        - id: nsx_edge_ha_management_ip_1
+          name: "Management IP 1"
+          optional: 1
+          help: "You can specify a pair of IPs (in CIDR format) with a /30 subnet"
+        - id: nsx_edge_ha_management_ip_2
+          name: "Management IP 2"
+          optional: 1
+          help: "The second management IP"
+
 - Install:
   - "vCenter Services Deployment":
     - id: psc_ova_deploy
@@ -1830,39 +2282,6 @@
       name: "Apply Host Profiles"
       commands:
         - "/opt/supervio/supervio_play_tags site_dc.yml applyprofile"
-  - "NSX Deploy":
-    - id: nsx_ova_deploy
-      name: "Deploy NSX OVA"
-      commands:
-        - "/opt/supervio/supervio_play_tags site_nsx.yml nsxdeploy"
-    - id: install_nsx
-      name: "Prepare NSX"
-      commands:
-        - "/opt/supervio/supervio_play_tags site_nsx.yml prep_nsxmanager"
-    - id: install_nsx_instvirt
-      name: "Host Prep"
-      commands:
-        - "/opt/supervio/supervio_play_tags site_nsx.yml install_virt"
-    - id: install_nsx_instvirt_sync
-      name: "IP Pools"
-      commands:
-        - "/opt/supervio/supervio_play_tags site_nsx.yml ippools"
-    - id: install_nsx_controller
-      name: "Controller"
-      commands:
-        - "/opt/supervio/supervio_play_tags site_nsx.yml create_controller"
-    - id: install_nsx_vxlan
-      name: "VXLAN"
-      commands:
-        - "/opt/supervio/supervio_play_tags site_nsx.yml vxlan"
-    - id: install_nsx_netprep
-      name: "Segment ID"
-      commands:
-        - "/opt/supervio/supervio_play_tags site_nsx.yml segment_id"
-    - id: install_nsx_vdn
-      name: "Segment ID"
-      commands:
-        - "/opt/supervio/supervio_play_tags site_nsx.yml tzone"
   - "vRealize Operation Manager":
     - id: install_vrops
       name: "Install OVA's"
@@ -1951,3 +2370,40 @@
       name: "Install Content Packs"
       commands:
        - "/opt/supersddc/supersddc_play content_packs_vrli.yml"
+  - "NSX Deploy":
+    - id: nsx_ova_deploy
+      name: "Deploy NSX OVA"
+      commands:
+        - "/opt/supersddc/supersddc_play_tags site_nsx.yml nsxdeploy"
+    - id: install_nsx
+      name: "Prepare Manager"
+      commands:
+        - "/opt/supersddc/supersddc_play_tags site_nsx.yml prep_nsxmanager"
+    - id: install_nsx_instvirt
+      name: "Prepare Host"
+      commands:
+        - "/opt/supersddc/supersddc_play_tags site_nsx.yml install_virt"
+    - id: install_nsx_instvirt_sync
+      name: "Create IP Pools"
+      commands:
+        - "/opt/supersddc/supersddc_play_tags site_nsx.yml ippools"
+    - id: install_nsx_controller
+      name: "Install Controller"
+      commands:
+        - "/opt/supersddc/supersddc_play_tags site_nsx.yml create_controller"
+    - id: install_nsx_vxlan
+      name: "Install VXLAN"
+      commands:
+        - "/opt/supersddc/supersddc_play_tags site_nsx.yml vxlan"
+    - id: install_nsx_netprep
+      name: "Install Segment ID"
+      commands:
+        - "/opt/supersddc/supersddc_play_tags site_nsx.yml segment_id"
+    - id: install_nsx_vdn
+      name: "Install Transport Zone"
+      commands:
+        - "/opt/supersddc/supersddc_play_tags site_nsx.yml tzone"
+    - id: install_nsx_edges
+      name: "Install Edges"
+      commands:
+        - "/opt/supersddc/supersddc_play site_nsx.yml --tags nsxedges_deploy"
