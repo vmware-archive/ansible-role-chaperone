@@ -73,3 +73,19 @@
   tags:
     - downloads
 
+- name: get cRA OVA file stats
+  stat: path="{{ downloads_dir }}/{{ chaperone_vra_ova }}"
+  register: vraova
+  when: download_files
+  tags:
+    - downloads
+
+- name: pull vRA OVA for future downloads (may take many minutes)
+  get_url:
+    force: yes
+    dest: "{{ downloads_dir }}/{{ chaperone_vra_ova }}"
+    url: "{{ chaperone_vra_url }}"
+    timeout: "{{ downloads_timeout }}"
+  when: download_files and (not vraova.stat.exists or (vraova.stat.md5 != "{{ chaperone_vra_md5 }}"))
+  tags:
+    - downloads

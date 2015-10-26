@@ -68,3 +68,7 @@ chaperone_vrli_url: "http://build-squid.eng.vmware.com/build/mts/release/bora-30
 chaperone_vrb_ova: "vRealize-Business-Standard-6.0.0.0-2323216_OVF10.ova"
 chaperone_vrb_md5: "d5ea907a0b29601858f10f0927bac15b"
 chaperone_vrb_url: "http://build-squid.eng.vmware.com/build/mts/release/bora-2323216/publish/exports/ova/vRealize-Business-Standard-6.0.0.0-2323216_OVF10.ova"
+
+chaperone_vra_ova: "VMware-vCAC-Appliance-6.2.1.0-2553372_OVF10.ova"
+chaperone_vra_md5: "f98a3003d0391b71858c90ce14f2754d"
+chaperone_vra_url: "http://build-squid.eng.vmware.com/build/mts/release/bora-2553372/publish/exports/ova/VMware-vCAC-Appliance-6.2.1.0-2553372_OVF10.ova"
