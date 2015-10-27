@@ -1683,21 +1683,21 @@
         - id: vra_datastore
           name: "Datastore"
           optional: 0
+          input: dropdown
+          options: mgmt_vc_datastores
           help: "The datastore on which to place the OVA"
         - id: vra_network
           name: "Network"
           optional: 0
-          help: "The Network  on which to place the OVA"
+          help: "The Network on which to place the OVA"
+          input: dropdown
+          options: mgmt_vc_networks
         - id: vra_name
           name: "VM Name"
           optional: 0
           help: "The VM name for the installed vRealize Automation"
-        - id: vra_cluster
-          name: "Management Cluster"
-          optional: 0
-          help: "Cluster on which to install vRA"
         - id: vra_root_password
-          name: "vRA ` Root Password"
+          name: "vRA Root Password"
           optional: 0
           input: password
           help: "Root password"
