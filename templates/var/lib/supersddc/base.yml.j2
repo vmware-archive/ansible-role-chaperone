@@ -1719,21 +1719,59 @@
           optional: 0
           input: checkbox
           help: "Power on VRA after deployment"
-
       - "General Configuration":
         - id: vra_instance
-          name: "VRA Appliance instance name"
+          name: "VRA Appliance instance"
           optional: 0
-          help: " VRA Appliance instance name"
+          help: " The VRA Appliance instance name"
         - id: vra_port
           name: "VRA Appliance Port"
           optional: 0
-          help: " VRA Appliance Port"
+          help: "The port at which VRA Appliance is accessed"
         - id: vra_user
           name: "VRA User"
           optional: 0
-          help: " VRA User"
-
+          help: "The vra user id"
+      - NTP Configuration:
+        - id: vra_ntp_server
+          name: "VRA NTP Server"
+          optional: 0
+          help: "The time server hostname or ip"
+      - SSL  Configuration:
+        - id: vra_ssl_org
+          name: "VRA SSL ORG"
+          optional: 0
+          help: "Organization name for ssl cert."
+        - id: vra_ssl_org_unit
+          name: "VRA SSL ORG. UNIT"
+          optional: 0
+          help: "The BU name for ssl cert."
+        - id: vra_ssl_country
+          name: "VRA SSL COUNTRY"
+          optional: 0
+          help: "The country for ssl cert."
+      - SSO  Configuration:
+        - id: vra_sso_host
+          name: "VRA SSO HOST"
+          optional: 0
+          help: "The sso server that vra should use"
+        - id: vra_sso_port
+          name: "VRA SSO PORT"
+          optional: 0
+          help: "The port of the sso server"
+        - id: vra_sso_user
+          name: "VRA SSO USER"
+          optional: 0
+          help: "sso user id"
+        - id: vra_sso_password
+          name: "VRA SSO PASSWORD"
+          optional: 0
+          help: "sso password"
+      - License  Configuration:
+        - id: vra_license_key
+          name: "VRA LICENSE KEY"
+          optional: 0
+          help: "The license key to use"
       - Postgres DB  Configuration:
         - id: vra_postgres_host
           name: "VRA Postgres DB host"
@@ -2346,9 +2384,13 @@
       commands:
         - "/opt/supersddc/supersddc_play_tags site_vra.yml vra_delete"
     - id: configure_vra
-      name: "Configure vRealize Automation"
+      name: "Configure Host Settings"
       commands:
         - "/opt/supersddc/supersddc_play_tags site_vra.yml  vra_configure_settings"
+    - id: configure_sso
+      name: "Configure SSO and License"
+      commands:
+        - "/opt/supersddc/supersddc_play_tags site_vra.yml  vra_configure_sso"
     - id: configure_postgresdb
       name: "Configure Postgres Database"
       commands:
