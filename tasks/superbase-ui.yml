@@ -63,6 +63,7 @@
     - rsync
 
 - name: recursively sync the ansible library from local repos
+  sudo: no
   synchronize: src=../../../ansible/library dest=/opt/{{ django_app }}-ansible/ recursive=yes rsync_opts=--no-motd,--exclude=.git archive=no
   tags:
     - rsync
