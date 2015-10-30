@@ -6,6 +6,7 @@
 #  You may obtain a copy of the License at
 #
 #      http://www.apache.org/licenses/LICENSE-2.0
+
 #
 #  Unless required by applicable law or agreed to in writing, software
 #  distributed under the License is distributed on an "AS IS" BASIS,
@@ -1634,10 +1635,66 @@
           optional: 0
           help: "The VM name for the installed vRealize Business Standard"
       - "User Information":
+        - id: vrb_default_admin_user
+          name: "Admin User"
+          optional: 0
+          help: "Default User of VRB"
         - id: vrealizeb_itfm_root_password
           name: "Admin User Password"
           optional: 0
           input: password
+      - "VRA SSO":
+        - id: vrb_cafe_host
+          name: "VRA SSO Host Name"
+          optional: 0
+          help: "Host Name of VRA"
+        - id: vrb_sso_tenant
+          name: "VRA SSO Default Tenant"
+          optional: 0
+          help: "Default Tenant of VRA"
+        - id: vrb_sso_admin
+          name: "VRA SSO Admin user"
+          optional: 0
+          help: "Admin User of VRA SSO"
+        - id: vrb_sso_password
+          name: "VRA SSO Admin Password"
+          optional: 0
+          help: "Admin Password of VRA SSO"
+          input: password
+      - "VRB Time Settings":
+        - id: vrb_time_sync_mode
+          name: "Time Sync Mode"
+          optional: 0
+          input: dropdown
+          options:
+            - id: "Disable"
+            - id: "Use ESX Host Time"
+            - id: "Use Time Server"
+        - id: vrb_time_server_1
+          name: "Time Server 1"
+          optional: 0
+          default: None
+          help: "Time Server 1"
+        - id: vrb_time_server_2
+          name: "Time Server 2"
+          optional: 0
+          default: None
+          help: "Time Server 2"
+        - id: vrb_time_server_3
+          name: "Time Server 3"
+          optional: 0
+          default: None
+          help: "Time Server 3"
+        - id: vrb_time_server_4
+          name: "Time Server 1"
+          optional: 0
+          default: None
+          help: "Time Server 4"
+        - id: vrb_time_server_5
+          name: "Time Server 5"
+          optional: 0
+          default: None
+          help: "Time Server 5"
       - "Networking":
         - id: vrealizeb_network
           name: "Network"
@@ -1647,7 +1704,7 @@
           help: "The Network  on which to place the OVA"
         - id: vrb_host_name
           name: "Host Name"
-          optional: 0
+          optional: 1
           help: "DNS host name to use for vRealize Business VM"
         - id: vrb_ip_address
           name: "IP Address"
@@ -1655,16 +1712,52 @@
           help: "IP address to assign to the vRealize Business VM"
         - id: vrb_ip_netmask
           name: "Netmask"
-          optional: 0
+          optional: 1
           help: "IP netmask for the vRealize Business VM"
         - id: vrb_gateway_address
           name: "Default Gateway"
-          optional: 0
+          optional: 1
           help: "Default gateway address for the vRealize Business VM"
         - id: vrb_dns_address
           name: "DNS Server Address"
-          optional: 0
+          optional: 1
           help: "IP address for the DNS Server vRealize Business VM shoould use"
+      - "VRB SSL":
+        - id: vrb_sslcert_mode
+          name: "Time Sync Mode"
+          optional: 0
+          input: dropdown
+          options:
+            - id: "Generate Self Signed Certificate"
+            - id: "Import PEM encoded Certificate"
+        - id: vrb_sslcert_common_name
+          name: "Common Name"
+          optional: 0
+          help: SSL Cert Common Name
+        - id: vrb_sslcert_organization
+          name: "Organization"
+          optional: 1
+          help: Organization
+        - id: vrb_sslcert_organizational_unit
+          name: "Organizational Unit"
+          optional: 1
+          help: Organizational Unit
+        - id: vrb_sslcert_country
+          name: "Country"
+          optional: 1
+          help: Country
+        - id: vrb_sslcert_encoded_key
+          name: "RSA Private Key(.pem)"
+          optional: 1
+          help: RSA Private Key
+        - id: vrb_sslcert_encoded_certchain
+          name: "Certificates(.pem)"
+          optional: 1
+          help: Certificates(.pem)
+        - id: vrb_sslcert_passphrase
+          name: "Private Key Passphrase"
+          optional: 1
+          help: Private Key Passphrase
 
     - "vRealize Automation":
       - Deployment:
@@ -2346,30 +2439,18 @@
       name: "Register vRealize Business Standard"
       commands:
         - "/opt/supersddc/supersddc_play site_vrealizeb.yml --tags vrb_sso"
-    - id: vrealizeb_config_std_costs
-      name: "Configure standard costs"
+    - id: toggle_ssh_vrealizeb
+      name: "Toggle SSH"
       commands:
-        - "echo Under Construction"
-    - id: vrealizeb_config_cost_profiles
-      name: "Configure cost profiles"
+        - "/opt/supersddc/supersddc_play site_vrealizeb.yml --tags vrb_toggle_ssh"
+    - id: configure_time_vrealizeb
+      name: "Configure Time"
       commands:
-        - "echo Under Construction"
-    - id: vrealizeb_config_blueprint_pricing
-      name: "Configure blueprint pricing"
+        - "/opt/supersddc/supersddc_play site_vrealizeb.yml --tags vrb_time_settings"
+    - id: configure_ssl_certificate
+      name: "Configure SSL Certificate"
       commands:
-        - "echo Under Construction"
-    - id: vrealizeb_config_usage
-      name: "Configure demand & usage analysis"
-      commands:
-        - "echo Under Construction"
-    - id: vrealizeb_config_comparisons
-      name: "Configure Cost comparisons"
-      commands:
-        - "echo Under Construction"
-    - id: vrealizeb_config_visibility
-      name: "Configure Cost visibility"
-      commands:
-        - "echo Under Construction"
+        - "/opt/supersddc/supersddc_play site_vrealizeb.yml --tags vrb_ssl_certificate"
   - "vRealize Automation":
     - id: install_vra
       name: "Create vRealize Automation"
