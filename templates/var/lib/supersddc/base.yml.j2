@@ -1906,6 +1906,149 @@
           optional: 0
           help: " VRA Messaging Password"
           input: password
+    - "vRealize Automation - Windows":
+      - vCenter Information:
+        - id: win_vra_vcacisvm
+          name: "Identity Server Name"
+          optional: 0
+          help: "Name of Identity Server VM"
+        - id: win_vra_vcacisgp
+          name: "Identity Server Password"
+          input: password
+          optional: 0
+          help: "Password for Identity Server  VM"
+        - id: win_vra_vcacapvm
+          name: "vCAC Appliance Name"
+          optional: 0
+          help: "Name of vCAC appiance"
+        - id: win_vra_vcacapgp
+          name: "vCAC Password"
+          input: password
+          optional: 0
+          help: "Password for vCAC appliance"
+        - id: win_vra_lickey
+          name: "License key"
+          optional: 0
+          help: "vCAC License key"
+        - id: win_vra_vcaciaasvm
+          name: "IAAS Name"
+          optional: 0
+          help: "Name of IAAS appliance"
+        - id: win_vra_vcaciaasvmgu
+          name: "IAAS administrator"
+          optional: 0
+          help: "IAAS administrator username"
+        - id: win_vra_vcaciaasvmgp
+          name: "IAAS Administrator password"
+          optional: 0
+          input: password
+          help: "IAAS administrator password"
+        - id: win_vra_vcaciaasip
+          name: "IAAS IP"
+          optional: 0
+          help: "IP address for IAAS"
+      - Deployment:
+        - id: win_vra_vcac_is_ova
+          name: "VCAC IS OVA"
+          optional: 1
+          help: "Location and name of VCAC Identity Server OVA"
+        - id: win_vra_vcac_is_ip
+          name: "VCAC IS IP"
+          optional: 0
+          help: "IP address of VCAC Identity Server Host"
+        - id: win_vra_vcac_ap_ova
+          name: "VCAC OVA"
+          optional: 1
+          help: "Location and name of VCAC Appliance"
+        - id: win_vra_vcac_ap_ip
+          name: "VCAC IP"
+          optional: 0
+          help: "IP address of VCAC appliance"
+        - id: win_vra_gateway
+          name: "Gateway"
+          optional: 0
+          help: "Gateway"
+        - id: win_vra_netmask
+          name: "Netmask"
+          optional: 0
+          help: "Netmask"
+        - id: win_vra_dns
+          name: "DNS"
+          optional: 0
+          help: "DNS"
+        - id: win_vra_cluster
+          name: "Management Cluster"
+          optional: 0
+          help: "Cluter to install vRA"
+        - id: win_vra_network_name
+          name: "Network"
+          optional: 0
+          help: "Network on which to place the OVA"
+        - id: win_vra_datastore
+          name: "Datastore"
+          optional: 1
+          help: "Datastore on which to place the OVA"
+        - id: win_vra_vm_host
+          name: "VM Host"
+          optional: 1
+          help: "The VM name for vRA installation"
+      - Certificate Generation Information:
+        - id: win_vra_cert_org
+          name: "Organization"
+          optional: 0
+          help: "Organization"
+        - id: win_vra_cert_org_unit
+          name: "Organization Unit"
+          optional: 0
+          help: "Organization"
+        - id: win_vra_cert_country
+          name: "Country"
+          optional: 0
+          help: "Country, use two characters only"
+        - id: win_vra_cert_state
+          name: "State"
+          optional: 0
+          help: "State, use two characters only"
+        - id: win_vra_cert_city
+          name: "City"
+          optional: 0
+          help: "Citi"
+        - id: win_vra_cert_email
+          name: "Email"
+          optional: 0
+          help: "Email address"
+      - XML Variables:
+        - id: win_vra_dns_sufix
+          name: "DNS Suffix"
+          optional: 0
+          help: "Used to create the FQDN of the machines"
+        - id: win_vra_sso_username
+          name: "SSO Username"
+          optional: 0
+          help: "SSO for Identity Server"
+        - id: win_vra_sso_password
+          name: "SSO Password"
+          optional: 0
+          input: password
+          help: "SSO password for Identity Server"
+        - id: win_vra_security_password
+          name: "Security Password"
+          optional: 0
+          input: password
+          help: "Security Password"
+        - id: win_vra_service_user_password
+          name: "Service User Password"
+          input: password
+          optional: 0
+          help: "Service User Password"
+        - id: win_vra_ntp_server1
+          name: "NTP Server 1"
+          optional: 0
+          help: "NTP server 1"
+        - id: win_vra_ntp_server2
+          name: "NTP Server 2"
+          optional: 0
+          help: "NTP server 2"
 
   - "NSX Services":
     - "NSX Deploy":
@@ -2480,6 +2623,11 @@
       name: "Configure Messaging"
       commands:
         - "/opt/supersddc/supersddc_play_tags site_vra.yml vra_configure_messaging"
+  - "vRealize Automation Windows":
+    - id: run_script
+      name: "Run vRA script"
+      commands:
+        - "/opt/supersddc/supersddc_play_tags site_vra.yml vra_win_run_script"
   - "vRealize Log Insight":
     - id: install_vrli
       name: "Create vRealize Log Insight"
