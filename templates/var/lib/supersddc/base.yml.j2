@@ -2012,7 +2012,7 @@
         - id: win_vra_cert_city
           name: "City"
           optional: 0
-          help: "Citi"
+          help: "City"
         - id: win_vra_cert_email
           name: "Email"
           optional: 0
@@ -2047,7 +2047,7 @@
           help: "NTP server 1"
         - id: win_vra_ntp_server2
           name: "NTP Server 2"
-          optional: 0
+          optional: 1
           help: "NTP server 2"
 
   - "NSX Services":
@@ -2624,10 +2624,14 @@
       commands:
         - "/opt/supersddc/supersddc_play_tags site_vra.yml vra_configure_messaging"
   - "vRealize Automation Windows":
-    - id: run_script
-      name: "Run vRA script"
+    - id: prepare_vra_win
+      name: "Prepare vRA Windows"
       commands:
-        - "/opt/supersddc/supersddc_play_tags site_vra.yml vra_win_run_script"
+        - "/opt/supersddc/supersddc_play_tags site_vra.yml vra_win_script"
+    - id: install_vra_win
+      name: "Install vRA Windows"
+      commands:
+        - "/opt/supersddc/supersddc_play_tags site_vra.yml vra_win_deploy"
   - "vRealize Log Insight":
     - id: install_vrli
       name: "Create vRealize Log Insight"
