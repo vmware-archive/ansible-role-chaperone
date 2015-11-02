@@ -1634,6 +1634,14 @@
           name: "VM Name"
           optional: 0
           help: "The VM name for the installed vRealize Business Standard"
+        - id: vrb_ssh_enabled
+          name:  "VRB Enable SSH"
+          optional: 0
+          input: dropdown
+          options:
+            - id: "True"
+            - id: "False"
+          help: "Enable SSH on vRB"
       - "User Information":
         - id: vrb_default_admin_user
           name: "Admin User"
@@ -1647,11 +1655,11 @@
         - id: vrb_cafe_host
           name: "VRA SSO Host Name"
           optional: 0
-          help: "Host Name of VRA"
+          help: "Host Name of VRA" 
         - id: vrb_sso_tenant
           name: "VRA SSO Default Tenant"
           optional: 0
-          help: "Default Tenant of VRA"
+          help: "Default Tenant of VRA" 
         - id: vrb_sso_admin
           name: "VRA SSO Admin user"
           optional: 0
@@ -1659,7 +1667,7 @@
         - id: vrb_sso_password
           name: "VRA SSO Admin Password"
           optional: 0
-          help: "Admin Password of VRA SSO"
+          help: "Admin Password of VRA SSO" 
           input: password
       - "VRB Time Settings":
         - id: vrb_time_sync_mode
