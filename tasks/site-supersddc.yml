@@ -22,6 +22,38 @@
     group: "{{ ansible_ssh_user }}"
     mode: 0755
 
+- name: get esx hypervisor iso file stats
+  stat: path="{{ downloads_dir }}/{{ chaperone_esxi_iso }}"
+  register: esxiiso
+  tags:
+    - downloads
+
+- name: pull esxi iso for future downloads (may take many minutes)
+  get_url:
+    dest: "{{ downloads_dir }}/{{ chaperone_esxi_iso }}"
+    url: "{{ chaperone_esxi_url }}"
+    timeout: "{{ downloads_timeout }}"
+  when: not (esxiiso.stat.exists and (esxiiso.stat.md5 == "{{ chaperone_esxi_md5 }}"))
+  tags:
+    - downloads
+
+- name: get vCenter Appliance file stats
+  stat: path="{{ downloads_dir }}/{{ chaperone_vcsa_iso }}"
+  register: vcsaiso
+  when: download_files
+  tags:
+    - downloads
+
+- name: pull vCenter Appliance ISO for future downloads (may take many minutes)
+  get_url:
+    force: yes
+    dest: "{{ downloads_dir }}/{{ chaperone_vcsa_iso }}"
+    url: "{{ chaperone_vcsa_url }}"
+    timeout: "{{ downloads_timeout }}"
+  when: download_files and (not vcsaiso.stat.exists or (vcsaiso.stat.md5 != "{{ chaperone_vcsa_md5 }}"))
+  tags:
+    - downloads
+
 - name: get vROps OVA file stats
   stat: path="{{ downloads_dir }}/{{ chaperone_vrops_ova }}"
   register: vropsova
