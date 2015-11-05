@@ -2358,12 +2358,27 @@
             - id: 'LACP_ACTIVE'
 
     - "NSX Edge":
+      - "NSX Manager":
+        - id: nsx_edge_manager_host
+          name: "NSX Manager Hostname"
+          optional: 0
+          help: "The host name of the manager receiving the edge"
+        - id: nsx_edge_manager_user
+          name: "NSX Manager Username"
+          optional: 0
+          help: "The username for the NSX manager instance"
+        - id: nsx_edge_manager_password
+          name: "NSX Manager Password"
+          optional: 0
+          input: password
+          help: "The password for the NSX manager instance"
+
       - "Name and Description":
         - id: nsx_edge_name
           name: "Name"
           optional: 0
           help: "The name of the edge"
-        - id: nsx_edge_hostname
+        - id: nsx_edge_fqdn
           name: "Hostname"
           optional: 1
           help: "The hostname to use for the edge"
@@ -2377,25 +2392,16 @@
           help: "The tenant for the edge"
 
       - "Settings":
-        - id: nsx_edge_username
+        - id: nsx_edge_cliSettings_userName
           name: "User Name"
           optional: 0
           help: "The user name for edge"
-        - id: nsx_edge_password
+        - id: nsx_edge_cliSettings_password
           name: "Password"
           optional: 0
           input: password
           help: "The password for the edge"
-        - id: nsx_edge_confirm_password
-          name: "Confirm Password"
-          input: password
-          optional: 0
-          help: "Confirmation of the password for the edge"
-        - id: nsx_edge_tenant
-          name: "Tenant"
-          optional: 1
-          help: "The tenant for the edge"
-        - id: nsx_edge_enable_ssh
+        - id: nsx_edge_cliSettings_remoteAccess
           name: "Enable SSH access"
           optional: 1
           input: checkbox
