@@ -1869,6 +1869,23 @@
           optional: 0
           input: checkbox
           help: "Power on VRA after deployment"
+      - "Networking":
+        - id: vra_ip
+          name: "VRA Appliance IP Address"
+          optional: 0
+          help: " The VRA Appliance IP Address"
+        - id: vra_netmask
+          name: "VRA Appliance IP Address Netmask"
+          optional: 0
+          help: " The VRA Appliance IP Address Netmask"
+        - id: vra_gateway
+          name: "VRA Appliance Gateway"
+          optional: 0
+          help: " The VRA Appliance Gateway"
+        - id: vra_dns
+          name: "VRA Appliance DNS"
+          optional: 0
+          help: " The VRA Appliance DNS"
       - "General Configuration":
         - id: vra_instance
           name: "VRA Appliance instance"
@@ -1963,6 +1980,37 @@
           optional: 0
           help: " VRA Messaging Password"
           input: password
+      - Tenant Configuration:
+        - id: vra_tenant_id
+          name: "VRA Tenant Id"
+          optional: 0
+          help: " VRA Tenant Id"
+        - id: vra_tenant_url
+          name: "VRA Tenant URL"
+          optional: 0
+          help: " VRA Tenant URL"
+        - id: vra_tenant_name
+          name: "VRA Tenant Name"
+          optional: 0
+          help: " VRA Tenant Name"
+        - id: vra_tenant_description
+          name: "VRA Tenant Description"
+          optional: 0
+          help: " VRA Tenant Description"
+        - id: vra_tenant_email
+          name: "VRA Tenant Email"
+          optional: 0
+          help: " VRA Tenant Email"
+        - id: vra_default_tenant
+          input: dropdown
+          options:
+            - id: "True"
+            - id: "False"
+          name: "VRA Default Tenant"
+          optional: 0
+          help: "VRA Default Tenant"
+
+
     - "vRealize Automation - Windows":
       - vCenter Information:
         - id: win_vra_vcacisvm
@@ -2038,7 +2086,7 @@
           input: dropdown
           options: mgmt_vc_cluster
           optional: 0
-          help: "Cluter to install vRA"
+          help: "Cluster to install vRA"
         - id: win_vra_network_name
           name: "Network"
           input: dropdown
@@ -2048,8 +2096,8 @@
         - id: win_vra_datastore
           name: "Datastore"
           input: dropdown
-          optional: 0
           options: mgmt_vc_datastores
+          optional: 0
           help: "Datastore on which to place the OVA"
         - id: win_vra_vm_host
           name: "VM Host"
@@ -2581,10 +2629,6 @@
       name: "Setup NFS Storage"
       commands:
         - "/opt/{{ django_app }}/{{ django_app }}_play nfs.yml"
-    - id: vrpt_service
-      name: "Setup vRPT"
-      commands:
-        - "/opt/{{ django_app }}/{{ django_app }}_play vrpt.yml"
   - "vCenter Services Deployment":
     - id: psc_ova_deploy
       name: "Deploy PSC"
@@ -2721,6 +2765,10 @@
       name: "Configure Messaging"
       commands:
         - "/opt/supersddc/supersddc_play_tags site_vra.yml vra_configure_messaging"
+    - id: configure_tenant
+      name: "Configure Tenant"
+      commands:
+        - "/opt/supersddc/supersddc_play_tags site_vra.yml vra_configure_tenant"
   - "vRealize Automation Windows":
     - id: prepare_vra_win
       name: "Prepare vRA Windows"
@@ -2730,6 +2778,10 @@
       name: "Install vRA Windows"
       commands:
         - "/opt/supersddc/supersddc_play_tags site_vra.yml vra_win_deploy"
+    - id: install_vrpt_service
+      name: "Install vRPT"
+      commands:
+        - "/opt/{{ django_app }}/{{ django_app }}_play vrpt.yml"
   - "vRealize Log Insight":
     - id: install_vrli
       name: "Create vRealize Log Insight"
