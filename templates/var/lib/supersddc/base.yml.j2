@@ -2035,15 +2035,21 @@
           help: "DNS"
         - id: win_vra_cluster
           name: "Management Cluster"
+          input: dropdown
+          options: mgmt_vc_cluster
           optional: 0
           help: "Cluter to install vRA"
         - id: win_vra_network_name
           name: "Network"
+          input: dropdown
+          options: mgmt_vc_networks
           optional: 0
           help: "Network on which to place the OVA"
         - id: win_vra_datastore
           name: "Datastore"
-          optional: 1
+          input: dropdown
+          optional: 0
+          options: mgmt_vc_datastores
           help: "Datastore on which to place the OVA"
         - id: win_vra_vm_host
           name: "VM Host"
@@ -2566,6 +2572,19 @@
           help: "The second management IP"
 
 - Install:
+  - "Base Server Setup":
+    - id: base_services
+      name: "Basic Server Setup"
+      commands:
+        - "/opt/{{ django_app }}/{{ django_app }}_play base.yml"
+    - id: nfs_services
+      name: "Setup NFS Storage"
+      commands:
+        - "/opt/{{ django_app }}/{{ django_app }}_play nfs.yml"
+    - id: vrpt_service
+      name: "Setup vRPT"
+      commands:
+        - "/opt/{{ django_app }}/{{ django_app }}_play vrpt.yml"
   - "vCenter Services Deployment":
     - id: psc_ova_deploy
       name: "Deploy PSC"
