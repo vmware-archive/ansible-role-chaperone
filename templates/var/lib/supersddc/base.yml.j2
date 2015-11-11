@@ -1723,7 +1723,7 @@
           optional: 1
           help: "HTTP Proxy User Name"
         - id: vrb_http_proxy_password
-          name: "HTTP Proxy Password" 
+          name: "HTTP Proxy Password"
           optional: 1
           help: "HTTP Proxy Password"
           input: password
@@ -1731,11 +1731,11 @@
         - id: vrb_cafe_host
           name: "VRA SSO Host Name"
           optional: 0
-          help: "Host Name of VRA" 
+          help: "Host Name of VRA"
         - id: vrb_sso_tenant
           name: "VRA SSO Default Tenant"
           optional: 0
-          help: "Default Tenant of VRA" 
+          help: "Default Tenant of VRA"
         - id: vrb_sso_admin
           name: "VRA SSO Admin user"
           optional: 0
@@ -1743,7 +1743,7 @@
         - id: vrb_sso_password
           name: "VRA SSO Admin Password"
           optional: 0
-          help: "Admin Password of VRA SSO" 
+          help: "Admin Password of VRA SSO"
           input: password
       - "VRB Time Settings":
         - id: vrb_time_sync_mode
@@ -2480,48 +2480,52 @@
             - id: 'DEBUG'
 
       - "Configure Deployment":
-        - id: nsx_edge_datacenter
-          name: "Datacenter"
+        - id: nsx_edge_datacenterMoid
+          name: "Datacenter MOID"
           optional: 0
-          help: "The datacenter for the edge"
-        - id: nsx_edge_appliance_size
+          help: "The datacenter MOID for the edge"
+        - id: nsx_edge_applianceSize
           name: "Appliance Size"
           optional: 0
           help: The size of the edge appliance
           input: dropdown
           options:
-            - id: 'Compact'
-            - id: 'Large'
-            - id: 'X-Large'
-            - id: 'Quad Large'
+            - name: 'Compact'
+              id: 'compact'
+            - name: 'Large'
+              id: 'large'
+            - name: 'X-Large'
+              id: 'xlarge'
+            - name: 'Quad Large'
+              id: 'quadlarge'
         - id: nsx_edge_deploy_edge
           name: "Deploy NSX Edge"
           optional: 1
           help: "Create the edge in deployed mode"
           input: checkbox
-        - id: nsx_edge_appliance_cluster
+        - id: nsx_edge_resourcePoolId
           name: "Cluster/Resource Pool"
           optional: 1
           help: "The cluster/resource pool into which the edge will be placed"
-        - id: nsx_edge_appliance_datastore
+        - id: nsx_edge_datastoreId
           name: "Datastore"
           optional: 1
           help: "The datastore for the appliance"
-        - id: nsx_edge_appliance_host
+        - id: nsx_edge_hostId
           name: "Host"
           optional: 0
           help: "The host into which the appliance will be placed"
-        - id: nsx_edge_appliance_folder
+        - id: nsx_edge_vmFolderId
           name: "Folder"
           optional: 0
           help: "The folder on the host into which the appliance will be placed"
 
       - "Configure Interfaces":
-        - id: nsx_edge_interface_name
+        - id: nsx_edge_vnic_name
           name: "Name"
           optional: 0
           help: "The interface name"
-        - id: nsx_edge_interface_type
+        - id: nsx_edge_vnic_type
           name: "Type"
           optional: 0
           help: "The type of interface"
@@ -2529,36 +2533,36 @@
           options:
             - id: 'Internal'
             - id: 'Uplink'
-        - id: nsx_edge_interface_connected_to
+        - id: nsx_edge_vnic_connected_to
           name: "Connected To"
           optional: 1
           help: "The network or portgroup to attach the edge to"
-        - id: nsx_edge_connectivity_status
+        - id: nsx_edge_vnic_isConnected
           name: "Connectivity Status"
           optional: 0
           input: dropdown
           options:
             - id: 'Connected'
             - id: 'Disconnected'
-        - id: nsx_edge_interface_mac
+        - id: nsx_edge_vnic_mac
           name: "MAC Address"
           optional: 1
           help: "Specify the MAC address, or leave it blank to auto-generate one"
-        - id: nsx_edge_interface_mtu
+        - id: nsx_edge_vnic_mtu
           name: "MTU"
           optional: 1
           help: "The MTU for the edge"
-        - id: nsx_edge_enable_proxy_arp
+        - id: nsx_edge_vnic_enableProxyArp
           name: "Enable Proxy Arp"
           optional: 1
           help: "Enables proxy ARP for the edge"
           input: checkbox
-        - id: nsx_edge_send_icmp_redirect
+        - id: nsx_edge_vnic_enableSendRedirects
           name: "Send ICMP Redirect"
           optional: 1
           help: "Enables the sending of ICMP redirect"
           input: checkbox
-        - id: nsx_edge_fence_parameters
+        - id: nsx_edge_vnic_fence_parameters
           name: "Fence Parameters"
           optional: 1
           help: "Examples include:  ethernet0.filter1.param1=1"
