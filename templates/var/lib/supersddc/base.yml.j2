@@ -1692,7 +1692,11 @@
           name: "Default Gateway"
           optional: 1
           help: "Default gateway address for the vRealize Business VM"
-        - id: vrb_dns_address
+        - id: vrb_dns_server1
+          name: "DNS Server Address"
+          optional: 1
+          help: "IP address for the DNS Server vRealize Business VM shoould use"
+        - id: vrb_dns_server2
           name: "DNS Server Address"
           optional: 1
           help: "IP address for the DNS Server vRealize Business VM shoould use"
@@ -1710,20 +1714,20 @@
           help: "IPV6 Gateway"
 
       - "VRB HTTP Proxy":
-        - id: vrb_http_proxy_ip
-          name: "HTTP Proxy IP Address"
+        - id: vrb_http_proxy_server
+          name: "HTTP Proxy Server"
           optional: 1
           help: "HTTP Proxy IP Address"
         - id: vrb_http_proxy_port
           name: "HTTP Proxy Port"
           optional: 1
           help: "HTTP Proxy Ports"
-        - id: vrb_http_proxy_username
+        - id: vrb_http_proxy_user
           name: "HTTP Proxy User Name"
           optional: 1
           help: "HTTP Proxy User Name"
         - id: vrb_http_proxy_password
-          name: "HTTP Proxy Password"
+          name: "HTTP Proxy Password" 
           optional: 1
           help: "HTTP Proxy Password"
           input: password
@@ -1731,11 +1735,11 @@
         - id: vrb_cafe_host
           name: "VRA SSO Host Name"
           optional: 0
-          help: "Host Name of VRA"
+          help: "Host Name of VRA" 
         - id: vrb_sso_tenant
           name: "VRA SSO Default Tenant"
           optional: 0
-          help: "Default Tenant of VRA"
+          help: "Default Tenant of VRA" 
         - id: vrb_sso_admin
           name: "VRA SSO Admin user"
           optional: 0
@@ -1743,7 +1747,7 @@
         - id: vrb_sso_password
           name: "VRA SSO Admin Password"
           optional: 0
-          help: "Admin Password of VRA SSO"
+          help: "Admin Password of VRA SSO" 
           input: password
       - "VRB Time Settings":
         - id: vrb_time_sync_mode
@@ -1781,7 +1785,7 @@
           help: "Time Server 5"
       - "VRB SSL":
         - id: vrb_sslcert_mode
-          name: "Time Sync Mode"
+          name: "SSL Certification Mode"
           optional: 0
           input: dropdown
           options:
@@ -1826,10 +1830,6 @@
           name: "OVA"
           optional: 0
           help: "The vApp Name in vCenter"
-        - id: vra_host_name
-          name: "VRA Host Name"
-          optional: 0
-          help: "Host name for the VRA"
         - id: vra_datastore
           name: "Datastore"
           optional: 0
@@ -1846,11 +1846,6 @@
           name: "VM Name"
           optional: 0
           help: "The VM name for the installed vRealize Automation"
-        - id: vra_root_password
-          name: "vRA Root Password"
-          optional: 0
-          input: password
-          help: "Root password"
         - id: vra_ssh_enabled
           name:  "VRA Enable SSH"
           optional: 0
@@ -1870,27 +1865,89 @@
           input: checkbox
           help: "Power on VRA after deployment"
       - "Networking":
+        - id: vra_address_version
+          input: dropdown
+          options:
+            - id: "DHCPV4+AUTOV6"
+            - id: "DHCPV4+STATICV6"
+            - id: "STATICV4+AUTOV6"
+            - id: "STATICV4+STATICV6"
+            - id: "AUTOV6"
+            - id: "STATICV6"
+          name: "VRA Address Version"
+          optional: 1
+          help: "VRA Address Version"
         - id: vra_ip
-          name: "VRA Appliance IP Address"
-          optional: 0
+          name: "VRA ppliance IP Address"
+          optional: 1
           help: " The VRA Appliance IP Address"
         - id: vra_netmask
           name: "VRA Appliance IP Address Netmask"
-          optional: 0
+          optional: 1
           help: " The VRA Appliance IP Address Netmask"
         - id: vra_gateway
           name: "VRA Appliance Gateway"
-          optional: 0
+          optional: 1
           help: " The VRA Appliance Gateway"
-        - id: vra_dns
-          name: "VRA Appliance DNS"
+        - id: vra_ipv6
+          name: "VRA Appliance IPV6 Address"
+          optional: 1
+          help: " The VRA Appliance DNS Server 2"
+        - id: vra_ipv6_gateway
+          name: "VRA Appliance IPv6 Gateway"
+          optional: 1
+          help: " The VRA Appliance IPv6 Gateway"
+        - id: vra_ipv6_prefix
+          name: "VRA Appliance IPv6 Prefix"
           optional: 0
-          help: " The VRA Appliance DNS"
+          help: " The VRA Appliance IPV6 Prefix"
+        - id: vra_dns_server1
+          name: "VRA Appliance DNS Server 1"
+          optional: 1
+          help: " The VRA Appliance DNS Server 1"
+        - id: vra_dns_server2
+          name: "VRA Appliance DNS Server 2"
+          optional: 1
+          help: " The VRA Appliance DNS Server 2"
+        - id: vra_domain
+          name: "VRA Domain"
+          optional: 1
+          help: " The VRA Domain of the Appliance"
+        - id: vra_search_path
+          name: "VRA Appliance Domain Search Path"
+          optional: 1
+          help: " The VRA Domain Search Path" 
+      - "VRA HTTP Proxy":
+        - id: vra_http_proxy_server
+          name: "HTTP Proxy Server"
+          optional: 1
+          help: "HTTP Proxy IP Address"
+        - id: vra_http_proxy_port
+          name: "HTTP Proxy Port"
+          optional: 1
+          help: "HTTP Proxy Ports"
+        - id: vra_http_proxy_user
+          name: "HTTP Proxy User Name"
+          optional: 1
+          help: "HTTP Proxy User Name"
+        - id: vra_http_proxy_password
+          name: "HTTP Proxy Password" 
+          optional: 1
+          help: "HTTP Proxy Password"
+          input: password
       - "General Configuration":
-        - id: vra_instance
-          name: "VRA Appliance instance"
+        - id: vra_config_type
+          name:  "VRA Configuration Type"
           optional: 0
-          help: " The VRA Appliance instance name"
+          input: dropdown
+          options:
+            - id: "Default"
+            - id: "Windows"
+          help: "Default for General Ansible configuration else choose windows"
+        - id: vra_host_name
+          name: "VRA Host Name"
+          optional: 0
+          help: "Host name for the VRA"
         - id: vra_port
           name: "VRA Appliance Port"
           optional: 0
@@ -1899,6 +1956,11 @@
           name: "VRA User"
           optional: 0
           help: "The vra user id"
+        - id: vra_root_password
+          name: "vRA Root Password"
+          optional: 0
+          input: password
+          help: "Root password"
       - NTP Configuration:
         - id: vra_ntp_server
           name: "VRA NTP Server"
@@ -1934,6 +1996,7 @@
           name: "VRA SSO PASSWORD"
           optional: 0
           help: "sso password"
+          input: password
       - License  Configuration:
         - id: vra_license_key
           name: "VRA LICENSE KEY"
@@ -1985,6 +2048,15 @@
           name: "VRA Tenant Id"
           optional: 0
           help: " VRA Tenant Id"
+        - id: vra_tenant_user
+          name: "VRA Tenant User"
+          optional: 0
+          help: " VRA Tenant User"
+        - id: vra_tenant_password
+          name: "VRA Tenant password"
+          optional: 0
+          help: " VRA Tenant Password"
+          input: password
         - id: vra_tenant_url
           name: "VRA Tenant URL"
           optional: 0
@@ -2083,21 +2155,21 @@
           help: "DNS"
         - id: win_vra_cluster
           name: "Management Cluster"
+          optional: 0
           input: dropdown
           options: mgmt_vc_cluster
-          optional: 0
-          help: "Cluster to install vRA"
+          help: "Cluter to install vRA"
         - id: win_vra_network_name
           name: "Network"
+          optional: 0
           input: dropdown
           options: mgmt_vc_networks
-          optional: 0
           help: "Network on which to place the OVA"
         - id: win_vra_datastore
           name: "Datastore"
+          optional: 1
           input: dropdown
           options: mgmt_vc_datastores
-          optional: 0
           help: "Datastore on which to place the OVA"
         - id: win_vra_vm_host
           name: "VM Host"
@@ -2160,7 +2232,6 @@
           name: "NTP Server 2"
           optional: 1
           help: "NTP server 2"
-
   - "NSX Services":
     - "NSX Deploy":
       - "NSX Management vCenter":
@@ -2757,6 +2828,14 @@
       name: "Configure Host Settings"
       commands:
         - "/opt/supersddc/supersddc_play_tags site_vra.yml  vra_configure_settings"
+    - id: network_vra
+      name: "Configure Network"
+      commands:
+        - "/opt/supersddc/supersddc_play_tags site_vra.yml vra_network"
+    - id: configure_http_proxy
+      name: "Configure HTTP Proxy"
+      commands:
+        - "/opt/supersddc/supersddc_play_tags site_vra.yml  vra_http_proxy"
     - id: configure_sso
       name: "Configure SSO and License"
       commands:
