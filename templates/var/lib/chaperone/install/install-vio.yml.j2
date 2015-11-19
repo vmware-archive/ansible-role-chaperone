@@ -13,13 +13,3 @@
 #  See the License for the specific language governing permissions and
 #  limitations under the License.
 #
----
-- name: Update the Chaperone UI
-  template:
-    src: "var/lib/chaperone/base.yml.j2"
-    dest: "/var/lib/{{ django_app }}/base.yml"
-    owner: "{{ ansible_ssh_user }}"
-    group: "{{ ansible_ssh_user }}"
-  notify: Restart apache2
-  tags:
-    - uiconfig

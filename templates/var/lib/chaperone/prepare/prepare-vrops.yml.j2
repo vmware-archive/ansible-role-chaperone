@@ -1,0 +1,234 @@
+  - vRealize Operations:
+    - Accounts:
+      - "vROPS Service Account":
+        - id: svc_vrops_is_service_account
+          name: "Service Account"
+          default: 'svc-vrops'
+          help: "vROPS Read-Only Role for registration to vSphere"
+        - id: svc_vrops_password
+          name: "Password"
+          input: password
+          default: 'VMware1!'
+          help: "Service account password."
+        - id: svc_vrops_is_service_account
+          name: "Service Account"
+          default: '1'
+          input: checkbox
+          help: "Checked if this is a service account."
+      - "vROPS-Admin Account":
+        - id: svc_vrops_admin_name
+          name: "Account"
+          default: 'vROPS-Admin'
+          help: "VROPS Admin Role"
+        - id: svc_vrops_admin_password
+          name: "Password"
+          input: password
+          default: 'VMware1!'
+          help: "Account password"
+        - id: svc_vrops_admin_is_service_account
+          name: "Service Account"
+          default: '0'
+          input: checkbox
+          help: "Checked if this is a service account."
+        - id: svc_vrops_admin_group
+          name: "Group Membership"
+          input: dropdown
+          default: service_account_sddc_both
+          help: "Group to which this user belongs."
+          options:
+            - id: service_account_operators
+              name: "Account Operators (BuiltIn)"
+            - id: service_acccount_local_admins
+              name: "Local IaaS Administrators"
+            - id: service_account_orchestrator_admins
+              name: 'Orchestrator-Admins'
+            - id: service_account_sddc_admins
+              name: "SDDC-Admins"
+            - id: service_account_sddc_ops
+              name: "SDDC-Ops"
+            - id: service_account_sddc_both
+              name: "SDDC-Admins, SDDC-Ops"
+            - id: service_account_itac_tenantadmins
+              name: "ITAC-TenantAdmins"
+            - id: service_account_itac_tenantarchitects
+              name: "ITAC-TenantArchitects"
+      - "vROPS-Power Account":
+        - id: svc_vrops_power_name
+          name: "Account"
+          default: 'vROPS-Power'
+          help: "vROPS Power user"
+        - id: svc_vrops_power_password
+          name: "Password"
+          input: password
+          default: 'VMware1!'
+          help: "Account password"
+        - id: svc_vrops_power_is_service_account
+          name: "Service Account"
+          default: '0'
+          input: checkbox
+          help: "Checked if this is a service account."
+        - id: svc_vrops_power_group
+          name: "Group Membership"
+          input: dropdown
+          default: service_account_sddc_ops
+          help: "Group to which this user belongs."
+          options:
+            - id: service_account_operators
+              name: "Account Operators (BuiltIn)"
+            - id: service_acccount_local_admins
+              name: "Local IaaS Administrators"
+            - id: service_account_orchestrator_admins
+              name: 'Orchestrator-Admins'
+            - id: service_account_sddc_admins
+              name: "SDDC-Admins"
+            - id: service_account_sddc_ops
+              name: "SDDC-Ops"
+            - id: service_account_sddc_both
+              name: "SDDC-Admins, SDDC-Ops"
+            - id: service_account_itac_tenantadmins
+              name: "ITAC-TenantAdmins"
+            - id: service_account_itac_tenantarchitects
+              name: "ITAC-TenantArchitects"
+      - "vROPS-user-01 Account":
+        - id: svc_vrops_user01_name
+          name: "Account"
+          default: 'vROPS-user-01'
+          help: "Test a/c"
+        - id: svc_vrops_user01_password
+          name: "Password"
+          input: password
+          default: 'VMware1!'
+          help: "Account password"
+        - id: svc_vrops_user01_is_service_account
+          name: "Service Account"
+          default: '0'
+          input: checkbox
+          help: "Checked if this is a service account."
+        - id: svc_vrops_user01_group
+          name: "Group Membership"
+          input: dropdown
+          default: service_account_sddc_ops
+          help: "Group to which this user belongs."
+          options:
+            - id: service_account_operators
+              name: "Account Operators (BuiltIn)"
+            - id: service_acccount_local_admins
+              name: "Local IaaS Administrators"
+            - id: service_account_orchestrator_admins
+              name: 'Orchestrator-Admins'
+            - id: service_account_sddc_admins
+              name: "SDDC-Admins"
+            - id: service_account_sddc_ops
+              name: "SDDC-Ops"
+            - id: service_account_sddc_both
+              name: "SDDC-Admins, SDDC-Ops"
+            - id: service_account_itac_tenantadmins
+              name: "ITAC-TenantAdmins"
+            - id: service_account_itac_tenantarchitects
+              name: "ITAC-TenantArchitects"
+    - Servers:
+      - id: vrops_loadbalancer_address
+        name: "Load Balancer"
+        optional: 0
+        default: vrops-cluster-01
+        help: "Hostname of the Load Balancer."
+      - id: vrops_master_node_address
+        name: "Master Node"
+        optional: 0
+        default: vrops-mstrn-01
+        help: "Hostname of Master Node"
+      - id: vrops_master_node_ip
+        name: "IP Address"
+        optional: 0
+        help: "The IP address for the master node"
+      - id: vrops_replica_node_address
+        name: "Replica Master Node"
+        optional: 0
+        default: vrops-repln-02
+        help: "Hostname of the Replica Node"
+      - id: vrops_replica_node_ip
+        name: "IP Address"
+        optional: 0
+        help: "The IP address for the Replica Node"
+      - id: vrops_data_node1_address
+        name: "Data Node #1"
+        optional: 0
+        default: vrops-datan-03
+        help: "Hostname of an additional Data Node"
+      - id: vrops_data_node1_ip
+        name: "IP Address"
+        optional: 0
+        help: "The IP address for an additional Data Node"
+      - id: vrops_data_node2_address
+        name: "Data Node #2"
+        optional: 0
+        default: vrops-datan-04
+        help: "Hostname of an additional Data Node"
+      - id: vrops_data_node2_ip
+        name: "IP Address"
+        optional: 0
+        help: "The IP address for the replica node"
+    - Collectors:
+      - id: vrops_remote_collector1
+        name: "Remote Collector #1"
+        optional: 0
+        default: vrops-rmtcol-01
+        help: "Hostname of first collector."
+      - id: vrops_remote_collector2
+        name: "Remote Collector #2"
+        optional: 0
+        default: vrops-rmtcol-02
+        help: "Hostname of second collector."
+    - Deployment:
+      - id: vrops_ova
+        name: "OVA"
+        optional: 0
+        help: "The name of the OVA file"
+      - id: vrops_deployment_option
+        name: "Deployment Option"
+        optional: 0
+        input: dropdown
+        help: "Indicates the size of the environment"
+        options:
+          - id: "small"
+          - id: "medium"
+          - id: "large"
+          - id: "smallrc"
+          - id: "largerc"
+          - id: "xsmall"
+      - id: vrops_poweron
+        name: "Power on"
+        optional: 0
+        input: checkbox
+        help: "Whether to power up the vROps instance once deployed."
+    - SDDC Info:
+      - id: vrops_datastore
+        name: "Datastore"
+        optional: 0
+        input: dropdown
+        options: mgmt_vc_datastores
+        help: "The datastore on which to place the OVA"
+      - id: vrops_network
+        name: "Network"
+        optional: 0
+        input: dropdown
+        options: mgmt_vc_networks
+        help: "The network use for the OVA"
+    - Network Info:
+      - id: vrops_gateway
+        name: "Gateway"
+        optional: 0
+        help: "The default gateway address for this VM"
+      - id: vrops_dns
+        name: "DNS"
+        optional: 0
+        help: "The domain name server(s) for this VM (comma seperated)"
+      - id: vrops_netmask
+        name: "Netmask"
+        optional: 0
+        help: "The netmask or prefix for this interface."
+    - Initialization:
+      - id: vrops_license_key
+        name: "Licence Key"
+        optional: 0
+        help: "Product Licence Key"

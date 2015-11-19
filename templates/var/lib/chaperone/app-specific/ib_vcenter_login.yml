@@ -1,0 +1,15 @@
+      - "In-Band Management vCenter":
+        - id: ib_vcenter_url
+          name: "vCenter FQDN or IP Address"
+          optional: 0
+        - id: ib_vcenter_user_name
+          name: "vCenter Admin Username"
+          optional: 0
+        - id: ib_vcenter_user_password
+          name: "vCenter Admin User Password"
+          optional: 0
+          input: password
+        - id: ib_vcenter_port
+          name: "vCenter API Port"
+          optional: 0
+          default: 443

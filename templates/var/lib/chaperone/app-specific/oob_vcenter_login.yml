@@ -1,0 +1,15 @@
+      - "Out-of-Band Management vCenter":
+        - id: oob_vcenter_url
+          name: "vCenter FQDN or IP Address"
+          optional: 0
+        - id: oob_vcenter_user_name
+          name: "vCenter Admin Username"
+          optional: 0
+        - id: oob_vcenter_user_password
+          name: "vCenter Admin User Password"
+          optional: 0
+          input: password
+        - id: oob_vcenter_port
+          name: "vCenter API Port"
+          optional: 0
+          default: 443

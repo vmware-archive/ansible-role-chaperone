@@ -1,0 +1,38 @@
+  - Cloud-Native Applications:
+    - Swarm:
+      - "Consul Server":
+        - id: consul_server
+          name: "Consul IP Address"
+          optional: 0
+          help: "IP address of Consul Server -- Any Will Do."
+      - "External Consul Server":
+        - id: external_consul_server
+          name: "External Consul IP Address"
+          optional: 0
+          help: "IP address of Externally Exposed Consul Server."
+    - Bonneville:
+      - Directory:
+        - id: bonneville_dir
+          name: "Bonneville Path"
+          optional: 1
+          help: "Path to bonneville install files (default: /tmp/bonneville)."
+      - Target:
+        - id: bonneville_target_host
+          name: "ESX Target"
+          optional: 0
+          help: "IP address of ESX Host for Bonneville install."
+      - Name:
+        - id: bonneville_docker_name
+          name: "VM Name"
+          optional: 0
+          help: "What to name the Bonneville VM on ESXi."
+      - Docker Host:
+        - id: bonneville_docker_host
+          name: "Docker Engine #1"
+          optional: 0
+          help: "IP address of Bonneville VM (fill in late)."
+      - Port:
+        - id: bonneville_docker_port
+          name: "Port"
+          optional: 0
+          help: "Docker API Port on Bonneville VM."

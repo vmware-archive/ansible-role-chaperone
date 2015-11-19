@@ -236,174 +236,15 @@
 {% endif %}
 
 {% if deploy_vcenter == '1' %}
-  - "vCenter Server":
-    - "General Configuration":
+  - "vCenter Services":
 {% if enable_oob_mgmt_svcs == '1' %}
-      - "OOB Management vCenter Server Information":
-        - id: oob_vcenter_url
-          name: "vCenter hostname"
+    - "Out-of-Band vCenter":
+      - "Appliance Configuration":
+        - id: oob_vcenter_name
+          name: "vCenter Appliance Name"
           optional: 0
-          help: "Out-of-band vCenter Server that manages the ESX Server onto which vCSA and/or PSC gets deployed."
-        - id: oob_vcenter_user
-          name: "vCenter Admin User"
-          optional: 0
-        - id: oob_vcenter_password
-          name: "vCenter Admin User Password"
-          optional: 0
-          input: password
-        - id: oob_vcenter_port
-          name: "vCenter API Port"
-          optional: 0
-          default: 443
-{% endif %}
-      - "ESX Deployment Target":
-        - id: vcenter_deploy_target
-          name: "ESXi Server target"
-          optional: 0
-      - "ESX Credentials":
-        - id: esx_username
-          name: "ESXi User"
-          optional: 0
-          help: "Host login name."
-        - id: esx_password
-          name: "ESXi User Password"
-          optional: 0
-          input: password
-          help: "Host login password."
-{% if psc_appliance_deployment_scheme == 'Dedicated PSC' %}
-    - "Platform Services Controller":
-      - "Storage and Network Configuration (General)":
-        - id: esx_datastore
-          name: "Datastore"
-          optional: 0
-          help: "Datastore to deploy the OVA to"
-        - id: appliance_thin_disk_mode
-          name: "Thin Disk Mode"
-          optional: 0
-          input: checkbox
-          help: "Disk provisioning mode."
-        - id: esx_network
-          name: "Network"
-          optional: 0
-          help: "Network name to use for the vCenter NIC (which MUST be set to Ephemeral binding)."
-        - id: appliance_networking_mode
-          name: "Networking mode"
-          input: dropdown
-          optional: 0
-          options:
-            - id: DHCP
-            - id: Static
-      - "Network Configuration":
-        - id: psc_appliance_vcenter_name
-          name: "PSC appliance vCenter name"
-          optional: 0
-          help: "vCenter display name of PSC appliance"
-        - id: psc_appliance_domain_name
-          name: "PSC domain name"
-          optional: 1
-          help: "DNS domain suffix for PSC"
-{% if network_ip_scheme == 'Static' %}
-        - id: psc_appliance_ip_address
-          name: "PSC static IP address"
-          optional: 1
-          help: "(OPTIONAL) PSC IP address, required when Networking mode is set to static"
-        - id: psc_appliance_ip_prefix
-          name: "PSC VLSM"
-          optional: 1
-          help: "(OPTIONAL) PSC variable length subnet mask, required when Networking mode is set to static"
-        - id: psc_appliance_ip_gw
-          name: "PSC static IP gateway"
-          optional: 1
-          help: "(OPTIONAL) PSC IP gateway, required when Networking mode is set to static"
-        - id: psc_appliance_dns_servers
-          name: "PSC DNS servers"
-          optional: 1
-          help: "(OPTIONAL) PSC DNS server(s), required when Networking mode is set to static"
-{% endif %}
-      - "SSO Information":
-        - id: sso_domain_name
-          name: "SSO Domain Name"
-          optional: 0
-          help: "The single sign-on domain name for identity management."
-        - id: sso_site_name
-          name: "SSO Site Name"
-          optional: 0
-          help: "The single sign-on site name for identity management."
-        - id: sso_password
-          name: "SSO administrator password"
-          input: password
-          optional: 0
-          help: "The single sign-on admin password."
-      - "Appliance Information":
-        - id: psc_appliance_root_password
-          name: "PSC administrator password"
-          input: password
-          optional: 0
-          help: "The admin (not SSO admin) password for this PSC instance."
-{% endif %}
-    - "vCenter Server Appliance":
-      - "Storage and Network Configuration (General)":
-        - id: esx_datastore
-          name: "Datastore"
-          optional: 0
-          help: "Datastore to deploy the OVA to"
-        - id: appliance_thin_disk_mode
-          name: "Thin Disk Mode"
-          optional: 0
-          input: checkbox
-          help: "Disk provisioning mode."
-        - id: esx_network
-          name: "Network"
-          optional: 0
-          help: "Network name to use for the vCenter NIC (which MUST be set to Ephemeral binding)."
-      - "Network Configuration":
-        - id: vcsa_appliance_vcenter_name
-          name: "vCSA vCenter name"
-          optional: 0
-          help: "vCenter display name of the vCSA instance"
-        - id: vcsa_appliance_domain_name
-          name: "vCSA domain name"
-          optional: 0
-          help: "DNS domain suffix of vCSA instance"
-{% if network_ip_scheme == 'Static' %}
-        - id: vcsa_appliance_ip_address
-          name: "vCSA static IP address"
-          optional: 0
-          help: "vCSA IP address, required when Networking mode is set to static"
-        - id: vcsa_appliance_ip_prefix
-          name: "vCSA VLSM"
-          optional: 0
-          help: "vCSA variable length subnet mask, required when Networking mode is set to static"
-        - id: vcsa_appliance_ip_gw
-          name: "vCSA static IP gateway"
-          optional: 0
-          help: "vCSA IP gateway, required when Networking mode is set to static"
-        - id: vcsa_appliance_dns_servers
-          name: "vCSA DNS Servers"
-          optional: 0
-          help: "vCSA DNS server(s), required when Networking mode is set to static"
-{% endif %}
-      - "SSO Information":
-        - id: psc_appliance_dns_name_manual
-          name: "PSC FQDN"
-          optional: 1
-          help: "PSC FQDN, required for SSO integration. Optional only when deployment architecture is Combined"
-        - id: sso_domain_name
-          name: "SSO Domain Name"
-          optional: 0
-          help: "The single sign-on domain name for identity management."
-        - id: sso_site_name
-          name: "SSO Site Name"
-          optional: 0
-          help: "The single sign-on site name for identity management."
-        - id: sso_password
-          name: "SSO administrator password"
-          input: password
-          optional: 0
-          help: "The single sign-on admin password."
-      - "Appliance Information":
-        - id: appliance_deployment_option
-          name: "vCSA Deployment Type"
+        - id: oob_vcenter_deployment_option
+          name: "vCenter Deployment Type"
           input: dropdown
           optional: 0
           options:
@@ -412,96 +253,390 @@
             - id: medium
             - id: large
           help: "The size for this vCenter appliance."
-        - id: vcsa_appliance_root_password
-          name: "vCSA administrator password"
+        - id: oob_vcenter_admin_password
+          name: "vCenter administrator password"
           input: password
           optional: 0
-          help: "The admin (not SSO admin) password for this vCSA instance."
+      - "Appliance Deployment Target":
+        - id: oob_vcenter_deploy_target
+          name: "ESXi Server target"
+          optional: 0
+        - id: oob_vcenter_deploy_target_user_name
+          name: "ESXi User"
+          optional: 0
+        - id: oob_vcenter_deploy_target_user_password
+          name: "ESXi User Password"
+          optional: 0
+          input: password
+      - "Storage Configuration":
+        - id: oob_vcenter_esx_datastore
+          name: "Datastore"
+          optional: 0
+          help: "Datastore to deploy the OVA to"
+        - id: oob_vcenter_appliance_thin_disk_mode
+          name: "Thin Disk Mode"
+          optional: 0
+          input: checkbox
+          help: "Disk provisioning mode."
+      - "Network Configuration":
+        - id: oob_vcenter_esx_portgroup
+          name: "Portgroup"
+          optional: 0
+          help: "Network name to use for the vCenter NIC (which MUST be set to Ephemeral binding)."
+{% if network_ip_scheme == 'Static' %}
+        - id: oob_vcenter_ip_address
+          name: "IP address"
+          optional: 0
+        - id: oob_vcenter_ip_netmask
+          name: "IP netmask"
+          optional: 0
+        - id: oob_vcenter_ip_gateway
+          name: "IP gateway"
+          optional: 0
+{% endif %}
+      - "SSO Information":
+{% if psc_appliance_deployment_scheme == 'Existing' %}
+        - id: oob_vcenter_psc_appliance_dns_name_manual
+          name: "PSC FQDN"
+          optional: 1
+          help: "PSC FQDN, required for SSO integration."
+{% endif %}
+{% if psc_appliance_deployment_scheme == 'Embedded PSC' %}
+        - id: oob_vcenter_sso_domain_name
+          name: "SSO Domain Name"
+          optional: 0
+          help: "The single sign-on domain name for identity management."
+        - id: oob_vcenter_sso_site_name
+          name: "SSO Site Name"
+          optional: 0
+          help: "The single sign-on site name for identity management."
+        - id: oob_vcenter_sso_password
+          name: "SSO administrator password"
+          input: password
+          optional: 0
+          help: "The single sign-on admin password."
+{% endif %}
+{% endif %}
+
+{% if enable_oob_mgmt_svcs == '1' and psc_appliance_deployment_scheme == 'Dedicated PSC' %}
+    - "Out-of-band PSC":
+      - "Appliance Configuration":
+        - id: oob_psc_name
+          name: "PSC Appliance Name"
+          optional: 0
+        - id: oob_psc_admin_password
+          name: "PSC administrator password"
+          input: password
+          optional: 0
+      - "Appliance Deployment Target":
+        - id: oob_psc_deploy_target
+          name: "ESXi Server target"
+          optional: 0
+        - id: oob_psc_esx_username
+          name: "ESXi User"
+          optional: 0
+          help: "Host login name."
+        - id: oob_psc_esx_password
+          name: "ESXi User Password"
+          optional: 0
+          input: password
+          help: "Host login password."
+      - "Storage Configuration":
+        - id: oob_psc_esx_datastore
+          name: "Datastore"
+          optional: 0
+          help: "Datastore to deploy the OVA to"
+        - id: oob_psc_appliance_thin_disk_mode
+          name: "Thin Disk Mode"
+          optional: 0
+          input: checkbox
+          help: "Disk provisioning mode."
+      - "Network Configuration":
+        - id: oob_psc_esx_portgroup
+          name: "Portgroup"
+          optional: 0
+{% if network_ip_scheme == 'Static' %}
+        - id: oob_psc_ip_address
+          name: "PSC static IP address"
+          optional: 0
+        - id: oob_psc_ip_netmask
+          name: "PSC VLSM"
+          optional: 0
+        - id: oob_psc_ip_gateway
+          name: "PSC static IP gateway"
+          optional: 0
+{% endif %}
+      - "SSO Information":
+        - id: oob_psc_sso_domain_name
+          name: "SSO Domain Name"
+          optional: 0
+          help: "The single sign-on domain name for identity management."
+        - id: oob_psc_sso_site_name
+          name: "SSO Site Name"
+          optional: 0
+          help: "The single sign-on site name for identity management."
+        - id: oob_psc_sso_password
+          name: "SSO administrator password"
+          input: password
+          optional: 0
+          help: "The single sign-on admin password."
+{% endif %}
+
+    - "In-band vCenter":
+      - "Appliance Configuration":
+        - id: ib_vcenter_name
+          name: "vCenter Appliance Name"
+          optional: 0
+        - id: ib_vcenter_deployment_option
+          name: "vCenter Deployment Type"
+          input: dropdown
+          optional: 0
+          options:
+            - id: tiny
+            - id: small
+            - id: medium
+            - id: large
+          help: "The size for this vCenter appliance."
+        - id: ib_vcenter_admin_password
+          name: "vCenter administrator password"
+          input: password
+          optional: 0
+      - "Appliance Deployment Target (OOB vCenter)":
+        - id: ib_vcenter_deploy_target
+          name: "vCenter Server FQDN"
+          optional: 0
+        - id: ib_vcenter_deploy_target_user_name
+          name: "vCenter User Name"
+          optional: 0
+        - id: ib_vcenter_deploy_target_user_password
+          name: "vCenter User Password"
+          optional: 0
+          input: password
+      - "Storage Configuration":
+        - id: ib_vcenter_esx_datastore
+          name: "Datastore"
+          optional: 0
+        - id: ib_vcenter_appliance_thin_disk_mode
+          name: "Thin Disk Mode"
+          optional: 0
+          input: checkbox
+      - "Network Configuration":
+        - id: ib_vcenter_esx_portgroup
+          name: "Portgroup"
+          optional: 0
+          help: "Network name to use for the vCenter NIC (which MUST be set to Ephemeral binding)."
+{% if network_ip_scheme == 'Static' %}
+        - id: ib_vcenter_ip_address
+          name: "PSC static IP address"
+          optional: 0
+          help: "PSC IP address, required when Networking mode is set to static"
+        - id: ib_vcenter_ip_netmask
+          name: "PSC VLSM"
+          optional: 0
+          help: "PSC variable length subnet mask, required when Networking mode is set to static"
+        - id: ib_vcenter_ip_gateway
+          name: "PSC static IP gateway"
+          optional: 0
+          help: "PSC IP gateway, required when Networking mode is set to static"
+{% endif %}
+      - "SSO Information":
+{% if psc_appliance_deployment_scheme == 'Existing' %}
+        - id: ib_vcenter_psc_appliance_dns_name_manual
+          name: "PSC FQDN"
+          optional: 1
+          help: "PSC FQDN, required for SSO integration."
+{% endif %}
+{% if psc_appliance_deployment_scheme == 'Embedded PSC' %}
+        - id: ib_vcenter_sso_domain_name
+          name: "SSO Domain Name"
+          optional: 0
+          help: "The single sign-on domain name for identity management."
+        - id: ib_vcenter_sso_site_name
+          name: "SSO Site Name"
+          optional: 0
+          help: "The single sign-on site name for identity management."
+        - id: ib_vcenter_sso_password
+          name: "SSO administrator password"
+          input: password
+          optional: 0
+          help: "The single sign-on admin password."
+{% endif %}
+
+{% if enable_oob_mgmt_svcs == '0' and psc_appliance_deployment_scheme == 'Dedicated PSC' %}
+    - "In-band PSC":
+      - "Appliance Configuration":
+        - id: ib_psc_name
+          name: "PSC Appliance Name"
+          optional: 0
+        - id: ib_psc_admin_password
+          name: "PSC administrator password"
+          input: password
+          optional: 0
+      - "Appliance Deployment Target":
+        - id: ib_psc_deploy_target
+          name: "ESXi Server target"
+          optional: 0
+        - id: ib_psc_esx_username
+          name: "ESXi User"
+          optional: 0
+          help: "Host login name."
+        - id: ib_psc_esx_password
+          name: "ESXi User Password"
+          optional: 0
+          input: password
+          help: "Host login password."
+      - "Storage Configuration":
+        - id: ib_psc_esx_datastore
+          name: "Datastore"
+          optional: 0
+          help: "Datastore to deploy the OVA to"
+        - id: ib_psc_appliance_thin_disk_mode
+          name: "Thin Disk Mode"
+          optional: 0
+          input: checkbox
+          help: "Disk provisioning mode."
+      - "Network Configuration":
+        - id: ib_psc_esx_portgroup
+          name: "Portgroup"
+          optional: 0
+{% if network_ip_scheme == 'Static' %}
+        - id: ib_psc_ip_address
+          name: "PSC IP address"
+          optional: 0
+        - id: ib_psc_ip_netmask
+          name: "PSC IP netmask"
+          optional: 0
+        - id: ib_psc_ip_gateway
+          name: "PSC IP gateway"
+          optional: 0
+{% endif %}
+      - "SSO Information":
+        - id: ib_psc_sso_domain_name
+          name: "SSO Domain Name"
+          optional: 0
+          help: "The single sign-on domain name for identity management."
+        - id: ib_psc_sso_site_name
+          name: "SSO Site Name"
+          optional: 0
+          help: "The single sign-on site name for identity management."
+        - id: ib_psc_sso_password
+          name: "SSO administrator password"
+          input: password
+          optional: 0
+          help: "The single sign-on admin password."
+{% endif %}
 {% endif %}
 
 {% if deploy_nsx == '1' %}
   - "NSX":
     - "NSX Deploy":
+{% if (deploy_vcenter == '1' and enable_oob_mgmt_svcs == '0') or deploy_vcenter == '0' %}
       - "NSX Management vCenter":
-        - id: nsx_vcenter_name
+        # !!!DROPDOWN_INPUT_REQUIRED!!! Needs to use the pre-populated dropdown
+        - id: nsxmgr_vcenter_url
           name: "NSX vCenter Name"
           optional: 0
-          help: "Name of the vCenter to deploy NSX Manager appliance to. Normally this will be the OOB vCenter."
-        - id: nsx_vcenter_user
+          help: "Name of the vCenter to deploy NSX Manager appliance to"
+        # !!!DUPLICATE_PROPERTY!!!
+        # This property can more than likely be replaced by a pre-entered
+        # account located under another section
+        - id: nsxmgr_vcenter_user
           name: "NSX vCenter Admin User"
           optional: 0
-        - id: nsx_vcenter_password
+        # !!!DUPLICATE_PROPERTY!!!
+        # This property can more than likely be replaced by a pre-entered
+        # account located under another section
+        - id: nsxmgr_vcenter_password
           name: "NSX vCenter Admin User Password"
           optional: 0
           input: password
-        - id: nsx_vcenter_port
+        - id: nsxmgr_vcenter_port
           name: "NSX vCenter API Port"
           optional: 0
           default: 443
-        - id: nsx_datacenter_name
+        # !!!DROPDOWN_INPUT_REQUIRED!!! Needs to use the pre-populated dropdown
+        - id: nsxmgr_datacenter_name
           name: "NSX vCenter Datacenter"
           optional: 0
-        - id: nsx_cluster_name
+        # !!!DROPDOWN_INPUT_REQUIRED!!! Needs to use the pre-populated dropdown
+        - id: nsxmgr_cluster_name
           name: "NSX vCenter Cluster"
           optional: 0
+{% endif %}
       - "NSX Appliance Configuration":
-        - id: nsx_name
+        - id: nsxmgr_appliance_name
           name: "NSX Manager Name"
           optional: 0
-          help: "Name of the NSX Manager VM"
-        - id: nsx_datastore
-          name: "NSX Datastore"
+          help: "Name of the NSX Manager appliance"
+        # !!!DROPDOWN_INPUT_REQUIRED!!! Needs to use the pre-populated dropdown
+        # or
+        # !!!DUPLICATE_PROPERTY!!!
+        # This property can more than likely be replaced by a pre-entered
+        # account located under another section
+        - id: nsxmgr_datastore
+          name: "NSX Manager Datastore"
           optional: 0
           help: "Name of the Datastore to use for VM deployment"
-        - id: nsx_mgmt_net
-          name: "NSX Management Network"
+        # !!!DROPDOWN_INPUT_REQUIRED!!! Needs to use the pre-populated dropdown
+        # or
+        # !!!DUPLICATE_PROPERTY!!!
+        # This property can more than likely be replaced by a pre-entered
+        # account located under another section
+        - id: nsxmgr_mgmt_net
+          name: "NSX Manager Management Network"
           optional: 0
           help: "Management Network"
-        - id: nsx_cluster_deploy
-          name: "Deploy to Cluster"
+        # !!!DROPDOWN_INPUT_REQUIRED!!! Needs to use the pre-populated dropdown
+        # or
+        # !!!DUPLICATE_PROPERTY!!!
+        # This property can more than likely be replaced by a pre-entered
+        # account located under another section
+        - id: nsxmgr_cluster_deploy
+          name: "Target ESX Cluster"
           optional: 0
           help: "Select cluster to deploy to"
-        - id: ntp_svr
-          name: "NSX Manager NTP"
-          optional: 0
-          help: "NTP Server for NSX Manager"
-        - id: nsx_ssh_enabled
-          name: "NSX Enable SSH"
-          optional: 0
-          input: dropdown
-          options:
-            - id: "True"
-            - id: "False"
-        - id: cli_pass
-          name: "NSX ssh passwd"
+        # All of the applications should use the same NTP services so this
+        # property may be...
+        # !!!DUPLICATE_PROPERTY!!!
+        # This property can more than likely be replaced by a pre-entered
+        # account located under another section
+        # - id: nsxmgr_ntp_server
+        #   name: "NSX Manager NTP"
+        #   optional: 0
+        #   help: "NTP Server for NSX Manager"
+        - id: nsxmgr_admin_password
+          name: "NSX Admin CLI password"
           optional: 0
           input: password
-          help: "NSX Manager default cli user admin"
+        - id: nsxmgr_enable_password
+          name: "NSX Enable password"
+          optional: 0
+          input: password
       - "NSX Appliance Configuration - Network":
-        - id: nsx_hostname
+        - id: nsxmgr_hostname
           name: "NSX Manager Hostname"
           optional: 0
           help: "NSX Manager Hostname ex: nsxmanager-01a"
-        - id: nsx_ip
+        - id: nsxmgr_ip_address
           name: "NSX Manager IP"
           optional: 0
           help: "IP address on management network for NSX Manager"
-        - id: nsx_netmask
+        - id: nsxmgr_ip_netmask
           name: "NSX Manager Netmask"
           optional: 0
           help: "Netmask for management network"
-        - id: nsx_gateway
+        - id: nsxmgr_ip_gateway
           name: "NSX Manager Gateway"
           optional: 0
           help: "Gateway for management network"
-        - id: nsx_dns
-          name: "NSX Manager DNS server"
-          optional: 0
-          help: "DNS server"
-        - id: nsx_domain
-          name: "Domain name"
-          optional: 0
-          help: "Domain information"
+        # - id: nsx_dns
+        #   name: "NSX Manager DNS server"
+        #   optional: 0
+        #   help: "DNS server"
+        # - id: nsx_domain
+        #   name: "Domain name"
+        #   optional: 0
+        #   help: "Domain information"
     - "NSX Configuration":
       - "NSX Manager Info":
         - id: nsx_sys
@@ -2047,37 +2182,13 @@
 {% if deploy_nsx == '1' %}
   - NSX:
     - id: nsx_ova_deploy
-      name: "Deploy NSX OVA"
+      name: "Deploy NSX Manager"
       commands:
-        - "/opt/supervio/supervio_play_tags site_nsx.yml nsxdeploy"
+        - "/opt/supervio/supervio_play_tags site_nsx.yml nsx_deploy_ova"
     - id: install_nsx
       name: "Prepare NSX"
       commands:
         - "/opt/supervio/supervio_play_tags site_nsx.yml prep_nsxmanager"
-    - id: install_nsx_instvirt
-      name: "Host Prep"
-      commands:
-        - "/opt/supervio/supervio_play_tags site_nsx.yml install_virt"
-    - id: install_nsx_instvirt_sync
-      name: "IP Pools"
-      commands:
-        - "/opt/supervio/supervio_play_tags site_nsx.yml ippools"
-    - id: install_nsx_controller
-      name: "Controller"
-      commands:
-        - "/opt/supervio/supervio_play_tags site_nsx.yml create_controller"
-    - id: install_nsx_vxlan
-      name: "VXLAN"
-      commands:
-        - "/opt/supervio/supervio_play_tags site_nsx.yml vxlan"
-    - id: install_nsx_netprep
-      name: "Segment ID"
-      commands:
-        - "/opt/supervio/supervio_play_tags site_nsx.yml segment_id"
-    - id: install_nsx_vdn
-      name: "Segment ID"
-      commands:
-        - "/opt/supervio/supervio_play_tags site_nsx.yml tzone"
 {% endif %}
 
 {% if deploy_vio == '1' %}

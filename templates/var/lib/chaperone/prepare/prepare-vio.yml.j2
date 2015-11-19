@@ -1,0 +1,219 @@
+  - "VMware Integrated OpenStack":
+    - "OMS OVF Deploy":
+      - "General":
+        - id: viouser_pwd
+          name: "viouser password"
+          optional: 0
+          input: password
+        - id: vio_oms_ntp_server
+          name: "VIO NTP server"
+          optional: 0
+      - "Target vCenter":
+        - id: vio_oms_vcenter_hostname
+          name: "vCenter name"
+          optional: 0
+        - id: vio_oms_vcenter_username
+          name: "vCenter user"
+          optional: 0
+        - id: vio_oms_vcenter_pwd
+          name: "vCenter user password"
+          optional: 0
+          input: password
+        - id: vio_oms_datacenter_name
+          name: "vCenter Datacenter name"
+          optional: 0
+        - id: vio_oms_cluster_name
+          name: "vCenter management cluster name"
+          optional: 0
+      - "Storage":
+        - id: vio_oms_datastore
+          name: "Datastore"
+          optional: 0
+      - "Network":
+        - id: vio_oms_network
+          name: "Network"
+          optional: 0
+{% if network_ip_scheme == 'Static' %}
+        - id: vio_oms_ip_address
+          name: "VIO OMS static IP address"
+          optional: 0
+        - id: vio_oms_ip_subnet
+          name: "VIO OMS IP subnet"
+          optional: 0
+        - id: vio_oms_ip_gw
+          name: "VIO OMS IP gateway"
+          optional: 0
+        - id: vio_oms_dns_server
+          name: "VIO OMS DNS server"
+          optional: 0
+{% endif %}
+    - "VIO Initial Configuration":
+      - "General Configuration":
+        - id: syslog_server
+          name: "Syslog server"
+          optional: 0
+        - id: vio_oms_cluster_name
+          name: "Destination ESX cluster"
+          optional: 0
+      - "Storage":
+        - id: nova_datastore
+          name: "Nova datastore"
+          optional: 0
+        - id: glance_datastores
+          name: "Glance datastores"
+          optional: 0
+      - "Network":
+        - id: vio_public_lb_fqdn
+          name: "Public FQDN for API VIP"
+          optional: 0
+        - id: vio_public_lb_ip
+          name: "Public VIP"
+          optional: 0
+        - id: vio_network_mode
+          name: "VIO networking mode"
+          optional: 0
+          input: dropdown
+          options:
+            - id: "vDS"
+            - id: "NSX"
+        - id: vio_nsx_mgr_ip
+          name: "VIO NSX Manager IP"
+          optional: 0
+      - "Network (NSX-General)":
+        - id: vio_nsx_username
+          name: "VIO NSX Manager Username"
+          optional: 0
+        - id: vio_nsx_user_pwd
+          name: "VIO NSX Manager Password"
+          optional: 0
+          input: password
+        - id: vio_nsx_tz_name
+          name: "VIO NSX Transport Zone"
+          optional: 0
+        - id: vio_nsx_edge_cluster
+          name: "VIO NSX Edge ESX Cluster"
+          optional: 0
+        - id: vio_nsx_vds
+          name: "VIO NSX vDS"
+          optional: 0
+        - id: vio_nsx_ext_dvpg
+          name: "VIO NSX External Portgroup"
+          optional: 0
+      - "Network (VIO-Management)":
+        - id: vio_net_mgmt_dvpg
+          name: "VIO Management Portgroup"
+          optional: 0
+        - id: vio_nsx_mgmt_ip_range_start
+          name: "VIO NSX Management IP range START"
+          optional: 0
+        - id: vio_nsx_mgmt_ip_range_end
+          name: "VIO NSX Management IP range END"
+          optional: 0
+        - id: vio_nsx_mgmt_subnet_mask
+          name: "VIO NSX Management Subnet Mask"
+          optional: 0
+        - id: vio_nsx_mgmt_gw
+          name: "VIO NSX Management Gateway"
+          optional: 0
+        - id: vio_nsx_mgmt_dns_server
+          name: "VIO NSX Management DNS Server"
+          optional: 0
+      - "Network (VIO-API)":
+        - id: vio_net_api_dvpg
+          name: "VIO API Portgroup"
+          optional: 0
+        - id: vio_nsx_api_ip_range_start
+          name: "VIO NSX API IP range START"
+          optional: 0
+        - id: vio_nsx_api_ip_range_end
+          name: "VIO NSX API IP range END"
+          optional: 0
+        - id: vio_nsx_api_subnet_mask
+          name: "VIO NSX API Subnet Mask"
+          optional: 0
+        - id: vio_nsx_api_gw
+          name: "VIO NSX API Gateway"
+          optional: 0
+        - id: vio_nsx_api_dns_server
+          name: "VIO NSX API DNS Server"
+          optional: 0
+      - "Keystone - Local DB":
+        - id: vio_local_admin
+          name: "VIO local Administrator name"
+          optional: 1
+        - id: vio_local_admin_pwd
+          name: "VIO local Administrator password"
+          optional: 1
+          input: password
+      - "Keystone - AD":
+        - id: vio_ad_encryption
+          name: "Encryption"
+          optional: 1
+          input: dropdown
+          options:
+            - id: "True"
+            - id: "False"
+        - id: vio_admin_tenant_name
+          name: "VIO Admin Tenant Name"
+          optional: 0
+        - id: vio_addc_hostname
+          name: "AD Domain Controller"
+          optional: 1
+        - id: vio_addc_port
+          name: "AD DC Port"
+          optional: 1
+          default: "636"
+        - id: vio_addc_username
+          name: "AD username"
+          optional: 1
+        - id: vio_addc_user_pwd
+          name: "AD user password"
+          optional: 1
+        - id: vio_local_admin
+          name: "VIO local Administrator name"
+          optional: 1
+        - id: vio_local_admin_pwd
+          name: "VIO local Administrator password"
+          optional: 1
+        - id: vio_ad_user_tree_dn
+          name: "AD User Tree DN"
+          optional: 1
+        - id: vio_ad_user_filter
+          name: "AD User Filter"
+          optional: 1
+        - id: vio_ad_user_object_class
+          name: "AD User objectClass"
+          optional: 1
+        - id: vio_ad_user_id_attribute
+          name: "AD User ID Attribute"
+          optional: 1
+        - id: vio_ad_user_name_attribute
+          name: "AD User Name Attribute"
+          optional: 1
+        - id: vio_ad_user_mail_attribute
+          name: "AD User Mail Attribute"
+          optional: 1
+        - id: vio_ad_user_pwd_attribute
+          name: "AD User Password Attribute"
+          optional: 1
+        - id: vio_ad_group_tree_dn
+          name: "AD Group Tree DN"
+          optional: 1
+        - id: vio_ad_group_filter
+          name: "AD Group Filter"
+          optional: 1
+        - id: vio_ad_group_object_class
+          name: "AD Group objectClass"
+          optional: 1
+        - id: vio_ad_group_id_attribute
+          name: "AD Group ID Attribute"
+          optional: 1
+        - id: vio_ad_group_name_attribute
+          name: "AD Group Name Attribute"
+          optional: 1
+        - id: vio_ad_group_member_attribute
+          name: "AD Group Member Attribute"
+          optional: 1
+        - id: vio_ad_group_description_attribute
+          name: "AD Group Description Attribute"
+          optional: 1

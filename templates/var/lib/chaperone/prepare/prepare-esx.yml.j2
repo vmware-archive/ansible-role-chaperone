@@ -1,0 +1,217 @@
+  - "ESX":
+    - "Software Depots":
+      - Local:
+        - id: use_local
+          name: "Use Local SoftwareDepot"
+          input: checkbox
+          optional: 1
+          help: "Select if using Local Software Depot Zip provided"
+        - id: win_path
+          name: "Local Directory"
+          optional: 1
+          help: "Local Full Directory Path on Windows Server to upload Software Depot Zip"
+        - id: esxi_host_profile
+          name: "ESXi Host Profile"
+          optional: 0
+          help: "Enter the ESXi Host Profile Name to Use"
+        - id: esxi_img
+          name: "ESX Image Profile Name"
+          input: dropdown
+          optional: 0
+          help: "Select the ESX Image Profile Name to use"
+          options:
+            - id: 'ESXi-*-no-tools'
+            - id: 'ESXi-*-standard'
+      - "Remote":
+        - id: use_remote
+          name: "Use Remote Software Depot"
+          optional: 1
+          input: checkbox
+          help: "Select if using Remote Software Depot URL"
+        - id: remote_url
+          name: "Remote URL"
+          optional: 1
+          help: "Enter the Remote URL for the Software Depot"
+        - id: esxi_host_profile_remote
+          name: "ESX Host Profile"
+          optional: 1
+          help: "Enter the Host Profile to use"
+        - id: esxi_img_remote
+          name: "ESX Image Profile Name"
+          optional: 1
+          help: "Enter the ESX Image Profile Name to use"
+    - "ESXi Software":
+      - ISO Location:
+        - id: chaperone_esxi_url
+          name: "URL to ESXi Installer ISO"
+          optional: 0
+    - "Network Services":
+      - DHCP:
+        - id: dhcp_subnet
+          name: "DHCP subnet"
+          optional: 0
+          help: "subnet for dhcp"
+        - id: dhcp_sub_mask
+          name: "DHCP subnet mask"
+          optional: 0
+          help: "subnet MASK for dhcp"
+        - id: dhcp_rout
+          name: "DHCP gateway"
+          optional: 0
+          help: "gateway for DHCP"
+        - id: dom_name
+          name: "Domain name"
+          optional: 0
+          help: "Domain name"
+        - id: dom_name_svr
+          name: "Domain name server"
+          optional: 0
+        - id: dhcp_range_a
+          name: "DHCP START range"
+          optional: 0
+          help: "Start of dhcp allocation"
+        - id: dhcp_range_b
+          name: "DHCP END range"
+          optional: 0
+          help: "END of dhcp allocation"
+        - id: boot_filename
+          name: "ESXi boot img"
+          input: dropdown
+          optional: 0
+          help: "Name of ESXi pxe boot img"
+          options:
+            - id: undionly.kpxe.vmw-hardwired
+      - "TFTP Settings":
+        - id: tftp_root
+          name: "TFTP root"
+          optional: 0
+          help: "TFTP root directory for ESX boot imge."
+        - id: tftp_ip
+          name: "TFTP IP"
+          optional: 0
+          help: "TFTP Server IP to use"
+    - "vDS and Port groups":
+      - "vDS Info":
+        - id: vds_name
+          name: "vDS Name"
+          optional: 0
+        - id: uplinks
+          name: "uplinks"
+          optional: 0
+          help: "Number of uplinks"
+        - id: sw_ports
+          name: "Switch Ports"
+          optional: 0
+          help: "Number of ports on the vDS"
+        - id: productVersion
+          name: "Product Version"
+          optional: 0
+          input: dropdown
+          options:
+            - id: '6.0.0'
+            - id: '5.5.0'
+            - id: '5.0.0'
+        - id: port_binding
+          name: "Port Binding"
+          optional: 0
+          input: dropdown
+          help: "Port Binding Type"
+          options:
+            - id: 'static'
+            - id: 'dynamic'
+            - id: 'ephemeral'
+        - id: ports
+          name: "Port Group Ports "
+          optional: 0
+          help: "Number of Ports on individual port group"
+      - "Port Group Names":
+        - id: api_grp
+          name: "VIO API Network"
+          optional: 0
+          help: "VIO API Network"
+        - id: api_vlan
+          name: "VIO API VLAN"
+          optional: 1
+        - id: ext_grp
+          name: "VIO External Network"
+          optional: 0
+          help: "VIO External Network"
+        - id: ext_vlan
+          name: "VIO External Network"
+          optional: 1
+        - id: mgmt_grp
+          name: "VIO Management"
+          optional: 0
+          help: "VIO Management"
+        - id: mgmt_vlan
+          name: "VIO Management VLAN"
+          optional: 1
+        - id: store_grp
+          name: "VIO Storage"
+          optional: 0
+          help: "VIO Storage"
+        - id: store_vlan
+          name: "VIO Storage VLAN"
+          optional: 1
+        - id: vmotion_grp
+          name: "VIO vMotion"
+          optional: 0
+          help: "VIO vMotion"
+        - id: vmotion_vlan
+          name: "VIO vMotion VLAN"
+          optional: 1
+        - id: vsan_grp
+          name: "VIO VSAN"
+          optional: 0
+          help: "VIO VSAN"
+        - id: vsan_vlan
+          name: "VIO VSAN VLAN"
+          optional: 1
+    - "ESX Management Cluster":
+{% set MGMTESXCOUNT = mgmt_esx_count|int %}
+{% for n in range(MGMTESXCOUNT) %}
+      - "Host Information":
+        - id: esx_server_mgmt-{{n}}_url
+          name: "ESX Server IP or FQDN"
+          optional: 0
+        - id: esx_server_mgmt-{{n}}_username
+          name: "ESX Server username"
+          optional: 0
+        - id: esx_server_mgmt-{{n}}_password
+          name: "ESX Server User password"
+          optional: 0
+          input: password
+{% endfor %}
+    - "ESX Edge Cluster":
+{% set NSXEDGEESXCOUNT = nsxedge_esx_count|int %}
+{% for n in range(NSXEDGEESXCOUNT) %}
+      - "Host Information":
+        - id: esx_server_nsxedge-{{n}}_url
+          name: "ESX Server IP or FQDN"
+          optional: 0
+        - id: esx_server_nsxedge-{{n}}_username
+          name: "ESX Server username"
+          optional: 0
+        - id: esx_server_nsxedge-{{n}}_password
+          name: "ESX Server User password"
+          optional: 0
+          input: password
+{% endfor %}
+{% set COMPUTECLUSTERCOUNT = compute_cluster_count|int %}
+{% for n in range(COMPUTECLUSTERCOUNT) %}
+    - "ESX Compute Cluster":
+{% set COMPUTEESXCOUNT = compute_esx_count|int %}
+{% for n in range(COMPUTEESXCOUNT) %}
+      - "Host Information":
+        - id: esx_server_compute-{{n}}_url
+          name: "ESX Server IP or FQDN"
+          optional: 0
+        - id: esx_server_compute-{{n}}_username
+          name: "ESX Server username"
+          optional: 0
+        - id: esx_server_compute-{{n}}_password
+          name: "ESX Server User password"
+          optional: 0
+          input: password
+{% endfor %}
+{% endfor %}

@@ -19,7 +19,21 @@
 ---
 - Prepare:
   - "Chaperone Configuration":
-    - "Deployment Selection":
+    - "Global Constants":
+      - "Infrastructure Services":
+        - id: ntp_server
+          name: Primary NTP Server
+          optional: 0
+        - id: dns_server
+          name: Primary DNS Server
+          optional: 0
+        - id: syslog_server
+          name: Syslog Server
+          optional: 0
+        - id: dns_domain
+          name: DNS Domain
+          optional: 0
+    - "Apps & Services":
       - "Infrastructure Services":
         - id: deploy_esx
           name: "ESX"
