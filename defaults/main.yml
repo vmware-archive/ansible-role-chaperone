@@ -20,12 +20,17 @@ chaperone_log_dir: "/var/log/{{ django_app }}"
 chaperone_answer_dir: "/var/lib/{{ django_app }}"
 chaperone_prepare_files_dir: "/var/lib/{{ django_app }}/prepare"
 
+chaperone_admin_log_dir: "/var/log/{{ django_admin_app }}"
+chaperone_admin_answer_dir: "/var/lib/{{ django_admin_app }}"
+chaperone_admin_prepare_files_dir: "/var/lib/{{ django_admin_app }}/prepare"
+
 django_debug: False
 django_template_debug: False
 apache_loglevel: info
 vcenter_port: 443
 
 django_fullname: "VMware {{ django_shortname }}"
+django_admin_fullname: "VMware {{ django_shortname }} Administration"
 
 download_files: false
 downloads_dir: /var/www/html/downloads

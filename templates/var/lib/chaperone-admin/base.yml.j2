@@ -1,0 +1,111 @@
+#
+#  Copyright 2015 VMware, Inc.
+#
+#  Licensed under the Apache License, Version 2.0 (the "License");
+#  you may not use this file except in compliance with the License.
+#  You may obtain a copy of the License at
+#
+#      http://www.apache.org/licenses/LICENSE-2.0
+#
+#  Unless required by applicable law or agreed to in writing, software
+#  distributed under the License is distributed on an "AS IS" BASIS,
+#  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+#  See the License for the specific language governing permissions and
+#  limitations under the License.
+#
+# ---------->>>>>>>>> READ ME <<<<<<<<<<----------------
+# All of the property ids should be added to the playbooks/supervio-ui/ui,yml
+# playbook
+---
+- Prepare:
+  - "Chaperone Configuration":
+    - "Deployment Selection":
+      - "Infrastructure Services":
+        - id: deploy_esx
+          name: "ESX"
+          optional: 0
+          input: checkbox
+        - id: deploy_nsx
+          name: "NSX"
+          optional: 0
+          input: checkbox
+        - id: deploy_vcenter
+          name: "vCenter Server"
+          optional: 0
+          input: checkbox
+      - "Cloud Management Platforms":
+        - id: deploy_cna
+          name: "Cloud-Native Applications"
+          optional: 0
+          input: checkbox
+        - id: deploy_vio
+          name: "VMware Integrated OpenStack"
+          optional: 0
+          input: checkbox
+        - id: deploy_vra
+          name: "vRealize Automation"
+          optional: 0
+          input: checkbox
+      - "Infrastructure Applications":
+        - id: deploy_vrli
+          name: "vRealize Log Insight"
+          optional: 0
+          input: checkbox
+        - id: deploy_vrops
+          name: "vRealize Operations"
+          optional: 0
+          input: checkbox
+        - id: deploy_vrb
+          name: "vRealize Business"
+          optional: 0
+          input: checkbox
+    - "General":
+      - "Out-of-band Management Services":
+        - id: enable_oob_mgmt_svcs
+          name: "Enable out-of-band vCenter and NSX management services?"
+          optional: 0
+          input: checkbox
+      - "vCenter PSC Deployment Scheme":
+        - id: psc_appliance_deployment_scheme
+          name: "Select the PSC deployment scheme"
+          optional: 0
+          input: dropdown
+          options:
+            - id: Existing
+            - id: Embedded PSC
+            - id: Dedicated PSC
+      - "Network IP Scheme":
+        - id: network_ip_scheme
+          name: "Select the IP scheme (where applicable)"
+          input: dropdown
+          optional: 0
+          options:
+            - id: DHCP
+            - id: Static
+    - "ESX":
+      - "Number of ESX hosts to provision to Management Cluster":
+        - id: mgmt_esx_count
+          name: "Enter the number"
+          default: 4
+      - "Number of ESX hosts to provision to NSX Edge Cluster":
+        - id: nsxedge_esx_count
+          name: "Enter the number"
+          default: 4
+      - "Number of ESX Compute Clusters":
+        - id: compute_cluster_count
+          name: "Enter number"
+          default: 1
+      - "Number of ESX to provision to the Compute Cluster":
+        - id: compute_esx_count
+          name: "Enter the number"
+          default: 4
+    - "NSX":
+      - "Number of Edges to provision":
+        - id: nsxedge_appliance_count
+          name: "Enter the number"
+- Install:
+  - Chaperone Configuration:
+    - id: config_chaperone
+      name: Save Chaperone config
+      commands:
+        - "/opt/supervio/supervio_play_tags site_primaryweb.yml uiconfig"
