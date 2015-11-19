@@ -2551,11 +2551,11 @@
             - id: 'DEBUG'
 
       - "Configure Deployment":
-        - id: nsx_edge_datacenterMoid
+        - id: nsx_edge_appliance_datacenterMoid
           name: "Datacenter MOID"
           optional: 0
           help: "The datacenter MOID for the edge"
-        - id: nsx_edge_applianceSize
+        - id: nsx_edge_appliance_applianceSize
           name: "Appliance Size"
           optional: 0
           help: The size of the edge appliance
@@ -2574,21 +2574,21 @@
           optional: 1
           help: "Create the edge in deployed mode"
           input: checkbox
-        - id: nsx_edge_resourcePoolId
+        - id: nsx_edge_appliance_resourcePoolId
           name: "Cluster/Resource Pool"
-          optional: 1
+          optional: 0
           help: "The cluster/resource pool into which the edge will be placed"
-        - id: nsx_edge_datastoreId
+        - id: nsx_edge_appliance_datastoreId
           name: "Datastore"
-          optional: 1
+          optional: 0
           help: "The datastore for the appliance"
-        - id: nsx_edge_hostId
+        - id: nsx_edge_appliance_hostId
           name: "Host"
           optional: 0
           help: "The host into which the appliance will be placed"
-        - id: nsx_edge_vmFolderId
+        - id: nsx_edge_appliance_vmFolderId
           name: "Folder"
-          optional: 0
+          optional: 1
           help: "The folder on the host into which the appliance will be placed"
 
       - "Configure Interfaces":
@@ -2602,19 +2602,35 @@
           help: "The type of interface"
           input: dropdown
           options:
-            - id: 'Internal'
-            - id: 'Uplink'
-        - id: nsx_edge_vnic_connected_to
-          name: "Connected To"
-          optional: 1
+            - name: "Internal"
+              id: "internal"
+            - name: "Uplink"
+              id: "uplink"
+        - id: nsx_edge_vnic_portgroupId
+          name: "Portgroup ID"
+          optional: 0
           help: "The network or portgroup to attach the edge to"
         - id: nsx_edge_vnic_isConnected
           name: "Connectivity Status"
           optional: 0
           input: dropdown
           options:
-            - id: 'Connected'
-            - id: 'Disconnected'
+            - name: "Connected"
+              id: "true"
+            - name: "Disconnected"
+              id: "false"
+        - id: nsx_edge_vnic_primaryAddress
+          name: "Primary Address"
+          optional: 0
+          help: "Specify the primary IP address for the edge"
+        - id: nsx_edge_vnic_subnetMask
+          name: "Subnet Mask"
+          optional: 0
+          help: "Specify the subnet mask for the edge"
+        - id: nsx_edge_vnic_subnetPrefixLength
+          name: "Subnet Prefix Length"
+          optional: 0
+          help: "Specify the subnet prefix length for the edge"
         - id: nsx_edge_vnic_mac
           name: "MAC Address"
           optional: 1
@@ -2639,11 +2655,16 @@
           help: "Examples include:  ethernet0.filter1.param1=1"
 
       - "Default Gateway Settings":
+        - id: nsx_edge_default_gateway_configure
+          name: Configure Default Gateway
+          optional: 1
+          help: Specify whether or not to configure a default gateway for the edge
+          input: checkbox
         - id: nsx_edge_default_gateway_vnic
           name: "vNIC"
           optional: 1
           help: "The vNIC for the default gateway"
-        - id: nsx_edge_default_gateway_ip
+        - id: nsx_edge_default_gatewayAddress
           name: "Gateway IP"
           optional: 1
           help: "The IP address of the default gateway to use for the edge"
