@@ -2674,43 +2674,47 @@
           help: "The MTU for the default edge"
 
       - "Firewall and HA":
-        - id: nsx_edge_default_traffic_policy
+        - id: nsx_edge_defaultPolicy_action
           name: "Default Traffic Policy"
           optional: 0
           help: "The firewall default traffic policy"
           input: dropdown
           options:
-            - id: 'Deny'
-            - id: 'Allow'
-        - id: nsx_edge_firewall_logging
+            - name: "Deny"
+              id: "deny"
+            - name: "Allow"
+              id: "accept"
+        - id: nsx_edge_defaultPolicy_loggingEnabled
           name: "Logging"
           optional: 0
           help: "Enable firewall logging"
           input: dropdown
           options:
-            - id: 'Disable'
-            - id: 'Enable'
-        - id: nsx_edge_enable_ha
+            - name: "Disable"
+              id: "false"
+            - name: "Enable"
+              id: "true"
+        - id: nsx_edge_highAvailability_enabled
           name: "Enable High Availability"
           optional: 1
           help: "Enable HA for enabling and configuring high availability"
           input: checkbox
-        - id: nsx_edge_ha_vnic
+        - id: nsx_edge_highAvailability_vnic
           name: "vNIC"
           optional: 0
           help: "HA vNIC"
           input: dropdown
           options:
             - id: 'any'
-        - id: nsx_edge_declare_dead_time
+        - id: nsx_edge_highAvailability_declareDeadTime
           name: "Declare Dead Time"
           optional: 1
           help: "The declared dead time in seconds"
-        - id: nsx_edge_ha_management_ip_1
+        - id: nsx_edge_highAvailability_managementIp1
           name: "Management IP 1"
           optional: 1
           help: "You can specify a pair of IPs (in CIDR format) with a /30 subnet"
-        - id: nsx_edge_ha_management_ip_2
+        - id: nsx_edge_highAvailability_managementIp2
           name: "Management IP 2"
           optional: 1
           help: "The second management IP"
