@@ -1,0 +1,200 @@
+#
+#  Copyright 2015 VMware, Inc.
+#
+#  Licensed under the Apache License, Version 2.0 (the "License");
+#  you may not use this file except in compliance with the License.
+#  You may obtain a copy of the License at
+#
+#      http://www.apache.org/licenses/LICENSE-2.0
+#
+#  Unless required by applicable law or agreed to in writing, software
+#  distributed under the License is distributed on an "AS IS" BASIS,
+#  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+#  See the License for the specific language governing permissions and
+#  limitations under the License.
+#
+---
+- name: create admin application directory
+  file:
+    dest: "/opt/{{ django_admin_app }}"
+    state: directory
+    owner: "{{ ansible_ssh_user }}"
+    group: "{{ ansible_ssh_user }}"
+    mode: 0755
+  tags:
+    - rsync
+
+- name: create admin blackhole directory
+  file:
+    dest: "/opt/{{ django_admin_app }}/.blackhole"
+    state: directory
+    owner: "{{ ansible_ssh_user }}"
+    group: "{{ ansible_ssh_user }}"
+    mode: 0755
+  tags:
+    - rsync
+
+- name: recursively sync the admin ui code from local repos
+  sudo: no
+  synchronize: src=../../../ui/ dest=/opt/{{ django_admin_app }}/ recursive=yes rsync_opts=--no-motd,--exclude=.git archive=no
+  tags:
+    - rsync
+
+- name: update the css template for admin UI
+  sudo: no
+  template:
+    src: ../../../ui/chaperone/static/chaperone/css/chaperone-admin.css.j2
+    dest: /opt/chaperone-admin/chaperone/static/chaperone/css/chaperone.css
+    owner: "{{ ansible_ssh_user }}"
+    group: "{{ ansible_ssh_user }}"
+  notify: Restart apache2
+  tags:
+    - rsync
+
+- name: create admin plays directory
+  file:
+    dest: "/opt/{{ django_admin_app }}-ansible"
+    state: directory
+    owner: "{{ ansible_ssh_user }}"
+    group: "{{ ansible_ssh_user }}"
+    mode: 0755
+  tags:
+    - rsync
+
+- name: recursively sync the ansible playbooks from local repos
+  sudo: no
+  synchronize: src=../../../ansible/playbooks dest=/opt/{{ django_admin_app }}-ansible/ recursive=yes rsync_opts=--no-motd,--exclude=.git archive=no
+  tags:
+    - rsync
+
+- name: recursively sync the ansible roles from local repos
+  sudo: no
+  synchronize: src=../../../ansible/roles dest=/opt/{{ django_admin_app }}-ansible/ recursive=yes rsync_opts=--no-motd,--exclude=.git archive=no
+  tags:
+    - rsync
+
+- name: recursively sync the ansible library from local repos
+  sudo: no
+  synchronize: src=../../../ansible/library dest=/opt/{{ django_admin_app }}-ansible/ recursive=yes rsync_opts=--no-motd,--exclude=.git archive=no
+  tags:
+    - rsync
+
+- name: Create admin settings.py
+  template:
+    src: "opt/superbase-admin-ui/settings.py.j2"
+    dest: "/opt/{{ django_admin_app }}/chaperone/settings.py"
+    owner: "{{ ansible_ssh_user }}"
+    group: "{{ ansible_ssh_user }}"
+  notify: Restart apache2
+  tags:
+    - rsync
+
+- name: Create admin local_settings.py
+  template:
+    src: "opt/superbase-admin-ui/local_settings.py.j2"
+    dest: "/opt/{{ django_admin_app }}/chaperone/local_settings.py"
+    owner: "{{ ansible_ssh_user }}"
+    group: "{{ ansible_ssh_user }}"
+  notify: Restart apache2
+  tags:
+    - rsync
+
+- name: Create admin application working directory
+  file:
+    dest: "/var/lib/{{ django_admin_app }}"
+    state: directory
+    owner: "{{ ansible_ssh_user }}"
+    group: "{{ ansible_ssh_user }}"
+    mode: 0755
+  tags:
+    - rsync
+
+- name: Create admin base.yml
+  template:
+    src: "var/lib/{{ django_admin_app }}/base.yml.j2"
+    dest: "/var/lib/{{ django_admin_app }}/base.yml"
+    owner: "{{ ansible_ssh_user }}"
+    group: "{{ ansible_ssh_user }}"
+  notify: Restart apache2
+  tags:
+    - rsync
+
+- name: Create admin Answer files directory
+  file:
+    dest: "{{ chaperone_admin_answer_dir }}"
+    state: directory
+    owner: "{{ ansible_ssh_user }}"
+    group: "{{ ansible_ssh_user }}"
+    mode: 0755
+  tags:
+    - rsync
+
+- name: Create admin Prepare files directory
+  file:
+    dest: "{{ chaperone_admin_prepare_files_dir }}"
+    state: directory
+    owner: "{{ ansible_ssh_user }}"
+    group: "{{ ansible_ssh_user }}"
+    mode: 0755
+  tags:
+    - rsync
+
+- name: Create admin Logs directory
+  file:
+    dest: "{{ chaperone_admin_log_dir }}/{{ django_admin_app }}"
+    state: directory
+    owner: "{{ ansible_ssh_user }}"
+    group: "{{ ansible_ssh_user }}"
+    mode: 0755
+  tags:
+    - rsync
+
+- name: Create admin database
+  command: touch "/opt/{{ django_admin_app }}/{{ django_admin_app }}.db"
+  args:
+    creates: "/opt/{{ django_admin_app }}/{{ django_admin_app }}.db"
+  sudo: no
+  register: db
+
+# Stat the db and if zero sized, rebuild it because either
+# the above 'touch' created it, or someone else truncated it.
+# either way, have to rebuild it.
+- name: Stat the admin database to determine if it's truncated to zero
+  stat: path="/opt/{{ django_admin_app }}/{{ django_admin_app }}.db" get_checksum=no get_md5=no
+  when: not db.changed
+  register: dbstat
+
+- name: Initialize admin database
+  command: python manage.py syncdb --noinput
+  args:
+    chdir: "/opt/{{ django_admin_app }}"
+  sudo: no
+  when: db.changed or dbstat.stat.size == 0
+
+- name: (Re)Generate admin site-available ui config
+  template:
+    src: "etc/apache2/sites-available/superbase-admin-ui.conf.j2"
+    dest: "/etc/apache2/sites-available/{{ django_admin_app }}.conf"
+    owner: "{{ ansible_ssh_user }}"
+    group: "{{ ansible_ssh_user }}"
+    mode: 0644
+  tags:
+    - rsync
+
+# - name: Disable 000-default site
+#   command: a2dissite 000-default
+#   notify: Restart apache2
+#   tags:
+#     - rsync
+
+- name: Enable  admin application site
+  command: a2ensite {{ django_admin_app }}
+  notify: Restart apache2
+  tags:
+    - rsync
+
+# - name: enable the general application site (this is not the ui)
+#   command: "a2ensite {{ django_admin_app }}-downloads"
+#   notify: Restart apache2
+#   tags:
+#     - downloads

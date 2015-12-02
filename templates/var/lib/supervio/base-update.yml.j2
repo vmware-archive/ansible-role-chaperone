@@ -1,0 +1,2178 @@
+#
+#  Copyright 2015 VMware, Inc.
+#
+#  Licensed under the Apache License, Version 2.0 (the "License");
+#  you may not use this file except in compliance with the License.
+#  You may obtain a copy of the License at
+#
+#      http://www.apache.org/licenses/LICENSE-2.0
+#
+#  Unless required by applicable law or agreed to in writing, software
+#  distributed under the License is distributed on an "AS IS" BASIS,
+#  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+#  See the License for the specific language governing permissions and
+#  limitations under the License.
+#
+---
+- Prepare:
+{% if deploy_esx == '1' %}
+  - "ESX":
+    - "Software Depots":
+      - Local:
+        - id: use_local
+          name: "Use Local SoftwareDepot"
+          input: checkbox
+          optional: 1
+          help: "Select if using Local Software Depot Zip provided"
+        - id: win_path
+          name: "Local Directory"
+          optional: 1
+          help: "Local Full Directory Path on Windows Server to upload Software Depot Zip"
+        - id: esxi_host_profile
+          name: "ESXi Host Profile"
+          optional: 0
+          help: "Enter the ESXi Host Profile Name to Use"
+        - id: esxi_img
+          name: "ESX Image Profile Name"
+          input: dropdown
+          optional: 0
+          help: "Select the ESX Image Profile Name to use"
+          options:
+            - id: 'ESXi-*-no-tools'
+            - id: 'ESXi-*-standard'
+      - "Remote":
+        - id: use_remote
+          name: "Use Remote Software Depot"
+          optional: 1
+          input: checkbox
+          help: "Select if using Remote Software Depot URL"
+        - id: remote_url
+          name: "Remote URL"
+          optional: 1
+          help: "Enter the Remote URL for the Software Depot"
+        - id: esxi_host_profile_remote
+          name: "ESX Host Profile"
+          optional: 1
+          help: "Enter the Host Profile to use"
+        - id: esxi_img_remote
+          name: "ESX Image Profile Name"
+          optional: 1
+          help: "Enter the ESX Image Profile Name to use"
+    - "ESXi Software":
+      - ISO Location:
+        - id: chaperone_esxi_url
+          name: "URL to ESXi Installer ISO"
+          optional: 0
+    - "Network Services":
+      - DHCP:
+        - id: dhcp_subnet
+          name: "DHCP subnet"
+          optional: 0
+          help: "subnet for dhcp"
+        - id: dhcp_sub_mask
+          name: "DHCP subnet mask"
+          optional: 0
+          help: "subnet MASK for dhcp"
+        - id: dhcp_rout
+          name: "DHCP gateway"
+          optional: 0
+          help: "gateway for DHCP"
+        - id: dom_name
+          name: "Domain name"
+          optional: 0
+          help: "Domain name"
+        - id: dom_name_svr
+          name: "Domain name server"
+          optional: 0
+        - id: dhcp_range_a
+          name: "DHCP START range"
+          optional: 0
+          help: "Start of dhcp allocation"
+        - id: dhcp_range_b
+          name: "DHCP END range"
+          optional: 0
+          help: "END of dhcp allocation"
+        - id: boot_filename
+          name: "ESXi boot img"
+          input: dropdown
+          optional: 0
+          help: "Name of ESXi pxe boot img"
+          options:
+            - id: undionly.kpxe.vmw-hardwired
+      - "TFTP Settings":
+        - id: tftp_root
+          name: "TFTP root"
+          optional: 0
+          help: "TFTP root directory for ESX boot imge."
+        - id: tftp_ip
+          name: "TFTP IP"
+          optional: 0
+          help: "TFTP Server IP to use"
+    - "vDS and Port groups":
+      - "vDS Info":
+        - id: vds_name
+          name: "vDS Name"
+          optional: 0
+        - id: uplinks
+          name: "uplinks"
+          optional: 0
+          help: "Number of uplinks"
+        - id: sw_ports
+          name: "Switch Ports"
+          optional: 0
+          help: "Number of ports on the vDS"
+        - id: productVersion
+          name: "Product Version"
+          optional: 0
+          input: dropdown
+          options:
+            - id: '6.0.0'
+            - id: '5.5.0'
+            - id: '5.0.0'
+        - id: port_binding
+          name: "Port Binding"
+          optional: 0
+          input: dropdown
+          help: "Port Binding Type"
+          options:
+            - id: 'static'
+            - id: 'dynamic'
+            - id: 'ephemeral'
+        - id: ports
+          name: "Port Group Ports "
+          optional: 0
+          help: "Number of Ports on individual port group"
+      - "Port Group Names":
+        - id: api_grp
+          name: "VIO API Network"
+          optional: 0
+          help: "VIO API Network"
+        - id: api_vlan
+          name: "VIO API VLAN"
+          optional: 1
+        - id: ext_grp
+          name: "VIO External Network"
+          optional: 0
+          help: "VIO External Network"
+        - id: ext_vlan
+          name: "VIO External Network"
+          optional: 1
+        - id: mgmt_grp
+          name: "VIO Management"
+          optional: 0
+          help: "VIO Management"
+        - id: mgmt_vlan
+          name: "VIO Management VLAN"
+          optional: 1
+        - id: store_grp
+          name: "VIO Storage"
+          optional: 0
+          help: "VIO Storage"
+        - id: store_vlan
+          name: "VIO Storage VLAN"
+          optional: 1
+        - id: vmotion_grp
+          name: "VIO vMotion"
+          optional: 0
+          help: "VIO vMotion"
+        - id: vmotion_vlan
+          name: "VIO vMotion VLAN"
+          optional: 1
+        - id: vsan_grp
+          name: "VIO VSAN"
+          optional: 0
+          help: "VIO VSAN"
+        - id: vsan_vlan
+          name: "VIO VSAN VLAN"
+          optional: 1
+    - "ESX Management Cluster":
+{% set MGMTESXCOUNT = mgmt_esx_count|int %}
+{% for n in range(MGMTESXCOUNT) %}
+      - "Host Information":
+        - id: esx_server_mgmt-{{n}}_url
+          name: "ESX Server IP or FQDN"
+          optional: 0
+        - id: esx_server_mgmt-{{n}}_username
+          name: "ESX Server username"
+          optional: 0
+        - id: esx_server_mgmt-{{n}}_password
+          name: "ESX Server User password"
+          optional: 0
+          input: password
+{% endfor %}
+    - "ESX Edge Cluster":
+{% set NSXEDGEESXCOUNT = nsxedge_esx_count|int %}
+{% for n in range(NSXEDGEESXCOUNT) %}
+      - "Host Information":
+        - id: esx_server_nsxedge-{{n}}_url
+          name: "ESX Server IP or FQDN"
+          optional: 0
+        - id: esx_server_nsxedge-{{n}}_username
+          name: "ESX Server username"
+          optional: 0
+        - id: esx_server_nsxedge-{{n}}_password
+          name: "ESX Server User password"
+          optional: 0
+          input: password
+{% endfor %}
+{% set COMPUTECLUSTERCOUNT = compute_cluster_count|int %}
+{% for n in range(COMPUTECLUSTERCOUNT) %}
+    - "ESX Compute Cluster":
+{% set COMPUTEESXCOUNT = compute_esx_count|int %}
+{% for n in range(COMPUTEESXCOUNT) %}
+      - "Host Information":
+        - id: esx_server_compute-{{n}}_url
+          name: "ESX Server IP or FQDN"
+          optional: 0
+        - id: esx_server_compute-{{n}}_username
+          name: "ESX Server username"
+          optional: 0
+        - id: esx_server_compute-{{n}}_password
+          name: "ESX Server User password"
+          optional: 0
+          input: password
+{% endfor %}
+{% endfor %}
+{% endif %}
+
+{% if deploy_vcenter == '1' %}
+  - "vCenter Server":
+    - "General Configuration":
+{% if enable_oob_mgmt_svcs == '1' %}
+      - "OOB Management vCenter Server Information":
+        - id: oob_vcenter_url
+          name: "vCenter hostname"
+          optional: 0
+          help: "Out-of-band vCenter Server that manages the ESX Server onto which vCSA and/or PSC gets deployed."
+        - id: oob_vcenter_user
+          name: "vCenter Admin User"
+          optional: 0
+        - id: oob_vcenter_password
+          name: "vCenter Admin User Password"
+          optional: 0
+          input: password
+        - id: oob_vcenter_port
+          name: "vCenter API Port"
+          optional: 0
+          default: 443
+{% endif %}
+      - "ESX Deployment Target":
+        - id: vcenter_deploy_target
+          name: "ESXi Server target"
+          optional: 0
+      - "ESX Credentials":
+        - id: esx_username
+          name: "ESXi User"
+          optional: 0
+          help: "Host login name."
+        - id: esx_password
+          name: "ESXi User Password"
+          optional: 0
+          input: password
+          help: "Host login password."
+{% if psc_appliance_deployment_scheme == 'Dedicated PSC' %}
+    - "Platform Services Controller":
+      - "Storage and Network Configuration (General)":
+        - id: esx_datastore
+          name: "Datastore"
+          optional: 0
+          help: "Datastore to deploy the OVA to"
+        - id: appliance_thin_disk_mode
+          name: "Thin Disk Mode"
+          optional: 0
+          input: checkbox
+          help: "Disk provisioning mode."
+        - id: esx_network
+          name: "Network"
+          optional: 0
+          help: "Network name to use for the vCenter NIC (which MUST be set to Ephemeral binding)."
+        - id: appliance_networking_mode
+          name: "Networking mode"
+          input: dropdown
+          optional: 0
+          options:
+            - id: DHCP
+            - id: Static
+      - "Network Configuration":
+        - id: psc_appliance_vcenter_name
+          name: "PSC appliance vCenter name"
+          optional: 0
+          help: "vCenter display name of PSC appliance"
+        - id: psc_appliance_domain_name
+          name: "PSC domain name"
+          optional: 1
+          help: "DNS domain suffix for PSC"
+{% if network_ip_scheme == 'Static' %}
+        - id: psc_appliance_ip_address
+          name: "PSC static IP address"
+          optional: 1
+          help: "(OPTIONAL) PSC IP address, required when Networking mode is set to static"
+        - id: psc_appliance_ip_prefix
+          name: "PSC VLSM"
+          optional: 1
+          help: "(OPTIONAL) PSC variable length subnet mask, required when Networking mode is set to static"
+        - id: psc_appliance_ip_gw
+          name: "PSC static IP gateway"
+          optional: 1
+          help: "(OPTIONAL) PSC IP gateway, required when Networking mode is set to static"
+        - id: psc_appliance_dns_servers
+          name: "PSC DNS servers"
+          optional: 1
+          help: "(OPTIONAL) PSC DNS server(s), required when Networking mode is set to static"
+{% endif %}
+      - "SSO Information":
+        - id: sso_domain_name
+          name: "SSO Domain Name"
+          optional: 0
+          help: "The single sign-on domain name for identity management."
+        - id: sso_site_name
+          name: "SSO Site Name"
+          optional: 0
+          help: "The single sign-on site name for identity management."
+        - id: sso_password
+          name: "SSO administrator password"
+          input: password
+          optional: 0
+          help: "The single sign-on admin password."
+      - "Appliance Information":
+        - id: psc_appliance_root_password
+          name: "PSC administrator password"
+          input: password
+          optional: 0
+          help: "The admin (not SSO admin) password for this PSC instance."
+{% endif %}
+    - "vCenter Server Appliance":
+      - "Storage and Network Configuration (General)":
+        - id: esx_datastore
+          name: "Datastore"
+          optional: 0
+          help: "Datastore to deploy the OVA to"
+        - id: appliance_thin_disk_mode
+          name: "Thin Disk Mode"
+          optional: 0
+          input: checkbox
+          help: "Disk provisioning mode."
+        - id: esx_network
+          name: "Network"
+          optional: 0
+          help: "Network name to use for the vCenter NIC (which MUST be set to Ephemeral binding)."
+      - "Network Configuration":
+        - id: vcsa_appliance_vcenter_name
+          name: "vCSA vCenter name"
+          optional: 0
+          help: "vCenter display name of the vCSA instance"
+        - id: vcsa_appliance_domain_name
+          name: "vCSA domain name"
+          optional: 0
+          help: "DNS domain suffix of vCSA instance"
+{% if network_ip_scheme == 'Static' %}
+        - id: vcsa_appliance_ip_address
+          name: "vCSA static IP address"
+          optional: 0
+          help: "vCSA IP address, required when Networking mode is set to static"
+        - id: vcsa_appliance_ip_prefix
+          name: "vCSA VLSM"
+          optional: 0
+          help: "vCSA variable length subnet mask, required when Networking mode is set to static"
+        - id: vcsa_appliance_ip_gw
+          name: "vCSA static IP gateway"
+          optional: 0
+          help: "vCSA IP gateway, required when Networking mode is set to static"
+        - id: vcsa_appliance_dns_servers
+          name: "vCSA DNS Servers"
+          optional: 0
+          help: "vCSA DNS server(s), required when Networking mode is set to static"
+{% endif %}
+      - "SSO Information":
+        - id: psc_appliance_dns_name_manual
+          name: "PSC FQDN"
+          optional: 1
+          help: "PSC FQDN, required for SSO integration. Optional only when deployment architecture is Combined"
+        - id: sso_domain_name
+          name: "SSO Domain Name"
+          optional: 0
+          help: "The single sign-on domain name for identity management."
+        - id: sso_site_name
+          name: "SSO Site Name"
+          optional: 0
+          help: "The single sign-on site name for identity management."
+        - id: sso_password
+          name: "SSO administrator password"
+          input: password
+          optional: 0
+          help: "The single sign-on admin password."
+      - "Appliance Information":
+        - id: appliance_deployment_option
+          name: "vCSA Deployment Type"
+          input: dropdown
+          optional: 0
+          options:
+            - id: tiny
+            - id: small
+            - id: medium
+            - id: large
+          help: "The size for this vCenter appliance."
+        - id: vcsa_appliance_root_password
+          name: "vCSA administrator password"
+          input: password
+          optional: 0
+          help: "The admin (not SSO admin) password for this vCSA instance."
+{% endif %}
+
+{% if deploy_nsx == '1' %}
+  - "NSX":
+    - "NSX Deploy":
+      - "NSX Management vCenter":
+        - id: nsx_vcenter_name
+          name: "NSX vCenter Name"
+          optional: 0
+          help: "Name of the vCenter to deploy NSX Manager appliance to. Normally this will be the OOB vCenter."
+        - id: nsx_vcenter_user
+          name: "NSX vCenter Admin User"
+          optional: 0
+        - id: nsx_vcenter_password
+          name: "NSX vCenter Admin User Password"
+          optional: 0
+          input: password
+        - id: nsx_vcenter_port
+          name: "NSX vCenter API Port"
+          optional: 0
+          default: 443
+        - id: nsx_datacenter_name
+          name: "NSX vCenter Datacenter"
+          optional: 0
+        - id: nsx_cluster_name
+          name: "NSX vCenter Cluster"
+          optional: 0
+      - "NSX Appliance Configuration":
+        - id: nsx_name
+          name: "NSX Manager Name"
+          optional: 0
+          help: "Name of the NSX Manager VM"
+        - id: nsx_datastore
+          name: "NSX Datastore"
+          optional: 0
+          help: "Name of the Datastore to use for VM deployment"
+        - id: nsx_mgmt_net
+          name: "NSX Management Network"
+          optional: 0
+          help: "Management Network"
+        - id: nsx_cluster_deploy
+          name: "Deploy to Cluster"
+          optional: 0
+          help: "Select cluster to deploy to"
+        - id: ntp_svr
+          name: "NSX Manager NTP"
+          optional: 0
+          help: "NTP Server for NSX Manager"
+        - id: nsx_ssh_enabled
+          name: "NSX Enable SSH"
+          optional: 0
+          input: dropdown
+          options:
+            - id: "True"
+            - id: "False"
+        - id: cli_pass
+          name: "NSX ssh passwd"
+          optional: 0
+          input: password
+          help: "NSX Manager default cli user admin"
+      - "NSX Appliance Configuration - Network":
+        - id: nsx_hostname
+          name: "NSX Manager Hostname"
+          optional: 0
+          help: "NSX Manager Hostname ex: nsxmanager-01a"
+        - id: nsx_ip
+          name: "NSX Manager IP"
+          optional: 0
+          help: "IP address on management network for NSX Manager"
+        - id: nsx_netmask
+          name: "NSX Manager Netmask"
+          optional: 0
+          help: "Netmask for management network"
+        - id: nsx_gateway
+          name: "NSX Manager Gateway"
+          optional: 0
+          help: "Gateway for management network"
+        - id: nsx_dns
+          name: "NSX Manager DNS server"
+          optional: 0
+          help: "DNS server"
+        - id: nsx_domain
+          name: "Domain name"
+          optional: 0
+          help: "Domain information"
+    - "NSX Configuration":
+      - "NSX Manager Info":
+        - id: nsx_sys
+          name: "NSX Syslog Server IP"
+          optional: 0
+          help: "Enter the Syslog server IP"
+        - id: nsx_sys_port
+          name: "NSX Syslog Port"
+          optional: 0
+        - id: nsx_sys_proto
+          name: "NSX Syslog Protocol"
+          optional: 0
+          help: "UDP or TCP"
+      - "NSX Controller":
+        - id: controllername
+          name: "Controller Name"
+          optional: 0
+          help: "Enter the name of the controller ex: controller-01"
+        - id: controller_ds_name
+          name: "Controller Datastore"
+          optional: 0
+          help: "Name of the datastore for the Controller VM"
+          input: dropdown
+          options: comp_vc_datastores
+        - id: controller_password
+          name: "Controller Password"
+          optional: 0
+          input: password
+        - id: controller_deploy_size
+          name: "Deploy Size"
+          optional: 0
+          input: dropdown
+          help: "Choose the deploy type based on your environment"
+          options:
+            - id: 'small'
+            - id: 'medium'
+            - id: 'large'
+    - "NSX IP Pools":
+      - "NSX Controller IP Pool":
+        - id: controller_ippool_name
+          name: "Controller IP pool"
+          optional: 0
+          help: "Controller IP pool name ex: controller-pool-1"
+        - id: controller_ippool_gw
+          name: "Controller IP pool Gateway"
+          optional: 0
+        - id: controller_ippool_prefix
+          name: "Prefix"
+          optional: 0
+          help: "Controller pool ip prefix ex: 24"
+        - id: controller_ippool_range_start
+          name: "Controller IP pool Start:"
+          optional: 0
+          help: "Starting IP range for controller ip pool ex: 192.168.110.51"
+        - id: controller_ippool_range_end
+          name: "Controller IP pool End"
+          optional: 0
+          help: "Ending IP range for controller ip pool ex: 192.168.110.59"
+      - "NSX Edge VTEP IP Pool":
+        - id: edgevtep_ippool_name
+          name: "Edge VTEP IP pool Name"
+          optional: 0
+          help: "Edge VTEP pool name ex: VTEP-pool-1"
+        - id: edgevtep_ippool_gw
+          name: "Edge VTEP pool Gateway"
+          optional: 0
+        - id: edgevtep_ippool_prefix
+          name: "Prefix"
+          optional: 0
+          help: "Edge VTEP ip prefix ex: 24"
+        - id: edgevtep_ippool_range_start
+          name: "Edge VTEP IP pool Start:"
+          optional: 0
+          help: "Starting IP range for Edge VTEP ip pool ex: 192.168.110.51"
+        - id: edgevtep_ippool_range_end
+          name: "Controller IP pool End"
+          optional: 0
+          help: "Ending IP range for Edge VTEP ip pool ex: 192.168.110.59"
+      - "NSX Compute VTEP IP Pool":
+        - id: computevtep_ippool_name
+          name: "Compute VTEP IP pool Name"
+          optional: 0
+          help: "Compute VTEP pool name ex: VTEP-pool-2"
+        - id: computevtep_ippool_gw
+          name: "Compute VTEP pool Gateway"
+          optional: 0
+        - id: computevtep_ippool_prefix
+          name: "Prefix"
+          optional: 0
+          help: "Compute VTEP ip prefix ex: 24"
+        - id: computevtep_ippool_range_start
+          name: "Compute VTEP IP pool Start:"
+          optional: 0
+          help: "Starting IP range for Compute VTEP ip pool ex: 192.168.110.51"
+        - id: computevtep_ippool_range_end
+          name: "Controller IP pool End"
+          optional: 0
+          help: "Ending IP range for Compute VTEP ip pool ex: 192.168.110.59"
+    - "NSX Logical Network":
+      - "NSX Segment Range":
+        - id: segment_id
+          name: "Segment Range ID"
+          iptional: 0
+          help: "ID number for the segment range"
+        - id: segment_name
+          name: "Segment Range Name"
+          optional: 0
+          help: "Name for the Segment Range"
+        - id: segment_desc
+          name: "Segment Description"
+          optional: 0
+        - id: segment_begin
+          name: "Segment Begin"
+          optional: 0
+          help: "Starting Range for Segment ex 5000"
+        - id: segment_end
+          name: "Segment End"
+          optional: 0
+          help: "Ending Range for Segment ex 5900"
+      - "NSX Transport Zone":
+        - id: vdnscope_name
+          name: "Transport Zone Name"
+          optional: 0
+        - id: vdnscope_mode
+          name: "Replication Mode"
+          optional: 0
+          input: dropdown
+          options:
+            - id: 'MULTICAST_MODE'
+            - id: 'UNICAST_MODE'
+            - id: 'HYBRID_MODE'
+      - "NSX VXLAN":
+        - id: vxlan_vlanid
+          name: "VLAN ID"
+          optional: 0
+        - id: vxlan_vmnic
+          name: "vmnic count"
+          optional: 0
+        - id: vxlan_mtu
+          name: "MTU"
+          optional: 0
+        - id: vxlan_teaming
+          name: "vmknic teaming policy"
+          optional: 0
+          input: dropdown
+          options:
+            - id: 'FAILOVER_ORDER'
+            - id: 'ETHER_CHANNEL'
+            - id: 'LACP_ACTIVE'
+{% endif %}
+
+{% if deploy_vio == '1' %}
+  - "VMware Integrated OpenStack":
+    - "OMS OVF Deploy":
+      - "General":
+        - id: viouser_pwd
+          name: "viouser password"
+          optional: 0
+          input: password
+        - id: vio_oms_ntp_server
+          name: "VIO NTP server"
+          optional: 0
+      - "Target vCenter":
+        - id: vio_oms_vcenter_hostname
+          name: "vCenter name"
+          optional: 0
+        - id: vio_oms_vcenter_username
+          name: "vCenter user"
+          optional: 0
+        - id: vio_oms_vcenter_pwd
+          name: "vCenter user password"
+          optional: 0
+          input: password
+        - id: vio_oms_datacenter_name
+          name: "vCenter Datacenter name"
+          optional: 0
+        - id: vio_oms_cluster_name
+          name: "vCenter management cluster name"
+          optional: 0
+      - "Storage":
+        - id: vio_oms_datastore
+          name: "Datastore"
+          optional: 0
+      - "Network":
+        - id: vio_oms_network
+          name: "Network"
+          optional: 0
+{% if network_ip_scheme == 'Static' %}
+        - id: vio_oms_ip_address
+          name: "VIO OMS static IP address"
+          optional: 0
+        - id: vio_oms_ip_subnet
+          name: "VIO OMS IP subnet"
+          optional: 0
+        - id: vio_oms_ip_gw
+          name: "VIO OMS IP gateway"
+          optional: 0
+        - id: vio_oms_dns_server
+          name: "VIO OMS DNS server"
+          optional: 0
+{% endif %}
+    - "VIO Initial Configuration":
+      - "General Configuration":
+        - id: syslog_server
+          name: "Syslog server"
+          optional: 0
+        - id: vio_oms_cluster_name
+          name: "Destination ESX cluster"
+          optional: 0
+      - "Storage":
+        - id: nova_datastore
+          name: "Nova datastore"
+          optional: 0
+        - id: glance_datastores
+          name: "Glance datastores"
+          optional: 0
+      - "Network":
+        - id: vio_public_lb_fqdn
+          name: "Public FQDN for API VIP"
+          optional: 0
+        - id: vio_public_lb_ip
+          name: "Public VIP"
+          optional: 0
+        - id: vio_network_mode
+          name: "VIO networking mode"
+          optional: 0
+          input: dropdown
+          options:
+            - id: "vDS"
+            - id: "NSX"
+        - id: vio_nsx_mgr_ip
+          name: "VIO NSX Manager IP"
+          optional: 0
+      - "Network (NSX-General)":
+        - id: vio_nsx_username
+          name: "VIO NSX Manager Username"
+          optional: 0
+        - id: vio_nsx_user_pwd
+          name: "VIO NSX Manager Password"
+          optional: 0
+          input: password
+        - id: vio_nsx_tz_name
+          name: "VIO NSX Transport Zone"
+          optional: 0
+        - id: vio_nsx_edge_cluster
+          name: "VIO NSX Edge ESX Cluster"
+          optional: 0
+        - id: vio_nsx_vds
+          name: "VIO NSX vDS"
+          optional: 0
+        - id: vio_nsx_ext_dvpg
+          name: "VIO NSX External Portgroup"
+          optional: 0
+      - "Network (VIO-Management)":
+        - id: vio_net_mgmt_dvpg
+          name: "VIO Management Portgroup"
+          optional: 0
+        - id: vio_nsx_mgmt_ip_range_start
+          name: "VIO NSX Management IP range START"
+          optional: 0
+        - id: vio_nsx_mgmt_ip_range_end
+          name: "VIO NSX Management IP range END"
+          optional: 0
+        - id: vio_nsx_mgmt_subnet_mask
+          name: "VIO NSX Management Subnet Mask"
+          optional: 0
+        - id: vio_nsx_mgmt_gw
+          name: "VIO NSX Management Gateway"
+          optional: 0
+        - id: vio_nsx_mgmt_dns_server
+          name: "VIO NSX Management DNS Server"
+          optional: 0
+      - "Network (VIO-API)":
+        - id: vio_net_api_dvpg
+          name: "VIO API Portgroup"
+          optional: 0
+        - id: vio_nsx_api_ip_range_start
+          name: "VIO NSX API IP range START"
+          optional: 0
+        - id: vio_nsx_api_ip_range_end
+          name: "VIO NSX API IP range END"
+          optional: 0
+        - id: vio_nsx_api_subnet_mask
+          name: "VIO NSX API Subnet Mask"
+          optional: 0
+        - id: vio_nsx_api_gw
+          name: "VIO NSX API Gateway"
+          optional: 0
+        - id: vio_nsx_api_dns_server
+          name: "VIO NSX API DNS Server"
+          optional: 0
+      - "Keystone - Local DB":
+        - id: vio_local_admin
+          name: "VIO local Administrator name"
+          optional: 1
+        - id: vio_local_admin_pwd
+          name: "VIO local Administrator password"
+          optional: 1
+          input: password
+      - "Keystone - AD":
+        - id: vio_ad_encryption
+          name: "Encryption"
+          optional: 1
+          input: dropdown
+          options:
+            - id: "True"
+            - id: "False"
+        - id: vio_admin_tenant_name
+          name: "VIO Admin Tenant Name"
+          optional: 0
+        - id: vio_addc_hostname
+          name: "AD Domain Controller"
+          optional: 1
+        - id: vio_addc_port
+          name: "AD DC Port"
+          optional: 1
+          default: "636"
+        - id: vio_addc_username
+          name: "AD username"
+          optional: 1
+        - id: vio_addc_user_pwd
+          name: "AD user password"
+          optional: 1
+        - id: vio_local_admin
+          name: "VIO local Administrator name"
+          optional: 1
+        - id: vio_local_admin_pwd
+          name: "VIO local Administrator password"
+          optional: 1
+        - id: vio_ad_user_tree_dn
+          name: "AD User Tree DN"
+          optional: 1
+        - id: vio_ad_user_filter
+          name: "AD User Filter"
+          optional: 1
+        - id: vio_ad_user_object_class
+          name: "AD User objectClass"
+          optional: 1
+        - id: vio_ad_user_id_attribute
+          name: "AD User ID Attribute"
+          optional: 1
+        - id: vio_ad_user_name_attribute
+          name: "AD User Name Attribute"
+          optional: 1
+        - id: vio_ad_user_mail_attribute
+          name: "AD User Mail Attribute"
+          optional: 1
+        - id: vio_ad_user_pwd_attribute
+          name: "AD User Password Attribute"
+          optional: 1
+        - id: vio_ad_group_tree_dn
+          name: "AD Group Tree DN"
+          optional: 1
+        - id: vio_ad_group_filter
+          name: "AD Group Filter"
+          optional: 1
+        - id: vio_ad_group_object_class
+          name: "AD Group objectClass"
+          optional: 1
+        - id: vio_ad_group_id_attribute
+          name: "AD Group ID Attribute"
+          optional: 1
+        - id: vio_ad_group_name_attribute
+          name: "AD Group Name Attribute"
+          optional: 1
+        - id: vio_ad_group_member_attribute
+          name: "AD Group Member Attribute"
+          optional: 1
+        - id: vio_ad_group_description_attribute
+          name: "AD Group Description Attribute"
+          optional: 1
+{% endif %}
+
+{% if deploy_cna == '1' %}
+  - Cloud-Native Applications:
+    - Swarm:
+      - "Consul Server":
+        - id: consul_server
+          name: "Consul IP Address"
+          optional: 0
+          help: "IP address of Consul Server -- Any Will Do."
+      - "External Consul Server":
+        - id: external_consul_server
+          name: "External Consul IP Address"
+          optional: 0
+          help: "IP address of Externally Exposed Consul Server."
+    - Bonneville:
+      - Directory:
+        - id: bonneville_dir
+          name: "Bonneville Path"
+          optional: 1
+          help: "Path to bonneville install files (default: /tmp/bonneville)."
+      - Target:
+        - id: bonneville_target_host
+          name: "ESX Target"
+          optional: 0
+          help: "IP address of ESX Host for Bonneville install."
+      - Name:
+        - id: bonneville_docker_name
+          name: "VM Name"
+          optional: 0
+          help: "What to name the Bonneville VM on ESXi."
+      - Docker Host:
+        - id: bonneville_docker_host
+          name: "Docker Engine #1"
+          optional: 0
+          help: "IP address of Bonneville VM (fill in late)."
+      - Port:
+        - id: bonneville_docker_port
+          name: "Port"
+          optional: 0
+          help: "Docker API Port on Bonneville VM."
+{% endif %}
+
+{% if deploy_vrops == '1' %}
+  - vRealize Operations:
+    - Accounts:
+      - "vROPS Service Account":
+        - id: svc_vrops_is_service_account
+          name: "Service Account"
+          default: 'svc-vrops'
+          help: "vROPS Read-Only Role for registration to vSphere"
+        - id: svc_vrops_password
+          name: "Password"
+          input: password
+          default: 'VMware1!'
+          help: "Service account password."
+        - id: svc_vrops_is_service_account
+          name: "Service Account"
+          default: '1'
+          input: checkbox
+          help: "Checked if this is a service account."
+      - "vROPS-Admin Account":
+        - id: svc_vrops_admin_name
+          name: "Account"
+          default: 'vROPS-Admin'
+          help: "VROPS Admin Role"
+        - id: svc_vrops_admin_password
+          name: "Password"
+          input: password
+          default: 'VMware1!'
+          help: "Account password"
+        - id: svc_vrops_admin_is_service_account
+          name: "Service Account"
+          default: '0'
+          input: checkbox
+          help: "Checked if this is a service account."
+        - id: svc_vrops_admin_group
+          name: "Group Membership"
+          input: dropdown
+          default: service_account_sddc_both
+          help: "Group to which this user belongs."
+          options:
+            - id: service_account_operators
+              name: "Account Operators (BuiltIn)"
+            - id: service_acccount_local_admins
+              name: "Local IaaS Administrators"
+            - id: service_account_orchestrator_admins
+              name: 'Orchestrator-Admins'
+            - id: service_account_sddc_admins
+              name: "SDDC-Admins"
+            - id: service_account_sddc_ops
+              name: "SDDC-Ops"
+            - id: service_account_sddc_both
+              name: "SDDC-Admins, SDDC-Ops"
+            - id: service_account_itac_tenantadmins
+              name: "ITAC-TenantAdmins"
+            - id: service_account_itac_tenantarchitects
+              name: "ITAC-TenantArchitects"
+      - "vROPS-Power Account":
+        - id: svc_vrops_power_name
+          name: "Account"
+          default: 'vROPS-Power'
+          help: "vROPS Power user"
+        - id: svc_vrops_power_password
+          name: "Password"
+          input: password
+          default: 'VMware1!'
+          help: "Account password"
+        - id: svc_vrops_power_is_service_account
+          name: "Service Account"
+          default: '0'
+          input: checkbox
+          help: "Checked if this is a service account."
+        - id: svc_vrops_power_group
+          name: "Group Membership"
+          input: dropdown
+          default: service_account_sddc_ops
+          help: "Group to which this user belongs."
+          options:
+            - id: service_account_operators
+              name: "Account Operators (BuiltIn)"
+            - id: service_acccount_local_admins
+              name: "Local IaaS Administrators"
+            - id: service_account_orchestrator_admins
+              name: 'Orchestrator-Admins'
+            - id: service_account_sddc_admins
+              name: "SDDC-Admins"
+            - id: service_account_sddc_ops
+              name: "SDDC-Ops"
+            - id: service_account_sddc_both
+              name: "SDDC-Admins, SDDC-Ops"
+            - id: service_account_itac_tenantadmins
+              name: "ITAC-TenantAdmins"
+            - id: service_account_itac_tenantarchitects
+              name: "ITAC-TenantArchitects"
+      - "vROPS-user-01 Account":
+        - id: svc_vrops_user01_name
+          name: "Account"
+          default: 'vROPS-user-01'
+          help: "Test a/c"
+        - id: svc_vrops_user01_password
+          name: "Password"
+          input: password
+          default: 'VMware1!'
+          help: "Account password"
+        - id: svc_vrops_user01_is_service_account
+          name: "Service Account"
+          default: '0'
+          input: checkbox
+          help: "Checked if this is a service account."
+        - id: svc_vrops_user01_group
+          name: "Group Membership"
+          input: dropdown
+          default: service_account_sddc_ops
+          help: "Group to which this user belongs."
+          options:
+            - id: service_account_operators
+              name: "Account Operators (BuiltIn)"
+            - id: service_acccount_local_admins
+              name: "Local IaaS Administrators"
+            - id: service_account_orchestrator_admins
+              name: 'Orchestrator-Admins'
+            - id: service_account_sddc_admins
+              name: "SDDC-Admins"
+            - id: service_account_sddc_ops
+              name: "SDDC-Ops"
+            - id: service_account_sddc_both
+              name: "SDDC-Admins, SDDC-Ops"
+            - id: service_account_itac_tenantadmins
+              name: "ITAC-TenantAdmins"
+            - id: service_account_itac_tenantarchitects
+              name: "ITAC-TenantArchitects"
+    - Servers:
+      - id: vrops_loadbalancer_address
+        name: "Load Balancer"
+        optional: 0
+        default: vrops-cluster-01
+        help: "Hostname of the Load Balancer."
+      - id: vrops_master_node_address
+        name: "Master Node"
+        optional: 0
+        default: vrops-mstrn-01
+        help: "Hostname of Master Node"
+      - id: vrops_master_node_ip
+        name: "IP Address"
+        optional: 0
+        help: "The IP address for the master node"
+      - id: vrops_replica_node_address
+        name: "Replica Master Node"
+        optional: 0
+        default: vrops-repln-02
+        help: "Hostname of the Replica Node"
+      - id: vrops_replica_node_ip
+        name: "IP Address"
+        optional: 0
+        help: "The IP address for the Replica Node"
+      - id: vrops_data_node1_address
+        name: "Data Node #1"
+        optional: 0
+        default: vrops-datan-03
+        help: "Hostname of an additional Data Node"
+      - id: vrops_data_node1_ip
+        name: "IP Address"
+        optional: 0
+        help: "The IP address for an additional Data Node"
+      - id: vrops_data_node2_address
+        name: "Data Node #2"
+        optional: 0
+        default: vrops-datan-04
+        help: "Hostname of an additional Data Node"
+      - id: vrops_data_node2_ip
+        name: "IP Address"
+        optional: 0
+        help: "The IP address for the replica node"
+    - Collectors:
+      - id: vrops_remote_collector1
+        name: "Remote Collector #1"
+        optional: 0
+        default: vrops-rmtcol-01
+        help: "Hostname of first collector."
+      - id: vrops_remote_collector2
+        name: "Remote Collector #2"
+        optional: 0
+        default: vrops-rmtcol-02
+        help: "Hostname of second collector."
+    - Deployment:
+      - id: vrops_ova
+        name: "OVA"
+        optional: 0
+        help: "The name of the OVA file"
+      - id: vrops_deployment_option
+        name: "Deployment Option"
+        optional: 0
+        input: dropdown
+        help: "Indicates the size of the environment"
+        options:
+          - id: "small"
+          - id: "medium"
+          - id: "large"
+          - id: "smallrc"
+          - id: "largerc"
+          - id: "xsmall"
+      - id: vrops_poweron
+        name: "Power on"
+        optional: 0
+        input: checkbox
+        help: "Whether to power up the vROps instance once deployed."
+    - SDDC Info:
+      - id: vrops_datastore
+        name: "Datastore"
+        optional: 0
+        input: dropdown
+        options: mgmt_vc_datastores
+        help: "The datastore on which to place the OVA"
+      - id: vrops_network
+        name: "Network"
+        optional: 0
+        input: dropdown
+        options: mgmt_vc_networks
+        help: "The network use for the OVA"
+    - Network Info:
+      - id: vrops_gateway
+        name: "Gateway"
+        optional: 0
+        help: "The default gateway address for this VM"
+      - id: vrops_dns
+        name: "DNS"
+        optional: 0
+        help: "The domain name server(s) for this VM (comma seperated)"
+      - id: vrops_netmask
+        name: "Netmask"
+        optional: 0
+        help: "The netmask or prefix for this interface."
+    - Initialization:
+      - id: vrops_license_key
+        name: "Licence Key"
+        optional: 0
+        help: "Product Licence Key"
+{% endif %}
+
+{% if deploy_vra == '1' %}
+  - vRealize Automation:
+    - Accounts:
+      - "vRO Service Account":
+        - id: svc_vra_name
+          name: "Account"
+          default: 'svc-vro'
+          help: "vRealize Orechestrator Service Account"
+        - id: svc_vro_password
+          name: "Password"
+          input: password
+          default: 'VMware1!'
+          help: "Service Account password"
+        - id: svc_vro_is_service_account
+          name: "Service Account"
+          default: '1'
+          input: checkbox
+          help: "Checked if this is a service account."
+        - id: svc_vra_account_group
+          name: "Group Membership"
+          input: dropdown
+          default: service_account_orchestrator_admins
+          help: "Group to which this user belongs."
+          options:
+            - id: service_account_operators
+              name: "Account Operators (BuiltIn)"
+            - id: service_acccount_local_admins
+              name: "Local IaaS Administrators"
+            - id: service_account_orchestrator_admins
+              name: 'Orchestrator-Admins'
+            - id: service_account_sddc_admins
+              name: "SDDC-Admins"
+            - id: service_account_sddc_ops
+              name: "SDDC-Ops"
+            - id: service_account_sddc_both
+              name: "SDDC-Admins, SDDC-Ops"
+            - id: service_account_itac_tenantadmins
+              name: "ITAC-TenantAdmins"
+            - id: service_account_itac_tenantarchitects
+              name: "ITAC-TenantArchitects"
+      - "SSO Service Account":
+        - id: svc_sso_name
+          name: "Account"
+          default: 'svc-vss'
+          help: "Single-Sign-On Service Account - Used for registration with Active Directory"
+        - id: svc_sso_password
+          name: "Password"
+          input: password
+          default: 'VMware1!'
+          help: "Service Account password"
+        - id: svc_sso_is_service_account
+          name: "Service Account"
+          default: '1'
+          input: checkbox
+          help: "Checked if this is a service account."
+      - "SMTP Service Account":
+        - id: svc_smtp_name
+          name: "Account"
+          default: 'svc-smtp'
+          help: "SMTP Service Account - Used for auhtentication where required for SMTP services"
+        - id: svc_smtp_password
+          name: "Password"
+          input: password
+          default: 'VMware1!'
+          help: "Service Account password"
+        - id: svc_smtp_is_service_account
+          name: "Service Account"
+          default: '1'
+          input: checkbox
+          help: "Checked if this is a service account."
+      - "SRM Service Account":
+        - id: svc_srm_name
+          name: "Account"
+          default: 'svc-smtp'
+          help: "vCenter Site Recovery Manager Service Account - Used for installing on Windows"
+        - id: svc_srm_password
+          name: "Password"
+          input: password
+          default: 'VMware1!'
+          help: "Service Account password"
+        - id: svc_srm_is_service_account
+          name: "Service Account"
+          default: '1'
+          input: checkbox
+          help: "Checked if this is a service account."
+    - Deployment:
+      - id: vra_ova_location
+        name: "OVA Location"
+        optional: 0
+        help: "Location of OVA "
+      - id: vra_ova
+        name: "OVA"
+        optional: 0
+        help: "The vApp Name in vCenter"
+      - id: vra_datastore
+        name: "Datastore"
+        optional: 0
+        input: dropdown
+        options: mgmt_vc_datastores
+        help: "The datastore on which to place the OVA"
+      - id: vra_network
+        name: "Network"
+        optional: 0
+        help: "The Network on which to place the OVA"
+        input: dropdown
+        options: mgmt_vc_networks
+      - id: vra_name
+        name: "VM Name"
+        optional: 0
+        help: "The VM name for the installed vRealize Automation"
+      - id: vra_ssh_enabled
+        name:  "VRA Enable SSH"
+        optional: 0
+        input: dropdown
+        options:
+          - id: "True"
+          - id: "False"
+        help: "Enable SSH on vRA"
+      - id: vra_delete
+        name:  "Replace VRA if Exists"
+        optional: 0
+        input: checkbox
+        help: "Replace vRA if it exists"
+      - id: vra_poweron
+        name: "Power on"
+        optional: 0
+        input: checkbox
+        help: "Power on VRA after deployment"
+    - Networking:
+      - id: vra_address_version
+        input: dropdown
+        options:
+          - id: "DHCPV4+AUTOV6"
+          - id: "DHCPV4+STATICV6"
+          - id: "STATICV4+AUTOV6"
+          - id: "STATICV4+STATICV6"
+          - id: "AUTOV6"
+          - id: "STATICV6"
+        name: "VRA Address Version"
+        optional: 1
+        help: "VRA Address Version"
+      - id: vra_ip
+        name: "VRA ppliance IP Address"
+        optional: 1
+        help: " The VRA Appliance IP Address"
+      - id: vra_netmask
+        name: "VRA Appliance IP Address Netmask"
+        optional: 1
+        help: " The VRA Appliance IP Address Netmask"
+      - id: vra_gateway
+        name: "VRA Appliance Gateway"
+        optional: 1
+        help: " The VRA Appliance Gateway"
+      - id: vra_ipv6
+        name: "VRA Appliance IPV6 Address"
+        optional: 1
+        help: " The VRA Appliance DNS Server 2"
+      - id: vra_ipv6_gateway
+        name: "VRA Appliance IPv6 Gateway"
+        optional: 1
+        help: " The VRA Appliance IPv6 Gateway"
+      - id: vra_ipv6_prefix
+        name: "VRA Appliance IPv6 Prefix"
+        optional: 0
+        help: " The VRA Appliance IPV6 Prefix"
+      - id: vra_dns_server1
+        name: "VRA Appliance DNS Server 1"
+        optional: 1
+        help: " The VRA Appliance DNS Server 1"
+      - id: vra_dns_server2
+        name: "VRA Appliance DNS Server 2"
+        optional: 1
+        help: " The VRA Appliance DNS Server 2"
+      - id: vra_domain
+        name: "VRA Domain"
+        optional: 1
+        help: " The VRA Domain of the Appliance"
+      - id: vra_search_path
+        name: "VRA Appliance Domain Search Path"
+        optional: 1
+        help: " The VRA Domain Search Path"
+    - vRA HTTP Proxy:
+      - id: vra_http_proxy_server
+        name: "HTTP Proxy Server"
+        optional: 1
+        help: "HTTP Proxy IP Address"
+      - id: vra_http_proxy_port
+        name: "HTTP Proxy Port"
+        optional: 1
+        help: "HTTP Proxy Ports"
+      - id: vra_http_proxy_user
+        name: "HTTP Proxy User Name"
+        optional: 1
+        help: "HTTP Proxy User Name"
+      - id: vra_http_proxy_password
+        name: "HTTP Proxy Password"
+        optional: 1
+        help: "HTTP Proxy Password"
+        input: password
+    - General Configuration:
+      - id: vra_config_type
+        name:  "VRA Configuration Type"
+        optional: 0
+        input: dropdown
+        options:
+          - id: "Default"
+          - id: "Windows"
+        help: "Default for General Ansible configuration else choose windows"
+      - id: vra_host_name
+        name: "VRA Host Name"
+        optional: 0
+        help: "Host name for the VRA"
+      - id: vra_port
+        name: "VRA Appliance Port"
+        optional: 0
+        help: "The port at which VRA Appliance is accessed"
+      - id: vra_user
+        name: "VRA User"
+        optional: 0
+        help: "The vra user id"
+      - id: vra_root_password
+        name: "vRA Root Password"
+        optional: 0
+        input: password
+        help: "Root password"
+    - NTP Configuration:
+      - id: vra_ntp_server
+        name: "VRA NTP Server"
+        optional: 0
+        help: "The time server hostname or ip"
+    - SSL  Configuration:
+      - id: vra_ssl_org
+        name: "VRA SSL ORG"
+        optional: 0
+        help: "Organization name for ssl cert."
+      - id: vra_ssl_org_unit
+        name: "VRA SSL ORG. UNIT"
+        optional: 0
+        help: "The BU name for ssl cert."
+      - id: vra_ssl_country
+        name: "VRA SSL COUNTRY"
+        optional: 0
+        help: "The country for ssl cert."
+    - SSO  Configuration:
+      - id: vra_sso_host
+        name: "VRA SSO HOST"
+        optional: 0
+        help: "The sso server that vra should use"
+      - id: vra_sso_port
+        name: "VRA SSO PORT"
+        optional: 0
+        help: "The port of the sso server"
+      - id: vra_sso_user
+        name: "VRA SSO USER"
+        optional: 0
+        help: "sso user id"
+      - id: vra_sso_password
+        name: "VRA SSO PASSWORD"
+        optional: 0
+        help: "sso password"
+        input: password
+    - License  Configuration:
+      - id: vra_license_key
+        name: "VRA LICENSE KEY"
+        optional: 0
+        help: "The license key to use"
+    - Postgres DB  Configuration:
+      - id: vra_postgres_host
+        name: "VRA Postgres DB host"
+        optional: 0
+        help: " VRA Appliance instance name"
+      - id: vra_postgres_port
+        name: "VRA Postgres DB  Port"
+        optional: 0
+        help: " VRA Postgres DB Port"
+      - id: vra_postgres_database
+        name: "VRA Postgres Database"
+        optional: 0
+        help: " VRA Postgres Database"
+      - id: vra_postgres_user
+        name: "VRA Postgres user"
+        optional: 0
+        help: " VRA Postgres User"
+      - id: vra_postgres_password
+        name: "VRA Postgres Password"
+        optional: 0
+        help: " VRA Postgres Password"
+        input: password
+    - Messaging Configuration:
+      - id: vra_messaging_host
+        name: "VRA Messaging Host"
+        optional: 0
+        help: " VRA Messaging Host"
+      - id: vra_messaging_port
+        name: "VRA Messaging Port"
+        optional: 0
+        help: " VRA Messaging Port"
+      - id: vra_messaging_user
+        name: "VRA Messaging User"
+        optional: 0
+        help: " VRA Messaging User"
+      - id: vra_messaging_password
+        name: "VRA Messaging Password"
+        optional: 0
+        help: " VRA Messaging Password"
+        input: password
+    - Tenant Configuration:
+      - id: vra_tenant_id
+        name: "VRA Tenant Id"
+        optional: 0
+        help: " VRA Tenant Id"
+      - id: vra_tenant_user
+        name: "VRA Tenant User"
+        optional: 0
+        help: " VRA Tenant User"
+      - id: vra_tenant_password
+        name: "VRA Tenant password"
+        optional: 0
+        help: " VRA Tenant Password"
+        input: password
+      - id: vra_tenant_url
+        name: "VRA Tenant URL"
+        optional: 0
+        help: " VRA Tenant URL"
+      - id: vra_tenant_name
+        name: "VRA Tenant Name"
+        optional: 0
+        help: " VRA Tenant Name"
+      - id: vra_tenant_description
+        name: "VRA Tenant Description"
+        optional: 0
+        help: " VRA Tenant Description"
+      - id: vra_tenant_email
+        name: "VRA Tenant Email"
+        optional: 0
+        help: " VRA Tenant Email"
+      - id: vra_default_tenant
+        input: dropdown
+        options:
+          - id: "True"
+          - id: "False"
+        name: "VRA Default Tenant"
+        optional: 0
+        help: "VRA Default Tenant"
+    - vRealize Automation - Windows:
+      - vCenter Information:
+        - id: win_vra_vcacisvm
+          name: "Identity Server Name"
+          optional: 0
+          help: "Name of Identity Server VM"
+        - id: win_vra_vcacisgp
+          name: "Identity Server Password"
+          input: password
+          optional: 0
+          help: "Password for Identity Server  VM"
+        - id: win_vra_vcacapvm
+          name: "vCAC Appliance Name"
+          optional: 0
+          help: "Name of vCAC appiance"
+        - id: win_vra_vcacapgp
+          name: "vCAC Password"
+          input: password
+          optional: 0
+          help: "Password for vCAC appliance"
+        - id: win_vra_lickey
+          name: "License key"
+          optional: 0
+          help: "vCAC License key"
+        - id: win_vra_vcaciaasvm
+          name: "IAAS Name"
+          optional: 0
+          help: "Name of IAAS appliance"
+        - id: win_vra_vcaciaasvmgu
+          name: "IAAS administrator"
+          optional: 0
+          help: "IAAS administrator username"
+        - id: win_vra_vcaciaasvmgp
+          name: "IAAS Administrator password"
+          optional: 0
+          input: password
+          help: "IAAS administrator password"
+        - id: win_vra_vcaciaasip
+          name: "IAAS IP"
+          optional: 0
+          help: "IP address for IAAS"
+      - Deployment:
+        - id: win_vra_vcac_is_ova
+          name: "VCAC IS OVA"
+          optional: 1
+          help: "Location and name of VCAC Identity Server OVA"
+        - id: win_vra_vcac_is_ip
+          name: "VCAC IS IP"
+          optional: 0
+          help: "IP address of VCAC Identity Server Host"
+        - id: win_vra_vcac_ap_ova
+          name: "VCAC OVA"
+          optional: 1
+          help: "Location and name of VCAC Appliance"
+        - id: win_vra_vcac_ap_ip
+          name: "VCAC IP"
+          optional: 0
+          help: "IP address of VCAC appliance"
+        - id: win_vra_gateway
+          name: "Gateway"
+          optional: 0
+          help: "Gateway"
+        - id: win_vra_netmask
+          name: "Netmask"
+          optional: 0
+          help: "Netmask"
+        - id: win_vra_dns
+          name: "DNS"
+          optional: 0
+          help: "DNS"
+        - id: win_vra_cluster
+          name: "Management Cluster"
+          optional: 0
+          input: dropdown
+          options: mgmt_vc_cluster
+          help: "Cluter to install vRA"
+        - id: win_vra_network_name
+          name: "Network"
+          optional: 0
+          input: dropdown
+          options: mgmt_vc_networks
+          help: "Network on which to place the OVA"
+        - id: win_vra_datastore
+          name: "Datastore"
+          optional: 1
+          input: dropdown
+          options: mgmt_vc_datastores
+          help: "Datastore on which to place the OVA"
+        - id: win_vra_vm_host
+          name: "VM Host"
+          optional: 1
+          help: "The VM name for vRA installation"
+      - Certificate Generation Information:
+        - id: win_vra_cert_org
+          name: "Organization"
+          optional: 0
+          help: "Organization"
+        - id: win_vra_cert_org_unit
+          name: "Organization Unit"
+          optional: 0
+          help: "Organization"
+        - id: win_vra_cert_country
+          name: "Country"
+          optional: 0
+          help: "Country, use two characters only"
+        - id: win_vra_cert_state
+          name: "State"
+          optional: 0
+          help: "State, use two characters only"
+        - id: win_vra_cert_city
+          name: "City"
+          optional: 0
+          help: "City"
+        - id: win_vra_cert_email
+          name: "Email"
+          optional: 0
+          help: "Email address"
+      - XML Variables:
+        - id: win_vra_dns_sufix
+          name: "DNS Suffix"
+          optional: 0
+          help: "Used to create the FQDN of the machines"
+        - id: win_vra_sso_username
+          name: "SSO Username"
+          optional: 0
+          help: "SSO for Identity Server"
+        - id: win_vra_sso_password
+          name: "SSO Password"
+          optional: 0
+          input: password
+          help: "SSO password for Identity Server"
+        - id: win_vra_security_password
+          name: "Security Password"
+          optional: 0
+          input: password
+          help: "Security Password"
+        - id: win_vra_service_user_password
+          name: "Service User Password"
+          input: password
+          optional: 0
+          help: "Service User Password"
+        - id: win_vra_ntp_server1
+          name: "NTP Server 1"
+          optional: 0
+          help: "NTP server 1"
+        - id: win_vra_ntp_server2
+          name: "NTP Server 2"
+          optional: 1
+          help: "NTP server 2"
+{% endif %}
+
+{% if deploy_vrli == '1' %}
+  - vRealize Log Insight:
+    - Accounts:
+      - "vRLI Service Account":
+        - id: svc_vrli_is_service_account
+          name: "Service Account"
+          default: 'svc-vrli'
+          help: "Readonly Service a/c for integrating LogInsight to vSphere Syslog"
+        - id: svc_vrli_password
+          name: "Password"
+          input: password
+          default: 'VMware1!'
+          help: "Service account password."
+        - id: svc_vrli_is_service_account
+          name: "Service Account"
+          default: '1'
+          input: checkbox
+          help: "Checked if this is a service account."
+      - "vRLI-ReadOnly Account":
+        - id: svc_vrli_readonly_name
+          name: "Account"
+          default: 'vLI-ReadOnly'
+          help: "Read-Only Operator"
+        - id: svc_vrli_readonly_password
+          name: "Password"
+          input: password
+          default: 'VMware1!'
+          help: "Account password"
+        - id: svc_vrli_readonly_is_service_account
+          name: "Service Account"
+          default: '0'
+          input: checkbox
+          help: "Checked if this is a service account."
+        - id: svc_vrli_readonly_group
+          name: "Group Membership"
+          input: dropdown
+          default: service_account_sddc_ops
+          help: "Group to which this user belongs."
+          options:
+            - id: service_account_operators
+              name: "Account Operators (BuiltIn)"
+            - id: service_acccount_local_admins
+              name: "Local IaaS Administrators"
+            - id: service_account_orchestrator_admins
+              name: 'Orchestrator-Admins'
+            - id: service_account_sddc_admins
+              name: "SDDC-Admins"
+            - id: service_account_sddc_ops
+              name: "SDDC-Ops"
+            - id: service_account_sddc_both
+              name: "SDDC-Admins, SDDC-Ops"
+            - id: service_account_itac_tenantadmins
+              name: "ITAC-TenantAdmins"
+            - id: service_account_itac_tenantarchitects
+              name: "ITAC-TenantArchitects"
+      - "vRLI-SuperAdmin Account":
+        - id: svc_vrli_user01_name
+          name: "Account"
+          default: 'vLI-SuperAdmin'
+          help: "Test user a/c"
+        - id: svc_vrli_user01_password
+          name: "Password"
+          input: password
+          default: 'VMware1!'
+          help: "Account password"
+        - id: svc_vrli_user01_is_service_account
+          name: "Service Account"
+          default: '0'
+          input: checkbox
+          help: "Checked if this is a service account."
+        - id: svc_vrli_user01_group
+          name: "Group Membership"
+          input: dropdown
+          default: service_account_sddc_ops
+          help: "Group to which this user belongs."
+          options:
+            - id: service_account_operators
+              name: "Account Operators (BuiltIn)"
+            - id: service_acccount_local_admins
+              name: "Local IaaS Administrators"
+            - id: service_account_orchestrator_admins
+              name: 'Orchestrator-Admins'
+            - id: service_account_sddc_admins
+              name: "SDDC-Admins"
+            - id: service_account_sddc_ops
+              name: "SDDC-Ops"
+            - id: service_account_sddc_both
+              name: "SDDC-Admins, SDDC-Ops"
+            - id: service_account_itac_tenantadmins
+              name: "ITAC-TenantAdmins"
+            - id: service_account_itac_tenantarchitects
+              name: "ITAC-TenantArchitects"
+    - Deployment:
+      - id: vrli_ova_location
+        name: "OVA Directory"
+        optional: 0
+        help: "The directory containing the vRLI OVA file"
+      - id: vrli_ova
+        name: "OVA Filename"
+        optional: 0
+        help: "The name of the vRLI OVA file"
+      - id: vrli_name
+        name: "VM Name"
+        optional: 0
+        help: "The vRealize Log Insight VM name"
+      - id: vrli_root_password
+        name: "VRLI Root Password"
+        optional: 0
+        input: password
+      - id: deployment_size
+        name: "Deployment Size"
+        input: dropdown
+        options:
+          - id: xsmall
+        help: "Determines the CPU and memory resources of the vRLI VM"
+      - id: start_vm
+        name: "Start VM after deployment"
+        input: checkbox
+        optional: 0
+    - Infrastructure:
+      - id: vrli_cluster
+        name: "Management Cluster"
+        input: dropdown
+        optional: 0
+        options: mgmt_vc_cluster
+        help: "The vCenter Cluster in which to place the OVA"
+      - id: vrli_datastore
+        name: "Datastore"
+        input: dropdown
+        optional: 0
+        options: mgmt_vc_datastores
+        help: "The datastore on which to place the OVA"
+    - Network:
+      - id: vrli_host_name
+        name: "VRLI Host Name"
+        optional: 0
+        help: "Host name for the vRLI VM"
+      - id: vrli_network
+        name: "Network"
+        input: dropdown
+        optional: 0
+        options: mgmt_vc_networks
+        help: "The network on which to place the OVA"
+      - id: vrli_gateway
+        name: "Gateway"
+        optional: 0
+        help: "The network gateway to be used by the vRLI VM"
+      - id: vrli_dns
+        name: "DNS"
+        optional: 0
+        help: "The domain name server to be used by the vRLI VM"
+      - id: vrli_netmask
+        name: "Netmask"
+        optional: 0
+        help: "The subnet mask to be used by the vRLI VM"
+      - id: vrli_ip
+        name: "IP Address"
+        optional: 0
+        help: "The IP address to assign the vRLI VM"
+{% endif %}
+
+{% if deploy_vrb == '1' %}
+  - "vRealize Business":
+    - Deployment:
+      - id: vrealizeb_ova
+        name: "OVA"
+        optional: 0
+        help: "The vApp Name in vCenter"
+      - id: vrealizeb_datastore
+        name: "Datastore"
+        optional: 0
+        input: dropdown
+        options: mgmt_vc_datastores
+        help: "The datastore on which to place the OVA"
+      - id: vrealizeb_network
+        name: "Network On Which to Place the OVA"
+        optional: 0
+        input: dropdown
+        options: mgmt_vc_networks
+        help: "The Network  on which to place the OVA"
+      - id: vrealizeb_name
+        name: "VM Name"
+        optional: 0
+        help: "The VM name for the installed vRealize Business Standard"
+      - id: vrb_ssh_enabled
+        name:  "VRB Enable SSH"
+        optional: 0
+        input: dropdown
+        options:
+          - id: "True"
+          - id: "False"
+        help: "Enable SSH on vRB"
+      - id: vrb_delete
+        name:  "Replace VRB if Exists"
+        optional: 0
+        input: checkbox
+        help: "Replace VRB if it exists"
+      - id: vrb_poweron
+        name: "Power on"
+        optional: 0
+        input: checkbox
+        help: "Power on VRB after deployment"
+    - "User Information":
+      - id: vrb_default_admin_user
+        name: "Admin User"
+        optional: 0
+        help: "Default User of VRB"
+      - id: vrealizeb_itfm_root_password
+        name: "Admin User Password"
+        optional: 0
+        input: password
+    - "Networking":
+      - id: vrb_address_version
+        name: "Address Version"
+        optional: 0
+        input: dropdown
+        options:
+          - id: "DEFAULT"
+          - id: "STATICV4+AUTOV6"
+          - id: "STATICV4+STATICV6"
+      - id: vrb_host_name
+        name: "Host Name"
+        optional: 1
+        help: "DNS host name to use for vRealize Business VM"
+      - id: vrb_ip_address
+        name: "IP Address"
+        optional: 0
+        help: "IP address to assign to the vRealize Business VM"
+      - id: vrb_ip_netmask
+        name: "Netmask"
+        optional: 1
+        help: "IP netmask for the vRealize Business VM"
+      - id: vrb_gateway_address
+        name: "Default Gateway"
+        optional: 1
+        help: "Default gateway address for the vRealize Business VM"
+      - id: vrb_dns_server1
+        name: "DNS Server Address"
+        optional: 1
+        help: "IP address for the DNS Server vRealize Business VM shoould use"
+      - id: vrb_dns_server2
+        name: "DNS Server Address"
+        optional: 1
+        help: "IP address for the DNS Server vRealize Business VM shoould use"
+      - id: vrb_ipv6_address
+        name: "Ipv6 Address"
+        optional: 1
+        help: "IPV6  addresse"
+      - id: vrb_ipv6_prefix
+        name: "Ipv6 Address Prefix"
+        optional: 1
+        help: "IPV6 Address Prefix"
+      - id: vrb_ipv6_gateway
+        name: "Ipv6 Gateway"
+        optional: 1
+        help: "IPV6 Gateway"
+    - "VRB HTTP Proxy":
+      - id: vrb_http_proxy_server
+        name: "HTTP Proxy Server"
+        optional: 1
+        help: "HTTP Proxy IP Address"
+      - id: vrb_http_proxy_port
+        name: "HTTP Proxy Port"
+        optional: 1
+        help: "HTTP Proxy Ports"
+      - id: vrb_http_proxy_user
+        name: "HTTP Proxy User Name"
+        optional: 1
+        help: "HTTP Proxy User Name"
+      - id: vrb_http_proxy_password
+        name: "HTTP Proxy Password"
+        optional: 1
+        help: "HTTP Proxy Password"
+        input: password
+    - "VRA SSO":
+      - id: vrb_cafe_host
+        name: "VRA SSO Host Name"
+        optional: 0
+        help: "Host Name of VRA"
+      - id: vrb_sso_tenant
+        name: "VRA SSO Default Tenant"
+        optional: 0
+        help: "Default Tenant of VRA"
+      - id: vrb_sso_admin
+        name: "VRA SSO Admin user"
+        optional: 0
+        help: "Admin User of VRA SSO"
+      - id: vrb_sso_password
+        name: "VRA SSO Admin Password"
+        optional: 0
+        help: "Admin Password of VRA SSO"
+        input: password
+    - "VRB Time Settings":
+      - id: vrb_time_sync_mode
+        name: "Time Sync Mode"
+        optional: 0
+        input: dropdown
+        options:
+          - id: "Disable"
+          - id: "Use ESX Host Time"
+          - id: "Use Time Server"
+      - id: vrb_time_server_1
+        name: "Time Server 1"
+        optional: 0
+        default: None
+        help: "Time Server 1"
+      - id: vrb_time_server_2
+        name: "Time Server 2"
+        optional: 0
+        default: None
+        help: "Time Server 2"
+      - id: vrb_time_server_3
+        name: "Time Server 3"
+        optional: 0
+        default: None
+        help: "Time Server 3"
+      - id: vrb_time_server_4
+        name: "Time Server 1"
+        optional: 0
+        default: None
+        help: "Time Server 4"
+      - id: vrb_time_server_5
+        name: "Time Server 5"
+        optional: 0
+        default: None
+        help: "Time Server 5"
+    - "VRB SSL":
+      - id: vrb_sslcert_mode
+        name: "SSL Certification Mode"
+        optional: 0
+        input: dropdown
+        options:
+          - id: "Generate Self Signed Certificate"
+          - id: "Import PEM encoded Certificate"
+      - id: vrb_sslcert_common_name
+        name: "Common Name"
+        optional: 0
+        help: SSL Cert Common Name
+      - id: vrb_sslcert_organization
+        name: "Organization"
+        optional: 1
+        help: Organization
+      - id: vrb_sslcert_organizational_unit
+        name: "Organizational Unit"
+        optional: 1
+        help: Organizational Unit
+      - id: vrb_sslcert_country
+        name: "Country"
+        optional: 1
+        help: Country
+      - id: vrb_sslcert_encoded_key
+        name: "RSA Private Key(.pem)"
+        optional: 1
+        help: RSA Private Key
+      - id: vrb_sslcert_encoded_certchain
+        name: "Certificates(.pem)"
+        optional: 1
+        help: Certificates(.pem)
+      - id: vrb_sslcert_passphrase
+        name: "Private Key Passphrase"
+        optional: 1
+        help: Private Key Passphrase
+{% endif %}
+
+- Install:
+{% if deploy_vcenter == '1' %}
+  - vCenter Server:
+    - id: psc_ova_deploy
+      name: "Deploy PSC"
+      commands:
+        - "/opt/supervio/supervio_play_tags site_vcsa.yml create_psc_task"
+        - "/opt/supervio/supervio_play_tags site_vcsa.yml prereqs,debug,psc,cleanup"
+    - id: psc_ova_cleanup
+      name: "Destroy PSC"
+      commands:
+        - "/opt/supervio/supervio_play_tags site_vcsa.yml cleanup_psc"
+    - id: vcenter_ova_deploy
+      name: "Deploy vCSA"
+      commands:
+        - "/opt/supervio/supervio_play_tags site_vcsa.yml create_vcsa_task"
+        - "/opt/supervio/supervio_play_tags site_vcsa.yml prereqs,debug,vcsa,cleanup"
+    - id: vcsa_ova_cleanup
+      name: "Destroy vCSA"
+      commands:
+        - "/opt/supervio/supervio_play_tags site_vcsa.yml cleanup_vcsa"
+    - id: combined_ova_deploy
+      name: "Deploy combined vCSA and PSC"
+      commands:
+        - "/opt/supervio/supervio_play_tags site_vcsa.yml create_combined_task"
+        - "/opt/supervio/supervio_play_tags site_vcsa.yml prereqs,debug,combined,cleanup"
+    - id: combined_ova_cleanup
+      name: "Destroy combined vCSA and PSC"
+      commands:
+        - "/opt/supervio/supervio_play_tags site_vcsa.yml cleanup_combined"
+{% endif %}
+
+{% if deploy_nsx == '1' %}
+  - NSX:
+    - id: nsx_ova_deploy
+      name: "Deploy NSX OVA"
+      commands:
+        - "/opt/supervio/supervio_play_tags site_nsx.yml nsxdeploy"
+    - id: install_nsx
+      name: "Prepare NSX"
+      commands:
+        - "/opt/supervio/supervio_play_tags site_nsx.yml prep_nsxmanager"
+    - id: install_nsx_instvirt
+      name: "Host Prep"
+      commands:
+        - "/opt/supervio/supervio_play_tags site_nsx.yml install_virt"
+    - id: install_nsx_instvirt_sync
+      name: "IP Pools"
+      commands:
+        - "/opt/supervio/supervio_play_tags site_nsx.yml ippools"
+    - id: install_nsx_controller
+      name: "Controller"
+      commands:
+        - "/opt/supervio/supervio_play_tags site_nsx.yml create_controller"
+    - id: install_nsx_vxlan
+      name: "VXLAN"
+      commands:
+        - "/opt/supervio/supervio_play_tags site_nsx.yml vxlan"
+    - id: install_nsx_netprep
+      name: "Segment ID"
+      commands:
+        - "/opt/supervio/supervio_play_tags site_nsx.yml segment_id"
+    - id: install_nsx_vdn
+      name: "Segment ID"
+      commands:
+        - "/opt/supervio/supervio_play_tags site_nsx.yml tzone"
+{% endif %}
+
+{% if deploy_vio == '1' %}
+  - VMware Integrated OpenStack:
+    - id: install_vio
+      name: "Deploy VIO OVA"
+      commands:
+        - "/opt/supervio/supervio_play_tags site_vio.yml create_vio_ovf_deploy_task"
+        - "/opt/supervio/supervio_play_tags site_vio.yml deploy_vio_oms"
+    - id: config_vio
+      name: "Configure VIO"
+      commands:
+#        - "/opt/supervio/supervio_play site_vio.yml"
+{% endif %}
+
+{% if deploy_cna == '1' %}
+  - Cloud-Native Applications:
+    - id: consul_base
+      name: "Consul Hosts"
+      commands:
+        - "/opt/supercna/supercna_play_inventory inventory.base base.yml"
+    - id: consul_consul
+      name: "Consul Cluster"
+      commands:
+        - "/opt/supercna/supercna_play consul.yml"
+
+    - id: photon_base
+      name: "Photon Base"
+      commands:
+        - "/opt/supercna/supercna_play_inventory inventory.base photon_base.yml"
+    - id: photon_docker
+      name: "Docker Setup"
+      commands:
+        - "/opt/supercna/supercna_play photon_docker.yml"
+
+    - id: bonneville_install
+      name: "Deploy to ESXi"
+      commands:
+        - "/opt/supercna/supercna_play bonneville_install.yml"
+
+    - id: photon_swarm_start
+      name: "Start Swarm on Photon"
+      commands:
+        - "/opt/supercna/supercna_play photon_swarm.yml"
+    - id: photon_swarm_start_manager
+      name: "Start Swarm Manager"
+      commands:
+        - "/opt/supercna/supercna_play photon_swarm_manager.yml"
+    - id: bonneville_swarm_start
+      name: "Start Swarm on Bonneville"
+      commands:
+        - "/opt/supercna/supercna_play bonneville_swarm.yml"
+
+    - id: photon_swarm_stop
+      name: "Stop Swarm"
+      commands:
+        - "/opt/supercna/supercna_play photon_kill_swarm.yml"
+
+    - id: graphite-api_install
+      name: "Deploy Graphite API"
+      commands:
+        - "/opt/supercna/supercna_play graphite_api.yml"
+
+    - id: photon_sshkeys
+      name: "Rotate SSHKeys"
+      commands:
+        - "/opt/supercna/supercna_play_inventory inventory.base sshkeys.yml"
+
+    - id: status_containers
+      name: "Show All Containers"
+      commands:
+        - "/opt/supercna/supercna_play status_containers_all.yml"
+
+    - id: consul_ls_keys
+      name: "Show Consul Keys/Values"
+      commands:
+        - "/opt/supercna/supercna_play status_consul_keys.yml"
+    - id: consul_members
+      name: "Show Consul Members"
+      commands:
+        - "/opt/supercna/supercna_play status_consul_members.yml"
+{% endif %}
+
+{% if deploy_vrops == '1' %}
+  - vRealize Operations:
+{% endif %}
+
+{% if deploy_vra == '1' %}
+  - vRealize Automation:
+{% endif %}
+
+{% if deploy_vrli == '1' %}
+  - vRealize Log Insight:
+{% endif %}
+
+{% if deploy_vrb == '1' %}
+  - vRealize Business:
+{% endif %}

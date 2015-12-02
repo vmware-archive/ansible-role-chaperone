@@ -14,8 +14,12 @@
 #  limitations under the License.
 #
 ---
-- include: packages.yml
-- include: sites.yml
-- include: superbase-ui.yml
-- include: superbase-admin-ui.yml
-- include: updatebase-ui.yml
+- name: Update the Chaperone UI
+  template:
+    src: "var/lib/{{ django_app }}/base-update.yml.j2"
+    dest: "/var/lib/{{ django_app }}/base.yml"
+    owner: "{{ ansible_ssh_user }}"
+    group: "{{ ansible_ssh_user }}"
+  notify: Restart apache2
+  tags:
+    - uiconfig
