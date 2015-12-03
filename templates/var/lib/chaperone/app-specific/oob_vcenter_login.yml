@@ -5,6 +5,7 @@
         - id: oob_vcenter_user_name
           name: "vCenter Admin Username"
           optional: 0
+          default: "administrator@vsphere.local"
         - id: oob_vcenter_user_password
           name: "vCenter Admin User Password"
           optional: 0

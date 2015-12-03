@@ -20,6 +20,7 @@
 {% endif %}
 
 {% if deploy_vcenter == '1' %}
+{% include 'prepare/prepare-vcsa.yml.j2' %}
 {% include 'prepare/prepare-vcenter.yml.j2' %}
 {% endif %}
 
@@ -57,6 +58,8 @@
 {% endif %}
 
 {% if deploy_vcenter == '1' %}
+{% include 'install/install-vcsa.yml.j2' %}
+
 {% include 'install/install-vcenter.yml.j2' %}
 {% endif %}
 

@@ -154,13 +154,21 @@
   tags:
     - rsync
 
-- name: Create base.yml
-  template:
-    src: "var/lib/{{ django_app }}/base.yml.j2"
-    dest: "/var/lib/{{ django_app }}/base.yml"
-    owner: "{{ ansible_ssh_user }}"
-    group: "{{ ansible_ssh_user }}"
-  notify: Restart apache2
+# - name: Create dummy Chaperone UI base.yml
+#   file:
+#     dest: "/var/lib/{{ django_app }}/base.yml"
+#     state: file
+#     owner: "{{ ansible_ssh_user }}"
+#     group: "{{ ansible_ssh_user }}"
+#     mode: 0755
+#   tags:
+#     - rsync
+
+- name: Create dummy Chaperone UI base.yml
+  command: touch "/var/lib/{{ django_app }}/base.yml"
+  args:
+    creates: "/var/lib/{{ django_app }}/base.yml"
+  sudo: no
   tags:
     - rsync
 
@@ -173,6 +181,12 @@
     mode: 0755
   tags:
     - rsync
+
+- name: Create Answer file
+  command: touch "{{ chaperone_answer_dir }}/answerfile.yml"
+  args:
+    creates: "{{ chaperone_answer_dir }}/answerfile.yml"
+  sudo: no
 
 - name: Create Prepare files directory
   file:
@@ -200,6 +214,8 @@
     creates: "/opt/{{ django_app }}/{{ django_app }}.db"
   sudo: no
   register: db
+  tags:
+    - db
 
 # Stat the db and if zero sized, rebuild it because either
 # the above 'touch' created it, or someone else truncated it.
@@ -208,6 +224,8 @@
   stat: path="/opt/{{ django_app }}/{{ django_app }}.db" get_checksum=no get_md5=no
   when: not db.changed
   register: dbstat
+  tags:
+    - db
 
 - name: Initialize database
   command: python manage.py syncdb --noinput
@@ -215,6 +233,8 @@
     chdir: "/opt/{{ django_app }}"
   sudo: no
   when: db.changed or dbstat.stat.size == 0
+  tags:
+    - db
 
 - name: (Re)Generate site-available ui config
   template:
@@ -248,7 +268,7 @@
   tags:
     - rsync
 
-- name: enable the general application site (this is not the ui)
+- name: Enable the general application site (this is not the ui)
   command: "a2ensite {{ django_app }}-downloads"
   notify: Restart apache2
   tags:

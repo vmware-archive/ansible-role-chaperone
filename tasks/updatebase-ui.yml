@@ -14,6 +14,13 @@
 #  limitations under the License.
 #
 ---
+- name: Remove the existing Chaperone UI base.yml
+  file:
+    path: "/var/lib/{{ django_app }}/base.yml"
+    state: absent
+  tags:
+    - uiconfig
+
 - name: Update the Chaperone UI
   template:
     src: "var/lib/chaperone/base.yml.j2"
