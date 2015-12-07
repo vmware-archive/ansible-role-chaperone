@@ -35,14 +35,14 @@ The directory in which files for preparing (see the Prepare menu) systems should
 The directory into which the UI should log operations. Note that the logs are read via
 AJAX callbacks for disploy in various UI pages.
 
-    chaperone_django_app: "supervio"
+    django_app: "supervio"
 
 The name for the application.
 
-    chaperone_download_files: false
+    download_files: false
 
 Whether to download ova and depot files and make them available at
-http://<{{ chaperone_django_app }}-ui>/downloads. These are large and can take a very
+http://<{{ django_app }}-ui>/downloads. These are large and can take a very
 long time to pull.
 
 ## Example playbook

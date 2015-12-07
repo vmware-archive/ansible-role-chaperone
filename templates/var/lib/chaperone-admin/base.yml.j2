@@ -140,4 +140,4 @@
     - id: config_chaperone
       name: Save Chaperone config
       commands:
-        - "/opt/supervio/supervio_play_tags site_primaryweb.yml uiconfig"
+        - "/opt/{{ django_app }}/{{ django_app }}_play_tags site_primaryweb.yml uiconfig"
