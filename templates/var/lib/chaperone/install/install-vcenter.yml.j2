@@ -2,29 +2,29 @@
     - id: install_oob_datacenter
       name: "Create OOB vSphere Datacenter"
       commands:
-        - "/opt/{{ django_app }}/{{ django_app }}_play_tags site_dc.yml create_oob_datacenter_task"
-        - "/opt/{{ django_app }}/{{ django_app }}_play_tags site_dc.yml oob_datacenter"
+        - "/opt/{{ django_app }}/{{ django_app }}_play_tags dc.yml create_oob_datacenter_task"
+        - "/opt/{{ django_app }}/{{ django_app }}_play_tags dc.yml oob_datacenter"
     - id: install_ib_datacenter
       name: "Create IB vSphere Datacenter"
       commands:
-        - "/opt/{{ django_app }}/{{ django_app }}_play_tags site_dc.yml ib_datacenter"
+        - "/opt/{{ django_app }}/{{ django_app }}_play_tags dc.yml ib_datacenter"
     - id: install_vds
       name: "Create VDS portgroups"
       commands:
-        - "/opt/{{ django_app }}/{{ django_app }}_play_tags site_dc.yml vds"
+        - "/opt/{{ django_app }}/{{ django_app }}_play_tags dc.yml vds"
     - id: install_datacenter_addhosts
       name: "Add Hosts"
       commands:
-        - "/opt/{{ django_app }}/{{ django_app }}_play_tags site_dc.yml addhosts"
+        - "/opt/{{ django_app }}/{{ django_app }}_play_tags dc.yml addhosts"
     - id: install_datacenter_confighosts
       name: "Configure Hosts vds"
       commands:
-        - "/opt/{{ django_app }}/{{ django_app }}_play_tags site_dc.yml confighosts"
+        - "/opt/{{ django_app }}/{{ django_app }}_play_tags dc.yml confighosts"
     - id: install_datacenter_hostprofile
       name: "Create Host Profiles"
       commands:
-        - "/opt/{{ django_app }}/{{ django_app }}_play_tags site_dc.yml hostprofile"
+        - "/opt/{{ django_app }}/{{ django_app }}_play_tags dc.yml hostprofile"
     - id: install_applyprofiles
       name: "Apply Host Profiles"
       commands:
-        - "/opt/{{ django_app }}/{{ django_app }}_play_tags site_dc.yml applyprofile"
+        - "/opt/{{ django_app }}/{{ django_app }}_play_tags dc.yml applyprofile"

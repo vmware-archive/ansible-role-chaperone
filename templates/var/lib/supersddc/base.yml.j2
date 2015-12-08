@@ -2733,159 +2733,159 @@
     - id: psc_ova_deploy
       name: "Deploy PSC"
       commands:
-        - "/opt/{{ django_app }}/{{ django_app }}_play_tags site_vcsa.yml create_psc_task"
-        - "/opt/{{ django_app }}/{{ django_app }}_play_tags site_vcsa.yml prereqs,debug,psc,cleanup"
+        - "/opt/{{ django_app }}/{{ django_app }}_play_tags vcsa.yml create_psc_task"
+        - "/opt/{{ django_app }}/{{ django_app }}_play_tags vcsa.yml prereqs,debug,psc,cleanup"
     - id: psc_ova_cleanup
       name: "Destroy PSC"
       commands:
-        - "/opt/{{ django_app }}/{{ django_app }}_play_tags site_vcsa.yml cleanup_psc"
+        - "/opt/{{ django_app }}/{{ django_app }}_play_tags vcsa.yml cleanup_psc"
     - id: vcenter_ova_deploy
       name: "Deploy vCSA"
       commands:
-        - "/opt/{{ django_app }}/{{ django_app }}_play_tags site_vcsa.yml create_vcsa_task"
-        - "/opt/{{ django_app }}/{{ django_app }}_play_tags site_vcsa.yml prereqs,debug,vcsa,cleanup"
+        - "/opt/{{ django_app }}/{{ django_app }}_play_tags vcsa.yml create_vcsa_task"
+        - "/opt/{{ django_app }}/{{ django_app }}_play_tags vcsa.yml prereqs,debug,vcsa,cleanup"
     - id: vcsa_ova_cleanup
       name: "Destroy vCSA"
       commands:
-        - "/opt/{{ django_app }}/{{ django_app }}_play_tags site_vcsa.yml cleanup_vcsa"
+        - "/opt/{{ django_app }}/{{ django_app }}_play_tags vcsa.yml cleanup_vcsa"
     - id: combined_ova_deploy
       name: "Deploy combined vCSA and PSC"
       commands:
-        - "/opt/{{ django_app }}/{{ django_app }}_play_tags site_vcsa.yml create_combined_task"
-        - "/opt/{{ django_app }}/{{ django_app }}_play_tags site_vcsa.yml prereqs,debug,combined,cleanup"
+        - "/opt/{{ django_app }}/{{ django_app }}_play_tags vcsa.yml create_combined_task"
+        - "/opt/{{ django_app }}/{{ django_app }}_play_tags vcsa.yml prereqs,debug,combined,cleanup"
     - id: combined_ova_cleanup
       name: "Destroy combined vCSA and PSC"
       commands:
-        - "/opt/{{ django_app }}/{{ django_app }}_play_tags site_vcsa.yml cleanup_combined"
+        - "/opt/{{ django_app }}/{{ django_app }}_play_tags vcsa.yml cleanup_combined"
   - "Datacenter Deploy":
     - id: install_datacenter
       name: "Create vSphere Datacenter Clusters"
       commands:
-        - "/opt/{{ django_app }}/{{ django_app }}_play_tags site_dc.yml datacenter"
+        - "/opt/{{ django_app }}/{{ django_app }}_play_tags dc.yml datacenter"
     - id: install_vds
       name: "Create VDS portgroups"
       commands:
-        - "/opt/{{ django_app }}/{{ django_app }}_play_tags site_dc.yml vds"
+        - "/opt/{{ django_app }}/{{ django_app }}_play_tags dc.yml vds"
     - id: install_datacenter_addhosts
       name: "Add Hosts"
       commands:
-        - "/opt/{{ django_app }}/{{ django_app }}_play_tags site_dc.yml addhosts"
+        - "/opt/{{ django_app }}/{{ django_app }}_play_tags dc.yml addhosts"
     - id: install_datacenter_confighosts
       name: "Configure Hosts vds"
       commands:
-        - "/opt/{{ django_app }}/{{ django_app }}_play_tags site_dc.yml confighosts"
+        - "/opt/{{ django_app }}/{{ django_app }}_play_tags dc.yml confighosts"
     - id: install_datacenter_hostprofile
       name: "Create Host Profiles"
       commands:
-        - "/opt/{{ django_app }}/{{ django_app }}_play_tags site_dc.yml hostprofile"
+        - "/opt/{{ django_app }}/{{ django_app }}_play_tags dc.yml hostprofile"
     - id: install_applyprofiles
       name: "Apply Host Profiles"
       commands:
-        - "/opt/{{ django_app }}/{{ django_app }}_play_tags site_dc.yml applyprofile"
+        - "/opt/{{ django_app }}/{{ django_app }}_play_tags dc.yml applyprofile"
   - "vRealize Operation Manager":
     - id: install_vrops
       name: "Install OVA's"
       commands:
-        - "/opt/supersddc/supersddc_play site_vrops.yml --tags vropsova_deploy"
+        - "/opt/supersddc/supersddc_play vrops.yml --tags vropsova_deploy"
     - id: vrops_admin_init
       name: "Initialize Admin User"
       commands:
-        - "/opt/supersddc/supersddc_play site_vrops.yml --tags vrops_admin_init"
+        - "/opt/supersddc/supersddc_play vrops.yml --tags vrops_admin_init"
     - id: vrops_master_init
       name: "Initialize Master Node"
       commands:
-        - "/opt/supersddc/supersddc_play site_vrops.yml --tags vrops_master_init"
+        - "/opt/supersddc/supersddc_play vrops.yml --tags vrops_master_init"
     - id: vrops_cluster_init
       name: "Initialize Cluster"
       commands:
-        - "/opt/supersddc/supersddc_play site_vrops.yml --tags vrops_cluster_init"
+        - "/opt/supersddc/supersddc_play vrops.yml --tags vrops_cluster_init"
   - "vRealize Business":
     - id: install_vrealizeb
       name: "Deploy to vCenter"
       commands:
-        - "/opt/supersddc/supersddc_play site_vrealizeb.yml --tags vrbova_deploy"
+        - "/opt/supersddc/supersddc_play vrealizeb.yml --tags vrbova_deploy"
     - id: power_vrb
       name: "Power VRB"
       commands:
-        - "/opt/supersddc/supersddc_play site_vrealizeb.yml --tags vrb_poweron"
+        - "/opt/supersddc/supersddc_play vrealizeb.yml --tags vrb_poweron"
     - id: delete_vra
       name: "Delete  VRB"
       commands:
-        - "/opt/supersddc/supersddc_play site_vrealizeb.yml --tags vrb_delete"
+        - "/opt/supersddc/supersddc_play vrealizeb.yml --tags vrb_delete"
     - id: configure_network
       name: "Configure Network"
       commands:
-        - "/opt/supersddc/supersddc_play site_vrealizeb.yml --tags vrb_network"
+        - "/opt/supersddc/supersddc_play vrealizeb.yml --tags vrb_network"
     - id: configure_http_proxy
       name: "Configure HTTP Proxy"
       commands:
-        - "/opt/supersddc/supersddc_play site_vrealizeb.yml --tags vrb_http_proxy"
+        - "/opt/supersddc/supersddc_play vrealizeb.yml --tags vrb_http_proxy"
     - id: register_vrealizeb
       name: "Configure VRA SSO"
       commands:
-        - "/opt/supersddc/supersddc_play site_vrealizeb.yml --tags vrb_sso"
+        - "/opt/supersddc/supersddc_play vrealizeb.yml --tags vrb_sso"
     - id: toggle_ssh_vrealizeb
       name: "Toggle SSH"
       commands:
-        - "/opt/supersddc/supersddc_play site_vrealizeb.yml --tags vrb_toggle_ssh"
+        - "/opt/supersddc/supersddc_play vrealizeb.yml --tags vrb_toggle_ssh"
     - id: configure_time_vrealizeb
       name: "Configure Time"
       commands:
-        - "/opt/supersddc/supersddc_play site_vrealizeb.yml --tags vrb_time_settings"
+        - "/opt/supersddc/supersddc_play vrealizeb.yml --tags vrb_time_settings"
     - id: configure_ssl_certificate
       name: "Configure SSL Certificate"
       commands:
-        - "/opt/supersddc/supersddc_play site_vrealizeb.yml --tags vrb_ssl_certificate"
+        - "/opt/supersddc/supersddc_play vrealizeb.yml --tags vrb_ssl_certificate"
   - "vRealize Automation":
     - id: install_vra
       name: "Create vRealize Automation"
       commands:
-        - "/opt/supersddc/supersddc_play_tags site_vra.yml vra_deploy"
+        - "/opt/supersddc/supersddc_play_tags vra.yml vra_deploy"
     - id: power_vra
       name: "Power VRA"
       commands:
-        - "/opt/supersddc/supersddc_play_tags site_vra.yml vra_poweron"
+        - "/opt/supersddc/supersddc_play_tags vra.yml vra_poweron"
     - id: delete_vra
       name: "Delete  VRA"
       commands:
-        - "/opt/supersddc/supersddc_play_tags site_vra.yml vra_delete"
+        - "/opt/supersddc/supersddc_play_tags vra.yml vra_delete"
     - id: configure_vra
       name: "Configure Host Settings"
       commands:
-        - "/opt/supersddc/supersddc_play_tags site_vra.yml  vra_configure_settings"
+        - "/opt/supersddc/supersddc_play_tags vra.yml  vra_configure_settings"
     - id: network_vra
       name: "Configure Network"
       commands:
-        - "/opt/supersddc/supersddc_play_tags site_vra.yml vra_network"
+        - "/opt/supersddc/supersddc_play_tags vra.yml vra_network"
     - id: configure_http_proxy
       name: "Configure HTTP Proxy"
       commands:
-        - "/opt/supersddc/supersddc_play_tags site_vra.yml  vra_http_proxy"
+        - "/opt/supersddc/supersddc_play_tags vra.yml  vra_http_proxy"
     - id: configure_sso
       name: "Configure SSO and License"
       commands:
-        - "/opt/supersddc/supersddc_play_tags site_vra.yml  vra_configure_sso"
+        - "/opt/supersddc/supersddc_play_tags vra.yml  vra_configure_sso"
     - id: configure_postgresdb
       name: "Configure Postgres Database"
       commands:
-        - "/opt/supersddc/supersddc_play_tags site_vra.yml vra_configure_postgresdb"
+        - "/opt/supersddc/supersddc_play_tags vra.yml vra_configure_postgresdb"
     - id: configure_messaging
       name: "Configure Messaging"
       commands:
-        - "/opt/supersddc/supersddc_play_tags site_vra.yml vra_configure_messaging"
+        - "/opt/supersddc/supersddc_play_tags vra.yml vra_configure_messaging"
     - id: configure_tenant
       name: "Configure Tenant"
       commands:
-        - "/opt/supersddc/supersddc_play_tags site_vra.yml vra_configure_tenant"
+        - "/opt/supersddc/supersddc_play_tags vra.yml vra_configure_tenant"
   - "vRealize Automation Windows":
     - id: prepare_vra_win
       name: "Prepare vRA Windows"
       commands:
-        - "/opt/supersddc/supersddc_play_tags site_vra.yml vra_win_script"
+        - "/opt/supersddc/supersddc_play_tags vra.yml vra_win_script"
     - id: install_vra_win
       name: "Install vRA Windows"
       commands:
-        - "/opt/supersddc/supersddc_play_tags site_vra.yml vra_win_deploy"
+        - "/opt/supersddc/supersddc_play_tags vra.yml vra_win_deploy"
     - id: install_vrpt_service
       name: "Install vRPT"
       commands:
@@ -2894,7 +2894,7 @@
     - id: install_vrli
       name: "Create vRealize Log Insight"
       commands:
-        - "/opt/supersddc/supersddc_play site_vrli.yml"
+        - "/opt/supersddc/supersddc_play vrli.yml"
     - id: configure_vlri
       name: "Configure vRealize Log Insight"
       commands:
@@ -2907,36 +2907,36 @@
     - id: nsx_ova_deploy
       name: "Deploy NSX OVA"
       commands:
-        - "/opt/supersddc/supersddc_play_tags site_nsx.yml nsx_deploy_ova"
+        - "/opt/supersddc/supersddc_play_tags nsx.yml nsx_deploy_ova"
     - id: install_nsx
       name: "Prepare Manager"
       commands:
-        - "/opt/supersddc/supersddc_play_tags site_nsx.yml prep_nsxmanager"
+        - "/opt/supersddc/supersddc_play_tags nsx.yml prep_nsxmanager"
     - id: install_nsx_instvirt
       name: "Prepare Host"
       commands:
-        - "/opt/supersddc/supersddc_play_tags site_nsx.yml install_virt"
+        - "/opt/supersddc/supersddc_play_tags nsx.yml install_virt"
     - id: install_nsx_instvirt_sync
       name: "Create IP Pools"
       commands:
-        - "/opt/supersddc/supersddc_play_tags site_nsx.yml ippools"
+        - "/opt/supersddc/supersddc_play_tags nsx.yml ippools"
     - id: install_nsx_controller
       name: "Install Controller"
       commands:
-        - "/opt/supersddc/supersddc_play_tags site_nsx.yml create_controller"
+        - "/opt/supersddc/supersddc_play_tags nsx.yml create_controller"
     - id: install_nsx_vxlan
       name: "Install VXLAN"
       commands:
-        - "/opt/supersddc/supersddc_play_tags site_nsx.yml vxlan"
+        - "/opt/supersddc/supersddc_play_tags nsx.yml vxlan"
     - id: install_nsx_netprep
       name: "Install Segment ID"
       commands:
-        - "/opt/supersddc/supersddc_play_tags site_nsx.yml segment_id"
+        - "/opt/supersddc/supersddc_play_tags nsx.yml segment_id"
     - id: install_nsx_vdn
       name: "Install Transport Zone"
       commands:
-        - "/opt/supersddc/supersddc_play_tags site_nsx.yml tzone"
+        - "/opt/supersddc/supersddc_play_tags nsx.yml tzone"
     - id: install_nsx_edges
       name: "Install Edges"
       commands:
-        - "/opt/supersddc/supersddc_play_tags site_nsx.yml nsx_edge"
+        - "/opt/supersddc/supersddc_play_tags nsx.yml nsx_edge"
