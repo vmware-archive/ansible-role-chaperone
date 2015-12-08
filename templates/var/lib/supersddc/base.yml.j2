@@ -2786,106 +2786,106 @@
     - id: install_vrops
       name: "Install OVA's"
       commands:
-        - "/opt/supersddc/supersddc_play vrops.yml --tags vropsova_deploy"
+        - "/opt/{{ django_app }}/{{ django_app }}_play vrops.yml --tags vropsova_deploy"
     - id: vrops_admin_init
       name: "Initialize Admin User"
       commands:
-        - "/opt/supersddc/supersddc_play vrops.yml --tags vrops_admin_init"
+        - "/opt/{{ django_app }}/{{ django_app }}_play vrops.yml --tags vrops_admin_init"
     - id: vrops_master_init
       name: "Initialize Master Node"
       commands:
-        - "/opt/supersddc/supersddc_play vrops.yml --tags vrops_master_init"
+        - "/opt/{{ django_app }}/{{ django_app }}_play vrops.yml --tags vrops_master_init"
     - id: vrops_cluster_init
       name: "Initialize Cluster"
       commands:
-        - "/opt/supersddc/supersddc_play vrops.yml --tags vrops_cluster_init"
+        - "/opt/{{ django_app }}/{{ django_app }}_play vrops.yml --tags vrops_cluster_init"
   - "vRealize Business":
     - id: install_vrealizeb
       name: "Deploy to vCenter"
       commands:
-        - "/opt/supersddc/supersddc_play vrealizeb.yml --tags vrbova_deploy"
+        - "/opt/{{ django_app }}/{{ django_app }}_play vrealizeb.yml --tags vrbova_deploy"
     - id: power_vrb
       name: "Power VRB"
       commands:
-        - "/opt/supersddc/supersddc_play vrealizeb.yml --tags vrb_poweron"
+        - "/opt/{{ django_app }}/{{ django_app }}_play vrealizeb.yml --tags vrb_poweron"
     - id: delete_vra
       name: "Delete  VRB"
       commands:
-        - "/opt/supersddc/supersddc_play vrealizeb.yml --tags vrb_delete"
+        - "/opt/{{ django_app }}/{{ django_app }}_play vrealizeb.yml --tags vrb_delete"
     - id: configure_network
       name: "Configure Network"
       commands:
-        - "/opt/supersddc/supersddc_play vrealizeb.yml --tags vrb_network"
+        - "/opt/{{ django_app }}/{{ django_app }}_play vrealizeb.yml --tags vrb_network"
     - id: configure_http_proxy
       name: "Configure HTTP Proxy"
       commands:
-        - "/opt/supersddc/supersddc_play vrealizeb.yml --tags vrb_http_proxy"
+        - "/opt/{{ django_app }}/{{ django_app }}_play vrealizeb.yml --tags vrb_http_proxy"
     - id: register_vrealizeb
       name: "Configure VRA SSO"
       commands:
-        - "/opt/supersddc/supersddc_play vrealizeb.yml --tags vrb_sso"
+        - "/opt/{{ django_app }}/{{ django_app }}_play vrealizeb.yml --tags vrb_sso"
     - id: toggle_ssh_vrealizeb
       name: "Toggle SSH"
       commands:
-        - "/opt/supersddc/supersddc_play vrealizeb.yml --tags vrb_toggle_ssh"
+        - "/opt/{{ django_app }}/{{ django_app }}_play vrealizeb.yml --tags vrb_toggle_ssh"
     - id: configure_time_vrealizeb
       name: "Configure Time"
       commands:
-        - "/opt/supersddc/supersddc_play vrealizeb.yml --tags vrb_time_settings"
+        - "/opt/{{ django_app }}/{{ django_app }}_play vrealizeb.yml --tags vrb_time_settings"
     - id: configure_ssl_certificate
       name: "Configure SSL Certificate"
       commands:
-        - "/opt/supersddc/supersddc_play vrealizeb.yml --tags vrb_ssl_certificate"
+        - "/opt/{{ django_app }}/{{ django_app }}_play vrealizeb.yml --tags vrb_ssl_certificate"
   - "vRealize Automation":
     - id: install_vra
       name: "Create vRealize Automation"
       commands:
-        - "/opt/supersddc/supersddc_play_tags vra.yml vra_deploy"
+        - "/opt/{{ django_app }}/{{ django_app }}_play_tags vra.yml vra_deploy"
     - id: power_vra
       name: "Power VRA"
       commands:
-        - "/opt/supersddc/supersddc_play_tags vra.yml vra_poweron"
+        - "/opt/{{ django_app }}/{{ django_app }}_play_tags vra.yml vra_poweron"
     - id: delete_vra
       name: "Delete  VRA"
       commands:
-        - "/opt/supersddc/supersddc_play_tags vra.yml vra_delete"
+        - "/opt/{{ django_app }}/{{ django_app }}_play_tags vra.yml vra_delete"
     - id: configure_vra
       name: "Configure Host Settings"
       commands:
-        - "/opt/supersddc/supersddc_play_tags vra.yml  vra_configure_settings"
+        - "/opt/{{ django_app }}/{{ django_app }}_play_tags vra.yml  vra_configure_settings"
     - id: network_vra
       name: "Configure Network"
       commands:
-        - "/opt/supersddc/supersddc_play_tags vra.yml vra_network"
+        - "/opt/{{ django_app }}/{{ django_app }}_play_tags vra.yml vra_network"
     - id: configure_http_proxy
       name: "Configure HTTP Proxy"
       commands:
-        - "/opt/supersddc/supersddc_play_tags vra.yml  vra_http_proxy"
+        - "/opt/{{ django_app }}/{{ django_app }}_play_tags vra.yml  vra_http_proxy"
     - id: configure_sso
       name: "Configure SSO and License"
       commands:
-        - "/opt/supersddc/supersddc_play_tags vra.yml  vra_configure_sso"
+        - "/opt/{{ django_app }}/{{ django_app }}_play_tags vra.yml  vra_configure_sso"
     - id: configure_postgresdb
       name: "Configure Postgres Database"
       commands:
-        - "/opt/supersddc/supersddc_play_tags vra.yml vra_configure_postgresdb"
+        - "/opt/{{ django_app }}/{{ django_app }}_play_tags vra.yml vra_configure_postgresdb"
     - id: configure_messaging
       name: "Configure Messaging"
       commands:
-        - "/opt/supersddc/supersddc_play_tags vra.yml vra_configure_messaging"
+        - "/opt/{{ django_app }}/{{ django_app }}_play_tags vra.yml vra_configure_messaging"
     - id: configure_tenant
       name: "Configure Tenant"
       commands:
-        - "/opt/supersddc/supersddc_play_tags vra.yml vra_configure_tenant"
+        - "/opt/{{ django_app }}/{{ django_app }}_play_tags vra.yml vra_configure_tenant"
   - "vRealize Automation Windows":
     - id: prepare_vra_win
       name: "Prepare vRA Windows"
       commands:
-        - "/opt/supersddc/supersddc_play_tags vra.yml vra_win_script"
+        - "/opt/{{ django_app }}/{{ django_app }}_play_tags vra.yml vra_win_script"
     - id: install_vra_win
       name: "Install vRA Windows"
       commands:
-        - "/opt/supersddc/supersddc_play_tags vra.yml vra_win_deploy"
+        - "/opt/{{ django_app }}/{{ django_app }}_play_tags vra.yml vra_win_deploy"
     - id: install_vrpt_service
       name: "Install vRPT"
       commands:
@@ -2894,49 +2894,49 @@
     - id: install_vrli
       name: "Create vRealize Log Insight"
       commands:
-        - "/opt/supersddc/supersddc_play vrli.yml"
+        - "/opt/{{ django_app }}/{{ django_app }}_play vrli.yml"
     - id: configure_vlri
       name: "Configure vRealize Log Insight"
       commands:
-        - "/opt/supersddc/supersddc_play configure_vrli.yml"
+        - "/opt/{{ django_app }}/{{ django_app }}_play configure_vrli.yml"
     - id: install_content_packs
       name: "Install Content Packs"
       commands:
-       - "/opt/supersddc/supersddc_play content_packs_vrli.yml"
+       - "/opt/{{ django_app }}/{{ django_app }}_play content_packs_vrli.yml"
   - "NSX Deploy":
     - id: nsx_ova_deploy
       name: "Deploy NSX OVA"
       commands:
-        - "/opt/supersddc/supersddc_play_tags nsx.yml nsx_deploy_ova"
+        - "/opt/{{ django_app }}/{{ django_app }}_play_tags nsx.yml nsx_deploy_ova"
     - id: install_nsx
       name: "Prepare Manager"
       commands:
-        - "/opt/supersddc/supersddc_play_tags nsx.yml prep_nsxmanager"
+        - "/opt/{{ django_app }}/{{ django_app }}_play_tags nsx.yml prep_nsxmanager"
     - id: install_nsx_instvirt
       name: "Prepare Host"
       commands:
-        - "/opt/supersddc/supersddc_play_tags nsx.yml install_virt"
+        - "/opt/{{ django_app }}/{{ django_app }}_play_tags nsx.yml install_virt"
     - id: install_nsx_instvirt_sync
       name: "Create IP Pools"
       commands:
-        - "/opt/supersddc/supersddc_play_tags nsx.yml ippools"
+        - "/opt/{{ django_app }}/{{ django_app }}_play_tags nsx.yml ippools"
     - id: install_nsx_controller
       name: "Install Controller"
       commands:
-        - "/opt/supersddc/supersddc_play_tags nsx.yml create_controller"
+        - "/opt/{{ django_app }}/{{ django_app }}_play_tags nsx.yml create_controller"
     - id: install_nsx_vxlan
       name: "Install VXLAN"
       commands:
-        - "/opt/supersddc/supersddc_play_tags nsx.yml vxlan"
+        - "/opt/{{ django_app }}/{{ django_app }}_play_tags nsx.yml vxlan"
     - id: install_nsx_netprep
       name: "Install Segment ID"
       commands:
-        - "/opt/supersddc/supersddc_play_tags nsx.yml segment_id"
+        - "/opt/{{ django_app }}/{{ django_app }}_play_tags nsx.yml segment_id"
     - id: install_nsx_vdn
       name: "Install Transport Zone"
       commands:
-        - "/opt/supersddc/supersddc_play_tags nsx.yml tzone"
+        - "/opt/{{ django_app }}/{{ django_app }}_play_tags nsx.yml tzone"
     - id: install_nsx_edges
       name: "Install Edges"
       commands:
-        - "/opt/supersddc/supersddc_play_tags nsx.yml nsx_edge"
+        - "/opt/{{ django_app }}/{{ django_app }}_play_tags nsx.yml nsx_edge"
