@@ -1,289 +1,100 @@
-  - "vCenter Services":
+  - "vCenter Services - Config":
 {% if enable_oob_mgmt_svcs == '1' %}
-    - "Out-of-Band vCenter":
-      - "Appliance Configuration":
-        - id: oob_vcenter_name
-          name: "vCenter Appliance Name"
-          optional: 0
-        - id: oob_vcenter_deployment_option
-          name: "vCenter Deployment Type"
-          input: dropdown
-          optional: 0
-          options:
-            - id: tiny
-            - id: small
-            - id: medium
-            - id: large
-          help: "The size for this vCenter appliance."
-        - id: oob_vcenter_admin_password
-          name: "vCenter administrator password"
-          input: password
-          optional: 0
-      - "Appliance Deployment Target":
-        - id: oob_vcenter_deploy_target
-          name: "ESXi Server target"
-          optional: 0
-        - id: oob_vcenter_deploy_target_user_name
-          name: "ESXi User"
-          optional: 0
-        - id: oob_vcenter_deploy_target_user_password
-          name: "ESXi User Password"
-          optional: 0
-          input: password
-      - "Storage Configuration":
-        - id: oob_vcenter_esx_datastore
-          name: "Datastore"
-          optional: 0
-          help: "Datastore to deploy the OVA to"
-        - id: oob_vcenter_appliance_thin_disk_mode
-          name: "Thin Disk Mode"
-          optional: 0
-          input: checkbox
-          help: "Disk provisioning mode."
-      - "Network Configuration":
-        - id: oob_vcenter_esx_portgroup
-          name: "Portgroup"
-          optional: 0
-          help: "Network name to use for the vCenter NIC (which MUST be set to Ephemeral binding)."
-{% if network_ip_scheme == 'Static' %}
-        - id: oob_vcenter_ip_address
-          name: "IP address"
-          optional: 0
-        - id: oob_vcenter_ip_netmask
-          name: "IP netmask"
-          optional: 0
-        - id: oob_vcenter_ip_gateway
-          name: "IP gateway"
-          optional: 0
-{% endif %}
-      - "SSO Information":
-{% if psc_appliance_deployment_scheme == 'Existing' %}
-        - id: oob_vcenter_psc_appliance_dns_name_manual
-          name: "PSC FQDN"
-          optional: 1
-          help: "PSC FQDN, required for SSO integration."
-{% endif %}
-{% if psc_appliance_deployment_scheme == 'Embedded PSC' %}
-        - id: oob_vcenter_sso_domain_name
-          name: "SSO Domain Name"
-          optional: 0
-          help: "The single sign-on domain name for identity management."
-        - id: oob_vcenter_sso_site_name
-          name: "SSO Site Name"
-          optional: 0
-          help: "The single sign-on site name for identity management."
-        - id: oob_vcenter_sso_password
-          name: "SSO administrator password"
-          input: password
-          optional: 0
-          help: "The single sign-on admin password."
-{% endif %}
-{% endif %}
+    - "Out-of-band vCenter":
+{% include 'app-specific/oob_vcenter_login.yml' %}
 
-{% if enable_oob_mgmt_svcs == '1' and psc_appliance_deployment_scheme == 'Dedicated PSC' %}
-    - "Out-of-band PSC":
-      - "Appliance Configuration":
-        - id: oob_psc_name
-          name: "PSC Appliance Name"
+        - id: oob_vcenter_datacenter_name
+          name: "Name of datacenter"
           optional: 0
-        - id: oob_psc_admin_password
-          name: "PSC administrator password"
-          input: password
+        - id: oob_vcenter_mgmt_esx_cluster
+          name: "Management ESX ClusterName"
           optional: 0
-      - "Appliance Deployment Target":
-        - id: oob_psc_deploy_target
-          name: "ESXi Server target"
+
+      - "Management ESX Cluster":
+{% set OOBMGMTESXCOUNT = oob_vcenter_mgmt_esx_count|int %}
+{% for oobesx in range(OOBMGMTESXCOUNT) %}
+        - id: oob_vcenter_mgmt_esx_server-{{ oobesx }}_url
+          name: "ESX Server IP or FQDN"
           optional: 0
-        - id: oob_psc_esx_username
-          name: "ESXi User"
+        - id: oob_vcenter_mgmt_esx_server-{{ oobesx }}_username
+          name: "ESX Server username"
           optional: 0
-          help: "Host login name."
-        - id: oob_psc_esx_password
-          name: "ESXi User Password"
+        - id: oob_vcenter_mgmt_esx_server-{{ oobesx }}_password
+          name: "ESX Server User password"
           optional: 0
           input: password
-          help: "Host login password."
-      - "Storage Configuration":
-        - id: oob_psc_esx_datastore
-          name: "Datastore"
-          optional: 0
-          help: "Datastore to deploy the OVA to"
-        - id: oob_psc_appliance_thin_disk_mode
-          name: "Thin Disk Mode"
-          optional: 0
-          input: checkbox
-          help: "Disk provisioning mode."
-      - "Network Configuration":
-        - id: oob_psc_esx_portgroup
-          name: "Portgroup"
-          optional: 0
-{% if network_ip_scheme == 'Static' %}
-        - id: oob_psc_ip_address
-          name: "PSC static IP address"
-          optional: 0
-        - id: oob_psc_ip_netmask
-          name: "PSC VLSM"
-          optional: 0
-        - id: oob_psc_ip_gateway
-          name: "PSC static IP gateway"
-          optional: 0
-{% endif %}
-      - "SSO Information":
-        - id: oob_psc_sso_domain_name
-          name: "SSO Domain Name"
-          optional: 0
-          help: "The single sign-on domain name for identity management."
-        - id: oob_psc_sso_site_name
-          name: "SSO Site Name"
-          optional: 0
-          help: "The single sign-on site name for identity management."
-        - id: oob_psc_sso_password
-          name: "SSO administrator password"
-          input: password
-          optional: 0
-          help: "The single sign-on admin password."
-{% endif %}
+{% endfor %}
 
     - "In-band vCenter":
-      - "Appliance Configuration":
-        - id: ib_vcenter_name
-          name: "vCenter Appliance Name"
+{% include 'app-specific/ib_vcenter_login.yml' %}
+
+        - id: ib_vcenter_datacenter_name
+          name: "Name of datacenter"
           optional: 0
-        - id: ib_vcenter_deployment_option
-          name: "vCenter Deployment Type"
-          input: dropdown
+        - id: ib_vcenter_mgmt_esx_cluster
+          name: "Management ESX Cluster Name"
           optional: 0
-          options:
-            - id: tiny
-            - id: small
-            - id: medium
-            - id: large
-          help: "The size for this vCenter appliance."
-        - id: ib_vcenter_admin_password
-          name: "vCenter administrator password"
-          input: password
+
+{% if deploy_nsx == '1' %}
+        - id: ib_vcenter_nsxedge_esx_cluster
+          name: "NSX Edge ESX Cluster Name"
           optional: 0
-      - "Appliance Deployment Target (OOB vCenter)":
-        - id: ib_vcenter_deploy_target
-          name: "vCenter Server FQDN"
-          optional: 0
-        - id: ib_vcenter_deploy_target_user_name
-          name: "vCenter User Name"
-          optional: 0
-        - id: ib_vcenter_deploy_target_user_password
-          name: "vCenter User Password"
-          optional: 0
-          input: password
-      - "Storage Configuration":
-        - id: ib_vcenter_esx_datastore
-          name: "Datastore"
-          optional: 0
-        - id: ib_vcenter_appliance_thin_disk_mode
-          name: "Thin Disk Mode"
-          optional: 0
-          input: checkbox
-      - "Network Configuration":
-        - id: ib_vcenter_esx_portgroup
-          name: "Portgroup"
-          optional: 0
-          help: "Network name to use for the vCenter NIC (which MUST be set to Ephemeral binding)."
-{% if network_ip_scheme == 'Static' %}
-        - id: ib_vcenter_ip_address
-          name: "PSC static IP address"
-          optional: 0
-          help: "PSC IP address, required when Networking mode is set to static"
-        - id: ib_vcenter_ip_netmask
-          name: "PSC VLSM"
-          optional: 0
-          help: "PSC variable length subnet mask, required when Networking mode is set to static"
-        - id: ib_vcenter_ip_gateway
-          name: "PSC static IP gateway"
-          optional: 0
-          help: "PSC IP gateway, required when Networking mode is set to static"
-{% endif %}
-      - "SSO Information":
-{% if psc_appliance_deployment_scheme == 'Existing' %}
-        - id: ib_vcenter_psc_appliance_dns_name_manual
-          name: "PSC FQDN"
-          optional: 1
-          help: "PSC FQDN, required for SSO integration."
-{% endif %}
-{% if psc_appliance_deployment_scheme == 'Embedded PSC' %}
-        - id: ib_vcenter_sso_domain_name
-          name: "SSO Domain Name"
-          optional: 0
-          help: "The single sign-on domain name for identity management."
-        - id: ib_vcenter_sso_site_name
-          name: "SSO Site Name"
-          optional: 0
-          help: "The single sign-on site name for identity management."
-        - id: ib_vcenter_sso_password
-          name: "SSO administrator password"
-          input: password
-          optional: 0
-          help: "The single sign-on admin password."
 {% endif %}
 
-{% if enable_oob_mgmt_svcs == '0' and psc_appliance_deployment_scheme == 'Dedicated PSC' %}
-    - "In-band PSC":
-      - "Appliance Configuration":
-        - id: ib_psc_name
-          name: "PSC Appliance Name"
+{% set COMPUTECLUSTERCOUNT = compute_esx_cluster_count|int %}
+{% for compcluster in range(COMPUTECLUSTERCOUNT) %}
+        - id: ib_vcenter_compute_cluster_name
+          name: "Compute ESX Cluster Name - {{ compcluster }}"
           optional: 0
-        - id: ib_psc_admin_password
-          name: "PSC administrator password"
-          input: password
+{% endfor %}
+
+      - "Management ESX Cluster":
+{% set IBMGMTESXCOUNT = ib_vcenter_mgmt_esx_count|int %}
+{% for ibesx in range(IBMGMTESXCOUNT) %}
+        - id: ib_vcenter_mgmt_esx_server-{{ ibesx }}_url
+          name: "ESX Server IP or FQDN"
           optional: 0
-      - "Appliance Deployment Target":
-        - id: ib_psc_deploy_target
-          name: "ESXi Server target"
+        - id: ib_vcenter_mgmt_esx_server-{{ ibesx }}_username
+          name: "ESX Server username"
           optional: 0
-        - id: ib_psc_esx_username
-          name: "ESXi User"
-          optional: 0
-          help: "Host login name."
-        - id: ib_psc_esx_password
-          name: "ESXi User Password"
+        - id: ib_vcenter_mgmt_esx_server-{{ ibesx }}_password
+          name: "ESX Server User password"
           optional: 0
           input: password
-          help: "Host login password."
-      - "Storage Configuration":
-        - id: ib_psc_esx_datastore
-          name: "Datastore"
+{% endfor %}
+
+{% if deploy_nsx == '1' %}
+      - "NSX Edge ESX Cluster":
+{% set NSXEDGEESXCOUNT = nsxedge_esx_count|int %}
+{% for nsxesx in range(NSXEDGEESXCOUNT) %}
+        - id: esx_server_nsxedge-{{ nsxesx }}_url
+          name: "ESX Server IP or FQDN"
           optional: 0
-          help: "Datastore to deploy the OVA to"
-        - id: ib_psc_appliance_thin_disk_mode
-          name: "Thin Disk Mode"
+        - id: esx_server_nsxedge-{{ nsxesx }}_username
+          name: "ESX Server username"
           optional: 0
-          input: checkbox
-          help: "Disk provisioning mode."
-      - "Network Configuration":
-        - id: ib_psc_esx_portgroup
-          name: "Portgroup"
+        - id: esx_server_nsxedge-{{ nsxesx }}_password
+          name: "ESX Server User password"
           optional: 0
-{% if network_ip_scheme == 'Static' %}
-        - id: ib_psc_ip_address
-          name: "PSC IP address"
-          optional: 0
-        - id: ib_psc_ip_netmask
-          name: "PSC IP netmask"
-          optional: 0
-        - id: ib_psc_ip_gateway
-          name: "PSC IP gateway"
-          optional: 0
+          input: password
+{% endfor %}
 {% endif %}
-      - "SSO Information":
-        - id: ib_psc_sso_domain_name
-          name: "SSO Domain Name"
+
+{% set COMPUTECLUSTERCOUNT = compute_esx_cluster_count|int %}
+{% for compcluster in range(COMPUTECLUSTERCOUNT) %}
+      - "Compute ESX Cluster - {{ compcluster }}":
+{% set COMPUTEESXCOUNT = compute_esx_count|int %}
+{% for computeesx in range(COMPUTEESXCOUNT) %}
+        - id: esx_server_compute-{{ computeesx }}_url
+          name: "ESX Server IP or FQDN"
           optional: 0
-          help: "The single sign-on domain name for identity management."
-        - id: ib_psc_sso_site_name
-          name: "SSO Site Name"
+        - id: esx_server_compute-{{ computeesx }}_username
+          name: "ESX Server username"
           optional: 0
-          help: "The single sign-on site name for identity management."
-        - id: ib_psc_sso_password
-          name: "SSO administrator password"
+        - id: esx_server_compute-{{ computeesx }}_password
+          name: "ESX Server User password"
+          optional: 0
           input: password
-          optional: 0
-          help: "The single sign-on admin password."
+{% endfor %}
+{% endfor %}
 {% endif %}

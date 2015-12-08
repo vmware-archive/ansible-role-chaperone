@@ -30,8 +30,8 @@
         - id: syslog_server
           name: Syslog Server
           optional: 0
-        - id: dns_domain
-          name: DNS Domain
+        - id: dns_domain_name
+          name: DNS Domain Name
           optional: 0
     - "Apps & Services":
       - "Infrastructure Services":
@@ -86,8 +86,8 @@
           input: dropdown
           options:
             - id: Existing
-            - id: Embedded PSC
-            - id: Dedicated PSC
+            - id: Embedded
+            - id: Dedicated
       - "Network IP Scheme":
         - id: network_ip_scheme
           name: "Select the IP scheme (where applicable)"
@@ -96,27 +96,45 @@
           options:
             - id: DHCP
             - id: Static
+      - "Storage Scheme":
+        - id: storage_scheme
+          name: "Select the storage scheme"
+          input: dropdown
+          optional: 0
+          options:
+            - id: NFS
+            - id: iSCSI
+            - id: VSAN
     - "ESX":
-      - "Number of ESX hosts to provision to Management Cluster":
-        - id: mgmt_esx_count
-          name: "Enter the number"
+      - "Out-of-band Management Cluster":
+        - id: oob_vcenter_mgmt_esx_count
+          name: "Number of ESX hosts to provision"
           default: 4
-      - "Number of ESX hosts to provision to NSX Edge Cluster":
+      - "In-band Management Cluster":
+        - id: ib_vcenter_mgmt_esx_count
+          name: "Number of ESX hosts to provision"
+          default: 4
+      - "NSX Edge Cluster":
         - id: nsxedge_esx_count
-          name: "Enter the number"
+          name: "Number of ESX hosts to provision"
           default: 4
-      - "Number of ESX Compute Clusters":
-        - id: compute_cluster_count
-          name: "Enter number"
+      - "ESX Compute Clusters":
+        - id: compute_esx_cluster_count
+          name: "Number of compute ESX clusters to provision"
           default: 1
-      - "Number of ESX to provision to the Compute Cluster":
+      - "Compute Cluster":
         - id: compute_esx_count
-          name: "Enter the number"
+          name: "Number of ESX hosts to provision"
           default: 4
     - "NSX":
-      - "Number of Edges to provision":
-        - id: nsxedge_appliance_count
-          name: "Enter the number"
+      - "Service Gateways":
+        - id: nsx_esg_edge_count
+          name: "Number of edges to provision"
+          default: 1
+      - "Logical Routers":
+        - id: nsx_lr_edge_count
+          name: "Number of edges to provision"
+          default: 1
 - Install:
   - Chaperone Configuration:
     - id: config_chaperone

@@ -51,34 +51,6 @@
   tags:
     - rsync
 
-- name: create admin plays directory
-  file:
-    dest: "/opt/{{ django_admin_app }}-ansible"
-    state: directory
-    owner: "{{ ansible_ssh_user }}"
-    group: "{{ ansible_ssh_user }}"
-    mode: 0755
-  tags:
-    - rsync
-
-- name: recursively sync the ansible playbooks from local repos
-  sudo: no
-  synchronize: src=../../../ansible/playbooks dest=/opt/{{ django_admin_app }}-ansible/ recursive=yes rsync_opts=--no-motd,--exclude=.git archive=no
-  tags:
-    - rsync
-
-- name: recursively sync the ansible roles from local repos
-  sudo: no
-  synchronize: src=../../../ansible/roles dest=/opt/{{ django_admin_app }}-ansible/ recursive=yes rsync_opts=--no-motd,--exclude=.git archive=no
-  tags:
-    - rsync
-
-- name: recursively sync the ansible library from local repos
-  sudo: no
-  synchronize: src=../../../ansible/library dest=/opt/{{ django_admin_app }}-ansible/ recursive=yes rsync_opts=--no-motd,--exclude=.git archive=no
-  tags:
-    - rsync
-
 - name: Create admin settings.py
   template:
     src: "opt/superbase-admin-ui/settings.py.j2"
@@ -155,6 +127,8 @@
     creates: "/opt/{{ django_admin_app }}/{{ django_admin_app }}.db"
   sudo: no
   register: db
+  tags:
+    - db
 
 # Stat the db and if zero sized, rebuild it because either
 # the above 'touch' created it, or someone else truncated it.
@@ -163,6 +137,8 @@
   stat: path="/opt/{{ django_admin_app }}/{{ django_admin_app }}.db" get_checksum=no get_md5=no
   when: not db.changed
   register: dbstat
+  tags:
+    - db
 
 - name: Initialize admin database
   command: python manage.py syncdb --noinput
@@ -170,6 +146,8 @@
     chdir: "/opt/{{ django_admin_app }}"
   sudo: no
   when: db.changed or dbstat.stat.size == 0
+  tags:
+    - db
 
 - name: (Re)Generate admin site-available ui config
   template:
@@ -181,20 +159,18 @@
   tags:
     - rsync
 
-# - name: Disable 000-default site
-#   command: a2dissite 000-default
-#   notify: Restart apache2
-#   tags:
-#     - rsync
+- name: Copy in updated ports.conf with admin UI port
+  copy:
+    src: "ports.conf"
+    dest: "/etc/apache2/ports.conf"
+    owner: "{{ ansible_ssh_user }}"
+    group: "{{ ansible_ssh_user }}"
+    mode: 0644
+  tags:
+    - rsync
 
-- name: Enable  admin application site
+- name: Enable admin application site
   command: a2ensite {{ django_admin_app }}
   notify: Restart apache2
   tags:
     - rsync
-
-# - name: enable the general application site (this is not the ui)
-#   command: "a2ensite {{ django_admin_app }}-downloads"
-#   notify: Restart apache2
-#   tags:
-#     - downloads

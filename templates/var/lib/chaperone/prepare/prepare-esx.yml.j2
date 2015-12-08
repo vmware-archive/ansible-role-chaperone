@@ -167,17 +167,32 @@
         - id: vsan_vlan
           name: "VIO VSAN VLAN"
           optional: 1
-    - "ESX Management Cluster":
-{% set MGMTESXCOUNT = mgmt_esx_count|int %}
-{% for n in range(MGMTESXCOUNT) %}
+    - "Out-of-band ESX Management Cluster":
+{% set OOBMGMTESXCOUNT = oob_vcenter_mgmt_esx_count|int %}
+{% for n in range(OOBMGMTESXCOUNT) %}
       - "Host Information":
-        - id: esx_server_mgmt-{{n}}_url
+        - id: oob_vcenter_mgmt_esx_server-{{n}}_url
           name: "ESX Server IP or FQDN"
           optional: 0
-        - id: esx_server_mgmt-{{n}}_username
+        - id: oob_vcenter_mgmt_esx_server-{{n}}_username
           name: "ESX Server username"
           optional: 0
-        - id: esx_server_mgmt-{{n}}_password
+        - id: oob_vcenter_mgmt_esx_server-{{n}}_password
+          name: "ESX Server User password"
+          optional: 0
+          input: password
+{% endfor %}
+    - "In-band ESX Management Cluster":
+{% set IBMGMTESXCOUNT = ib_vcenter_mgmt_esx_count|int %}
+{% for n in range(IBMGMTESXCOUNT) %}
+      - "Host Information":
+        - id: ib_vcenter_mgmt_esx_server-{{n}}_url
+          name: "ESX Server IP or FQDN"
+          optional: 0
+        - id: ib_vcenter_mgmt_esx_server-{{n}}_username
+          name: "ESX Server username"
+          optional: 0
+        - id: ib_vcenter_mgmt_esx_server-{{n}}_password
           name: "ESX Server User password"
           optional: 0
           input: password
