@@ -35,7 +35,7 @@ The directory in which files for preparing (see the Prepare menu) systems should
 The directory into which the UI should log operations. Note that the logs are read via
 AJAX callbacks for disploy in various UI pages.
 
-    django_app: "supervio"
+    django_app: "chaperone"
 
 The name for the application.
 
@@ -64,7 +64,7 @@ long time to pull.
 ```
 
 # License and Copyright
- 
+
 Copyright 2015 VMware, Inc.
 
 Licensed under the Apache License, Version 2.0 (the "License");
