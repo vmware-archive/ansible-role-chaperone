@@ -1,4 +1,4 @@
-  - vRealize Log Insight:
+  - "vRealize Log Insight":
     - Accounts:
       - "vRLI Service Account":
         - id: svc_vrli_is_service_account
@@ -90,69 +90,70 @@
             - id: service_account_itac_tenantarchitects
               name: "ITAC-TenantArchitects"
     - Deployment:
-      - id: vrli_ova_location
-        name: "OVA Directory"
-        optional: 0
-        help: "The directory containing the vRLI OVA file"
-      - id: vrli_ova
-        name: "OVA Filename"
-        optional: 0
-        help: "The name of the vRLI OVA file"
-      - id: vrli_name
-        name: "VM Name"
-        optional: 0
-        help: "The vRealize Log Insight VM name"
-      - id: vrli_root_password
-        name: "VRLI Root Password"
-        optional: 0
-        input: password
-      - id: deployment_size
-        name: "Deployment Size"
-        input: dropdown
-        options:
-          - id: xsmall
-        help: "Determines the CPU and memory resources of the vRLI VM"
-      - id: start_vm
-        name: "Start VM after deployment"
-        input: checkbox
-        optional: 0
-    - Infrastructure:
-      - id: vrli_cluster
-        name: "Management Cluster"
-        input: dropdown
-        optional: 0
-        options: mgmt_vc_cluster
-        help: "The vCenter Cluster in which to place the OVA"
-      - id: vrli_datastore
-        name: "Datastore"
-        input: dropdown
-        optional: 0
-        options: mgmt_vc_datastores
-        help: "The datastore on which to place the OVA"
-    - Network:
-      - id: vrli_host_name
-        name: "VRLI Host Name"
-        optional: 0
-        help: "Host name for the vRLI VM"
-      - id: vrli_network
-        name: "Network"
-        input: dropdown
-        optional: 0
-        options: mgmt_vc_networks
-        help: "The network on which to place the OVA"
-      - id: vrli_gateway
-        name: "Gateway"
-        optional: 0
-        help: "The network gateway to be used by the vRLI VM"
-      - id: vrli_dns
-        name: "DNS"
-        optional: 0
-        help: "The domain name server to be used by the vRLI VM"
-      - id: vrli_netmask
-        name: "Netmask"
-        optional: 0
-        help: "The subnet mask to be used by the vRLI VM"
-      - id: vrli_ip
-        name: "IP Address"
-        optional: 0
-        help: "The IP address to assign the vRLI VM"
+      - "Appliance Configuration":
+        - id: vrli_ova_location
+          name: "OVA Directory"
+          optional: 0
+          help: "The directory containing the vRLI OVA file"
+        - id: vrli_ova
+          name: "OVA Filename"
+          optional: 0
+          help: "The name of the vRLI OVA file"
+        - id: vrli_name
+          name: "VM Name"
+          optional: 0
+          help: "The vRealize Log Insight VM name"
+        - id: vrli_root_password
+          name: "VRLI Root Password"
+          optional: 0
+          input: password
+        - id: deployment_size
+          name: "Deployment Size"
+          input: dropdown
+          options:
+            - id: xsmall
+          help: "Determines the CPU and memory resources of the vRLI VM"
+        - id: start_vm
+          name: "Start VM after deployment"
+          input: checkbox
+          optional: 0
+      - Infrastructure:
+        - id: vrli_cluster
+          name: "Management Cluster"
+          input: dropdown
+          optional: 0
+          options: mgmt_vc_cluster
+          help: "The vCenter Cluster in which to place the OVA"
+        - id: vrli_datastore
+          name: "Datastore"
+          input: dropdown
+          optional: 0
+          options: mgmt_vc_datastores
+          help: "The datastore on which to place the OVA"
+      - Network:
+        - id: vrli_host_name
+          name: "VRLI Host Name"
+          optional: 0
+          help: "Host name for the vRLI VM"
+        - id: vrli_network
+          name: "Network"
+          input: dropdown
+          optional: 0
+          options: mgmt_vc_networks
+          help: "The network on which to place the OVA"
+        - id: vrli_gateway
+          name: "Gateway"
+          optional: 0
+          help: "The network gateway to be used by the vRLI VM"
+        - id: vrli_dns
+          name: "DNS"
+          optional: 0
+          help: "The domain name server to be used by the vRLI VM"
+        - id: vrli_netmask
+          name: "Netmask"
+          optional: 0
+          help: "The subnet mask to be used by the vRLI VM"
+        - id: vrli_ip
+          name: "IP Address"
+          optional: 0
+          help: "The IP address to assign the vRLI VM"

@@ -15,78 +15,98 @@
 #
 ---
 - Prepare:
-{% if deploy_esx == '1' %}
+# from prepare/prepare-esx.yml.j2
+{% if deploy_esx == '1' -%}
 {% include 'prepare/prepare-esx.yml.j2' %}
-{% endif %}
+{% endif -%}
 
-{% if deploy_vcenter == '1' %}
+{% if deploy_vcenter == '1' -%}
+# from prepare/prepare-vcsa.yml.j2
 {% include 'prepare/prepare-vcsa.yml.j2' %}
+# from prepare/prepare-vcenter.yml.j2
 {% include 'prepare/prepare-vcenter.yml.j2' %}
-{% endif %}
+{% endif -%}
 
-{% if deploy_nsx == '1' %}
+# from prepare/prepare-nsx.yml.j2
+{% if deploy_nsx == '1' -%}
 {% include 'prepare/prepare-nsx.yml.j2' %}
-{% endif %}
+{% endif -%}
 
-{% if deploy_vio == '1' %}
+# from prepare/prepare-vio.yml.j2
+{% if deploy_vio == '1' -%}
 {% include 'prepare/prepare-vio.yml.j2' %}
-{% endif %}
+{% endif -%}
 
-{% if deploy_cna == '1' %}
+# from prepare/prepare-cna.yml.j2
+{% if deploy_cna == '1' -%}
 {% include 'prepare/prepare-cna.yml.j2' %}
-{% endif %}
+{% endif -%}
 
-{% if deploy_vrops == '1' %}
+# from prepare/prepare-vrops.yml.j2
+{% if deploy_vrops == '1' -%}
 {% include 'prepare/prepare-vrops.yml.j2' %}
-{% endif %}
+{% endif -%}
 
-{% if deploy_vra == '1' %}
+# from prepare/prepare-vra.yml.j2
+{% if deploy_vra == '1' -%}
 {% include 'prepare/prepare-vra.yml.j2' %}
-{% endif %}
+{% endif -%}
 
-{% if deploy_vrli == '1' %}
+# from prepare/prepare-vrli.yml.j2
+{% if deploy_vrli == '1' -%}
 {% include 'prepare/prepare-vrli.yml.j2' %}
-{% endif %}
+{% endif -%}
 
-{% if deploy_vrb == '1' %}
+# from prepare/prepare-vrb.yml.j2
+{% if deploy_vrb == '1' -%}
 {% include 'prepare/prepare-vrb.yml.j2' %}
-{% endif %}
+{% endif -%}
 
+# Installer (action) menus
 - Install:
-{% if deploy_esx == '1' %}
+# from install/install-esx.yml.j2
+{% if deploy_esx == '1' -%}
 {% include 'install/install-esx.yml.j2' %}
-{% endif %}
+{% endif -%}
 
-{% if deploy_vcenter == '1' %}
+{% if deploy_vcenter == '1' -%}
+# from install/install-vcsa.yml.j2
 {% include 'install/install-vcsa.yml.j2' %}
-
+# from install/install-vcenter.yml.j2
 {% include 'install/install-vcenter.yml.j2' %}
-{% endif %}
+{% endif -%}
 
-{% if deploy_nsx == '1' %}
+# from install/install-nsx.yml.j2
+{% if deploy_nsx == '1' -%}
 {% include 'install/install-nsx.yml.j2' %}
-{% endif %}
+{% endif -%}
 
-{% if deploy_vio == '1' %}
+# from install/install-vio.yml.j2
+{% if deploy_vio == '1' -%}
 {% include 'install/install-vio.yml.j2' %}
-{% endif %}
+{% endif -%}
 
-{% if deploy_cna == '1' %}
+# from install/install-cna.yml.j2
+{% if deploy_cna == '1' -%}
 {% include 'install/install-cna.yml.j2' %}
-{% endif %}
+{% endif -%}
 
-{% if deploy_vrops == '1' %}
+# from install/install-vrops.yml.j2
+{% if deploy_vrops == '1' -%}
 {% include 'install/install-vrops.yml.j2' %}
-{% endif %}
+{% endif -%}
 
-{% if deploy_vra == '1' %}
+# from install/install-vra.yml.j2
+{% if deploy_vra == '1' -%}
 {% include 'install/install-vra.yml.j2' %}
-{% endif %}
+{% endif -%}
 
-{% if deploy_vrli == '1' %}
+# from install/install-vrli.yml.j2
+{% if deploy_vrli == '1' -%}
 {% include 'install/install-vrli.yml.j2' %}
-{% endif %}
+{% endif -%}
 
-{% if deploy_vrb == '1' %}
+# from install/install-vrb.yml.j2
+{% if deploy_vrb == '1' -%}
 {% include 'install/install-vrb.yml.j2' %}
-{% endif %}
+{% endif -%}

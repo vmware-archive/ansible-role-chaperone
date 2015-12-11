@@ -1,4 +1,4 @@
-  - vRealize Automation:
+  - "vRealize Automation":
     - Accounts:
       - "vRO Service Account":
         - id: svc_vra_name
@@ -83,266 +83,267 @@
           input: checkbox
           help: "Checked if this is a service account."
     - Deployment:
-      - id: vra_ova_location
-        name: "OVA Location"
-        optional: 0
-        help: "Location of OVA "
-      - id: vra_ova
-        name: "OVA"
-        optional: 0
-        help: "The vApp Name in vCenter"
-      - id: vra_datastore
-        name: "Datastore"
-        optional: 0
-        input: dropdown
-        options: mgmt_vc_datastores
-        help: "The datastore on which to place the OVA"
-      - id: vra_network
-        name: "Network"
-        optional: 0
-        help: "The Network on which to place the OVA"
-        input: dropdown
-        options: mgmt_vc_networks
-      - id: vra_name
-        name: "VM Name"
-        optional: 0
-        help: "The VM name for the installed vRealize Automation"
-      - id: vra_ssh_enabled
-        name:  "VRA Enable SSH"
-        optional: 0
-        input: dropdown
-        options:
-          - id: "True"
-          - id: "False"
-        help: "Enable SSH on vRA"
-      - id: vra_delete
-        name:  "Replace VRA if Exists"
-        optional: 0
-        input: checkbox
-        help: "Replace vRA if it exists"
-      - id: vra_poweron
-        name: "Power on"
-        optional: 0
-        input: checkbox
-        help: "Power on VRA after deployment"
-    - Networking:
-      - id: vra_address_version
-        input: dropdown
-        options:
-          - id: "DHCPV4+AUTOV6"
-          - id: "DHCPV4+STATICV6"
-          - id: "STATICV4+AUTOV6"
-          - id: "STATICV4+STATICV6"
-          - id: "AUTOV6"
-          - id: "STATICV6"
-        name: "VRA Address Version"
-        optional: 1
-        help: "VRA Address Version"
-      - id: vra_ip
-        name: "VRA ppliance IP Address"
-        optional: 1
-        help: " The VRA Appliance IP Address"
-      - id: vra_netmask
-        name: "VRA Appliance IP Address Netmask"
-        optional: 1
-        help: " The VRA Appliance IP Address Netmask"
-      - id: vra_gateway
-        name: "VRA Appliance Gateway"
-        optional: 1
-        help: " The VRA Appliance Gateway"
-      - id: vra_ipv6
-        name: "VRA Appliance IPV6 Address"
-        optional: 1
-        help: " The VRA Appliance DNS Server 2"
-      - id: vra_ipv6_gateway
-        name: "VRA Appliance IPv6 Gateway"
-        optional: 1
-        help: " The VRA Appliance IPv6 Gateway"
-      - id: vra_ipv6_prefix
-        name: "VRA Appliance IPv6 Prefix"
-        optional: 0
-        help: " The VRA Appliance IPV6 Prefix"
-      - id: vra_dns_server1
-        name: "VRA Appliance DNS Server 1"
-        optional: 1
-        help: " The VRA Appliance DNS Server 1"
-      - id: vra_dns_server2
-        name: "VRA Appliance DNS Server 2"
-        optional: 1
-        help: " The VRA Appliance DNS Server 2"
-      - id: vra_domain
-        name: "VRA Domain"
-        optional: 1
-        help: " The VRA Domain of the Appliance"
-      - id: vra_search_path
-        name: "VRA Appliance Domain Search Path"
-        optional: 1
-        help: " The VRA Domain Search Path"
-    - vRA HTTP Proxy:
-      - id: vra_http_proxy_server
-        name: "HTTP Proxy Server"
-        optional: 1
-        help: "HTTP Proxy IP Address"
-      - id: vra_http_proxy_port
-        name: "HTTP Proxy Port"
-        optional: 1
-        help: "HTTP Proxy Ports"
-      - id: vra_http_proxy_user
-        name: "HTTP Proxy User Name"
-        optional: 1
-        help: "HTTP Proxy User Name"
-      - id: vra_http_proxy_password
-        name: "HTTP Proxy Password"
-        optional: 1
-        help: "HTTP Proxy Password"
-        input: password
-    - General Configuration:
-      - id: vra_config_type
-        name:  "VRA Configuration Type"
-        optional: 0
-        input: dropdown
-        options:
-          - id: "Default"
-          - id: "Windows"
-        help: "Default for General Ansible configuration else choose windows"
-      - id: vra_host_name
-        name: "VRA Host Name"
-        optional: 0
-        help: "Host name for the VRA"
-      - id: vra_port
-        name: "VRA Appliance Port"
-        optional: 0
-        help: "The port at which VRA Appliance is accessed"
-      - id: vra_user
-        name: "VRA User"
-        optional: 0
-        help: "The vra user id"
-      - id: vra_root_password
-        name: "vRA Root Password"
-        optional: 0
-        input: password
-        help: "Root password"
-    - NTP Configuration:
-      - id: vra_ntp_server
-        name: "VRA NTP Server"
-        optional: 0
-        help: "The time server hostname or ip"
-    - SSL  Configuration:
-      - id: vra_ssl_org
-        name: "VRA SSL ORG"
-        optional: 0
-        help: "Organization name for ssl cert."
-      - id: vra_ssl_org_unit
-        name: "VRA SSL ORG. UNIT"
-        optional: 0
-        help: "The BU name for ssl cert."
-      - id: vra_ssl_country
-        name: "VRA SSL COUNTRY"
-        optional: 0
-        help: "The country for ssl cert."
-    - SSO  Configuration:
-      - id: vra_sso_host
-        name: "VRA SSO HOST"
-        optional: 0
-        help: "The sso server that vra should use"
-      - id: vra_sso_port
-        name: "VRA SSO PORT"
-        optional: 0
-        help: "The port of the sso server"
-      - id: vra_sso_user
-        name: "VRA SSO USER"
-        optional: 0
-        help: "sso user id"
-      - id: vra_sso_password
-        name: "VRA SSO PASSWORD"
-        optional: 0
-        help: "sso password"
-        input: password
-    - License  Configuration:
-      - id: vra_license_key
-        name: "VRA LICENSE KEY"
-        optional: 0
-        help: "The license key to use"
-    - Postgres DB  Configuration:
-      - id: vra_postgres_host
-        name: "VRA Postgres DB host"
-        optional: 0
-        help: " VRA Appliance instance name"
-      - id: vra_postgres_port
-        name: "VRA Postgres DB  Port"
-        optional: 0
-        help: " VRA Postgres DB Port"
-      - id: vra_postgres_database
-        name: "VRA Postgres Database"
-        optional: 0
-        help: " VRA Postgres Database"
-      - id: vra_postgres_user
-        name: "VRA Postgres user"
-        optional: 0
-        help: " VRA Postgres User"
-      - id: vra_postgres_password
-        name: "VRA Postgres Password"
-        optional: 0
-        help: " VRA Postgres Password"
-        input: password
-    - Messaging Configuration:
-      - id: vra_messaging_host
-        name: "VRA Messaging Host"
-        optional: 0
-        help: " VRA Messaging Host"
-      - id: vra_messaging_port
-        name: "VRA Messaging Port"
-        optional: 0
-        help: " VRA Messaging Port"
-      - id: vra_messaging_user
-        name: "VRA Messaging User"
-        optional: 0
-        help: " VRA Messaging User"
-      - id: vra_messaging_password
-        name: "VRA Messaging Password"
-        optional: 0
-        help: " VRA Messaging Password"
-        input: password
-    - Tenant Configuration:
-      - id: vra_tenant_id
-        name: "VRA Tenant Id"
-        optional: 0
-        help: " VRA Tenant Id"
-      - id: vra_tenant_user
-        name: "VRA Tenant User"
-        optional: 0
-        help: " VRA Tenant User"
-      - id: vra_tenant_password
-        name: "VRA Tenant password"
-        optional: 0
-        help: " VRA Tenant Password"
-        input: password
-      - id: vra_tenant_url
-        name: "VRA Tenant URL"
-        optional: 0
-        help: " VRA Tenant URL"
-      - id: vra_tenant_name
-        name: "VRA Tenant Name"
-        optional: 0
-        help: " VRA Tenant Name"
-      - id: vra_tenant_description
-        name: "VRA Tenant Description"
-        optional: 0
-        help: " VRA Tenant Description"
-      - id: vra_tenant_email
-        name: "VRA Tenant Email"
-        optional: 0
-        help: " VRA Tenant Email"
-      - id: vra_default_tenant
-        input: dropdown
-        options:
-          - id: "True"
-          - id: "False"
-        name: "VRA Default Tenant"
-        optional: 0
-        help: "VRA Default Tenant"
-    - vRealize Automation - Windows:
-      - vCenter Information:
+      - "Appliance Configuration":
+        - id: vra_ova_location
+          name: "OVA Location"
+          optional: 0
+          help: "Location of OVA"
+        - id: vra_ova
+          name: "OVA"
+          optional: 0
+          help: "The vApp Name in vCenter"
+        - id: vra_datastore
+          name: "Datastore"
+          optional: 0
+          input: dropdown
+          options: mgmt_vc_datastores
+          help: "The datastore on which to place the OVA"
+        - id: vra_network
+          name: "Network"
+          optional: 0
+          help: "The Network on which to place the OVA"
+          input: dropdown
+          options: mgmt_vc_networks
+        - id: vra_name
+          name: "VM Name"
+          optional: 0
+          help: "The VM name for the installed vRealize Automation"
+        - id: vra_ssh_enabled
+          name:  "VRA Enable SSH"
+          optional: 0
+          input: dropdown
+          options:
+            - id: "True"
+            - id: "False"
+          help: "Enable SSH on vRA"
+        - id: vra_delete
+          name:  "Replace VRA if Exists"
+          optional: 0
+          input: checkbox
+          help: "Replace vRA if it exists"
+        - id: vra_poweron
+          name: "Power on"
+          optional: 0
+          input: checkbox
+          help: "Power on VRA after deployment"
+      - Networking:
+        - id: vra_address_version
+          input: dropdown
+          options:
+            - id: "DHCPV4+AUTOV6"
+            - id: "DHCPV4+STATICV6"
+            - id: "STATICV4+AUTOV6"
+            - id: "STATICV4+STATICV6"
+            - id: "AUTOV6"
+            - id: "STATICV6"
+          name: "VRA Address Version"
+          optional: 1
+          help: "VRA Address Version"
+        - id: vra_ip
+          name: "VRA ppliance IP Address"
+          optional: 1
+          help: " The VRA Appliance IP Address"
+        - id: vra_netmask
+          name: "VRA Appliance IP Address Netmask"
+          optional: 1
+          help: " The VRA Appliance IP Address Netmask"
+        - id: vra_gateway
+          name: "VRA Appliance Gateway"
+          optional: 1
+          help: " The VRA Appliance Gateway"
+        - id: vra_ipv6
+          name: "VRA Appliance IPV6 Address"
+          optional: 1
+          help: " The VRA Appliance DNS Server 2"
+        - id: vra_ipv6_gateway
+          name: "VRA Appliance IPv6 Gateway"
+          optional: 1
+          help: " The VRA Appliance IPv6 Gateway"
+        - id: vra_ipv6_prefix
+          name: "VRA Appliance IPv6 Prefix"
+          optional: 0
+          help: " The VRA Appliance IPV6 Prefix"
+        - id: vra_dns_server1
+          name: "VRA Appliance DNS Server 1"
+          optional: 1
+          help: " The VRA Appliance DNS Server 1"
+        - id: vra_dns_server2
+          name: "VRA Appliance DNS Server 2"
+          optional: 1
+          help: " The VRA Appliance DNS Server 2"
+        - id: vra_domain
+          name: "VRA Domain"
+          optional: 1
+          help: " The VRA Domain of the Appliance"
+        - id: vra_search_path
+          name: "VRA Appliance Domain Search Path"
+          optional: 1
+          help: " The VRA Domain Search Path"
+      - "vRA HTTP Proxy":
+        - id: vra_http_proxy_server
+          name: "HTTP Proxy Server"
+          optional: 1
+          help: "HTTP Proxy IP Address"
+        - id: vra_http_proxy_port
+          name: "HTTP Proxy Port"
+          optional: 1
+          help: "HTTP Proxy Ports"
+        - id: vra_http_proxy_user
+          name: "HTTP Proxy User Name"
+          optional: 1
+          help: "HTTP Proxy User Name"
+        - id: vra_http_proxy_password
+          name: "HTTP Proxy Password"
+          optional: 1
+          help: "HTTP Proxy Password"
+          input: password
+      - "General Configuration":
+        - id: vra_config_type
+          name:  "VRA Configuration Type"
+          optional: 0
+          input: dropdown
+          options:
+            - id: "Default"
+            - id: "Windows"
+          help: "Default for General Ansible configuration else choose windows"
+        - id: vra_host_name
+          name: "VRA Host Name"
+          optional: 0
+          help: "Host name for the VRA"
+        - id: vra_port
+          name: "VRA Appliance Port"
+          optional: 0
+          help: "The port at which VRA Appliance is accessed"
+        - id: vra_user
+          name: "VRA User"
+          optional: 0
+          help: "The vra user id"
+        - id: vra_root_password
+          name: "vRA Root Password"
+          optional: 0
+          input: password
+          help: "Root password"
+      - "NTP Configuration":
+        - id: vra_ntp_server
+          name: "VRA NTP Server"
+          optional: 0
+          help: "The time server hostname or ip"
+      - "SSL Configuration":
+        - id: vra_ssl_org
+          name: "VRA SSL ORG"
+          optional: 0
+          help: "Organization name for ssl cert."
+        - id: vra_ssl_org_unit
+          name: "VRA SSL ORG. UNIT"
+          optional: 0
+          help: "The BU name for ssl cert."
+        - id: vra_ssl_country
+          name: "VRA SSL COUNTRY"
+          optional: 0
+          help: "The country for ssl cert."
+      - "SSO Configuration":
+        - id: vra_sso_host
+          name: "VRA SSO HOST"
+          optional: 0
+          help: "The sso server that vra should use"
+        - id: vra_sso_port
+          name: "VRA SSO PORT"
+          optional: 0
+          help: "The port of the sso server"
+        - id: vra_sso_user
+          name: "VRA SSO USER"
+          optional: 0
+          help: "sso user id"
+        - id: vra_sso_password
+          name: "VRA SSO PASSWORD"
+          optional: 0
+          help: "sso password"
+          input: password
+      - "License Configuration":
+        - id: vra_license_key
+          name: "VRA LICENSE KEY"
+          optional: 0
+          help: "The license key to use"
+      - "Postgres DB Configuration":
+        - id: vra_postgres_host
+          name: "VRA Postgres DB host"
+          optional: 0
+          help: " VRA Appliance instance name"
+        - id: vra_postgres_port
+          name: "VRA Postgres DB  Port"
+          optional: 0
+          help: " VRA Postgres DB Port"
+        - id: vra_postgres_database
+          name: "VRA Postgres Database"
+          optional: 0
+          help: " VRA Postgres Database"
+        - id: vra_postgres_user
+          name: "VRA Postgres user"
+          optional: 0
+          help: " VRA Postgres User"
+        - id: vra_postgres_password
+          name: "VRA Postgres Password"
+          optional: 0
+          help: " VRA Postgres Password"
+          input: password
+      - "Messaging Configuration":
+        - id: vra_messaging_host
+          name: "VRA Messaging Host"
+          optional: 0
+          help: " VRA Messaging Host"
+        - id: vra_messaging_port
+          name: "VRA Messaging Port"
+          optional: 0
+          help: " VRA Messaging Port"
+        - id: vra_messaging_user
+          name: "VRA Messaging User"
+          optional: 0
+          help: " VRA Messaging User"
+        - id: vra_messaging_password
+          name: "VRA Messaging Password"
+          optional: 0
+          help: " VRA Messaging Password"
+          input: password
+      - "Tenant Configuration":
+        - id: vra_tenant_id
+          name: "VRA Tenant Id"
+          optional: 0
+          help: " VRA Tenant Id"
+        - id: vra_tenant_user
+          name: "VRA Tenant User"
+          optional: 0
+          help: " VRA Tenant User"
+        - id: vra_tenant_password
+          name: "VRA Tenant password"
+          optional: 0
+          help: " VRA Tenant Password"
+          input: password
+        - id: vra_tenant_url
+          name: "VRA Tenant URL"
+          optional: 0
+          help: " VRA Tenant URL"
+        - id: vra_tenant_name
+          name: "VRA Tenant Name"
+          optional: 0
+          help: " VRA Tenant Name"
+        - id: vra_tenant_description
+          name: "VRA Tenant Description"
+          optional: 0
+          help: " VRA Tenant Description"
+        - id: vra_tenant_email
+          name: "VRA Tenant Email"
+          optional: 0
+          help: " VRA Tenant Email"
+        - id: vra_default_tenant
+          input: dropdown
+          options:
+            - id: "True"
+            - id: "False"
+          name: "VRA Default Tenant"
+          optional: 0
+          help: "VRA Default Tenant"
+    - "vRealize Automation - Windows":
+      - "vCenter Information":
         - id: win_vra_vcacisvm
           name: "Identity Server Name"
           optional: 0
@@ -382,7 +383,8 @@
           name: "IAAS IP"
           optional: 0
           help: "IP address for IAAS"
-      - Deployment:
+    - Deployment:
+      - "Appliance Configuration":
         - id: win_vra_vcac_is_ova
           name: "VCAC IS OVA"
           optional: 1
@@ -433,7 +435,7 @@
           name: "VM Host"
           optional: 1
           help: "The VM name for vRA installation"
-      - Certificate Generation Information:
+      - "Certificate Generation Information":
         - id: win_vra_cert_org
           name: "Organization"
           optional: 0
@@ -458,7 +460,7 @@
           name: "Email"
           optional: 0
           help: "Email address"
-      - XML Variables:
+      - "XML Variables":
         - id: win_vra_dns_sufix
           name: "DNS Suffix"
           optional: 0
