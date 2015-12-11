@@ -13,4 +13,4 @@
         - id: ib_vcenter_port
           name: "vCenter API Port"
           optional: 0
-          default: 443
+          default: "443"

@@ -6,58 +6,177 @@
         - id: oob_vcenter_datacenter_name
           name: "Name of datacenter"
           optional: 0
-        - id: oob_vcenter_mgmt_esx_cluster
-          name: "Management ESX ClusterName"
+          default: "OOB-Management"
+        - id: oob_vcenter_mgmt_esx_cluster_name
+          name: "Management ESX Cluster Name"
           optional: 0
-
+          default: "oob-mgmt_esxcluster-01"
       - "Management ESX Cluster":
-{% set OOBMGMTESXCOUNT = oob_vcenter_mgmt_esx_count|int %}
-{% for oobesx in range(OOBMGMTESXCOUNT) %}
-        - id: oob_vcenter_mgmt_esx_server-{{ oobesx }}_url
-          name: "ESX Server IP or FQDN"
+{% for oobmgmtesx in range(oob_vcenter_mgmt_esx_count|int) %}
+        - id: oob_vcenter_mgmt_esx_server_name-{{ oobmgmtesx }}
+          name: "ESX Name"
           optional: 0
-        - id: oob_vcenter_mgmt_esx_server-{{ oobesx }}_username
+          default: "oob-mgmt_esx-{{ oobmgmtesx }}"
+        - id: oob_vcenter_mgmt_esx_server_url-{{ oobmgmtesx }}
+          name: "ESX Server IP"
+          optional: 0
+{% if deploy_esx == '1' %}
+        - id: oob_vcenter_mgmt_esx_server_mac_address-{{ oobmgmtesx }}
+          name: "ESX Server MAC Address"
+          optional: 1
+          default: ""
+{% endif %}
+        - id: oob_vcenter_mgmt_esx_server_username-{{ oobmgmtesx }}
           name: "ESX Server username"
           optional: 0
-        - id: oob_vcenter_mgmt_esx_server-{{ oobesx }}_password
+          default: "root"
+        - id: oob_vcenter_mgmt_esx_server_password-{{ oobmgmtesx }}
           name: "ESX Server User password"
           optional: 0
           input: password
 {% endfor %}
-
+      - "Networking":
+        - id: oob_vcenter_net_vds_name
+          name: "Distributed vSwitch Name"
+          optional: 0
+          default: "oob-mgmt_vds-01"
+        - id: oob_vcenter_net_vds_uplinks
+          name: "Number of vDS uplinks"
+          optional: 1
+          hide: 1
+          default: "1"
+        - id: oob_vcenter_net_vds_ports
+          name: "Initial number of vDS ports"
+          optional: 1
+          hide: 1
+          default: "16"
+        - id: oob_vcenter_net_vds_nioc
+          name: "Enable NIOC"
+          optional: 1
+          hide: 1
+          default: "False"
+        - id: oob_vcenter_net_vds_version
+          name: "vDS version"
+          optional: 1
+          hide: 1
+          default: "6.0.0"
+### PORTGROUPS START ###
+        - id: oob_vcenter_net_mgmt_pg_name
+          name: "Management Port Group Name"
+          optional: 0
+          default: "oob-mgmt_pg-mgmt-01"
+        - id: oob_vcenter_net_mgmt_pg_vlan_id
+          name: "Management Port Group VLAN ID"
+          optional: 1
+        - id: oob_vcenter_net_mgmt_pg_port_binding
+          name: "Management Port Group Binding"
+          optional: 1
+          hide: 1
+          default: "ephemeral"
+        - id: oob_vcenter_net_mgmt_pg_ports
+          name: "Number of Management Port Group Ports"
+          optional: 1
+          hide: 1
+          default: "16"
+        - id: oob_vcenter_net_mgmt_pg_port_allocation
+          name: "Management Port Group Port Allocation"
+          optional: 1
+          hide: 1
+          default: "elastic"
+{% if (storage_scheme == 'NFS') or (storage_scheme == 'iSCSI') %}
+        - id: oob_vcenter_net_storage_pg_name
+          name: "IP Storage Port Group Name"
+          optional: 1
+          default: "oob-mgmt_pg-storage-01"
+        - id: oob_vcenter_net_storage_pg_vlan_id
+          name: "IP Storage Port Group VLAN ID"
+          optional: 1
+        - id: oob_vcenter_net_storage_ip_pool
+          name: "IP Storage IP Pool"
+          optional: 1
+        - id: oob_vcenter_net_storage_pg_port_binding
+          name: "IP Storage Port Group Binding"
+          optional: 1
+          hide: 1
+          default: "ephemeral"
+        - id: oob_vcenter_net_storage_pg_ports
+          name: "Number of Storage Port Group Ports"
+          optional: 1
+          hide: 1
+          default: "16"
+        - id: oob_vcenter_net_storage_pg_port_allocation
+          name: "Storage Port Group Port Allocation"
+          optional: 1
+          hide: 1
+          default: "elastic"
+{% endif %}
+        - id: oob_vcenter_net_vmotion_pg_name
+          name: "vMotion Port Group Name"
+          optional: 0
+          default: "oob-mgmt_pg-vmotion-01"
+        - id: oob_vcenter_net_vmotion_pg_vlan_id
+          name: "vMotion Port Group VLAN ID"
+          optional: 1
+        - id: oob_vcenter_net_vmotion_ip_pool
+          name: "vMotion IP Pool"
+          optional: 1
+        - id: oob_vcenter_net_vmotion_pg_port_binding
+          name: "vMotion Port Group Binding"
+          optional: 1
+          hide: 1
+          default: "ephemeral"
+        - id: oob_vcenter_net_vmotion_pg_ports
+          name: "Number of vMotion Port Group Ports"
+          optional: 1
+          hide: 1
+          default: "16"
+        - id: oob_vcenter_net_vmotion_pg_port_allocation
+          name: "vMotion Port Group Port Allocation"
+          optional: 1
+          hide: 1
+          default: "elastic"
+{% endif %}
+### PORTGROUPS END ###
     - "In-band vCenter":
 {% include 'app-specific/ib_vcenter_login.yml' %}
 
         - id: ib_vcenter_datacenter_name
           name: "Name of datacenter"
           optional: 0
-        - id: ib_vcenter_mgmt_esx_cluster
+        - id: ib_vcenter_mgmt_esx_cluster_name
           name: "Management ESX Cluster Name"
           optional: 0
 
 {% if deploy_nsx == '1' %}
-        - id: ib_vcenter_nsxedge_esx_cluster
+        - id: ib_vcenter_nsxedge_esx_cluster_name
           name: "NSX Edge ESX Cluster Name"
           optional: 0
 {% endif %}
 
-{% set COMPUTECLUSTERCOUNT = compute_esx_cluster_count|int %}
-{% for compcluster in range(COMPUTECLUSTERCOUNT) %}
-        - id: ib_vcenter_compute_cluster_name
-          name: "Compute ESX Cluster Name - {{ compcluster }}"
+        - id: ib_vcenter_compute_esx_cluster_name
+          name: "Compute ESX Cluster Name"
           optional: 0
-{% endfor %}
 
       - "Management ESX Cluster":
-{% set IBMGMTESXCOUNT = ib_vcenter_mgmt_esx_count|int %}
-{% for ibesx in range(IBMGMTESXCOUNT) %}
-        - id: ib_vcenter_mgmt_esx_server-{{ ibesx }}_url
-          name: "ESX Server IP or FQDN"
+{% for ibesx in range(ib_vcenter_mgmt_esx_count|int) %}
+        - id: ib_vcenter_mgmt_esx_server_name-{{ ibesx }}
+          name: "ESX Name"
           optional: 0
-        - id: ib_vcenter_mgmt_esx_server-{{ ibesx }}_username
+          default: "ib-mgmt_esx-{{ ibesx }}"
+        - id: ib_vcenter_mgmt_esx_server_url-{{ ibesx }}
+          name: "ESX Server IP"
+          optional: 0
+{% if deploy_esx == '1' %}
+        - id: ib_vcenter_mgmt_esx_server_mac_address-{{ ibesx }}
+          name: "ESX Server MAC Address"
+          optional: 1
+          default: ""
+{% endif %}
+        - id: ib_vcenter_mgmt_esx_server_username-{{ ibesx }}
           name: "ESX Server username"
           optional: 0
-        - id: ib_vcenter_mgmt_esx_server-{{ ibesx }}_password
+          default: "root"
+        - id: ib_vcenter_mgmt_esx_server_password-{{ ibesx }}
           name: "ESX Server User password"
           optional: 0
           input: password
@@ -65,36 +184,149 @@
 
 {% if deploy_nsx == '1' %}
       - "NSX Edge ESX Cluster":
-{% set NSXEDGEESXCOUNT = nsxedge_esx_count|int %}
-{% for nsxesx in range(NSXEDGEESXCOUNT) %}
-        - id: esx_server_nsxedge-{{ nsxesx }}_url
-          name: "ESX Server IP or FQDN"
+{% for nsxesx in range(nsxedge_esx_count|int) %}
+        - id: nsxedge_esx_server_name-{{ nsxesx }}
+          name: "ESX Name"
           optional: 0
-        - id: esx_server_nsxedge-{{ nsxesx }}_username
+          default: "nsx_edge-{{ nsxesx }}"
+        - id: nsxedge_esx_server_url-{{ nsxesx }}
+          name: "ESX Server IP"
+          optional: 0
+{% if deploy_esx == '1' %}
+        - id: nsxedge_esx_server_mac_address-{{ nsxesx }}
+          name: "ESX Server MAC Address"
+          optional: 1
+          default: ""
+{% endif %}
+        - id: nsxedge_esx_server_username-{{ nsxesx }}
           name: "ESX Server username"
           optional: 0
-        - id: esx_server_nsxedge-{{ nsxesx }}_password
+          default: "root"
+        - id: nsxedge_esx_server_password-{{ nsxesx }}
           name: "ESX Server User password"
           optional: 0
           input: password
 {% endfor %}
 {% endif %}
 
-{% set COMPUTECLUSTERCOUNT = compute_esx_cluster_count|int %}
-{% for compcluster in range(COMPUTECLUSTERCOUNT) %}
-      - "Compute ESX Cluster - {{ compcluster }}":
-{% set COMPUTEESXCOUNT = compute_esx_count|int %}
-{% for computeesx in range(COMPUTEESXCOUNT) %}
-        - id: esx_server_compute-{{ computeesx }}_url
+      - "Compute ESX Cluster":
+{% for computeesx in range(compute_esx_count|int) %}
+        - id: compute_esx_server_name-{{ computeesx }}
+          name: "ESX Name"
+          optional: 0
+          default: compute-{{ computeesx }}
+        - id: compute_esx_server_url-{{ computeesx }}
           name: "ESX Server IP or FQDN"
           optional: 0
-        - id: esx_server_compute-{{ computeesx }}_username
+{% if deploy_esx == '1' %}
+        - id: compute_esx_server_mac_address-{{ computeesx }}
+          name: "ESX Server MAC Address"
+          optional: 1
+          default: ""
+{% endif %}
+        - id: compute_esx_server_username-{{ computeesx }}
           name: "ESX Server username"
           optional: 0
-        - id: esx_server_compute-{{ computeesx }}_password
+          default: "root"
+        - id: compute_esx_server_password-{{ computeesx }}
           name: "ESX Server User password"
           optional: 0
           input: password
 {% endfor %}
-{% endfor %}
+      - "Networking":
+        - id: ib_vcenter_net_vds_name
+          name: "Distributed vSwitch Name"
+          optional: 0
+          default: "ib-mgmt_vds-01"
+        - id: ib_vcenter_net_vds_uplinks
+          name: "Number of vDS uplinks"
+          optional: 1
+          hide: 1
+          default: "1"
+        - id: ib_vcenter_net_vds_ports
+          name: "Initial number of vDS ports"
+          optional: 1
+          hide: 1
+          default: "16"
+        - id: ib_vcenter_net_vds_nioc
+          name: "Enable NIOC"
+          optional: 1
+          hide: 1
+          default: "False"
+        - id: ib_vcenter_net_vds_version
+          name: "vDS version"
+          optional: 1
+          hide: 1
+          default: "6.0.0"
+### PORTGROUPS START ###
+        - id: ib_vcenter_net_mgmt_pg_name
+          name: "Management Port Group Name"
+          optional: 0
+          default: "ib-mgmt_pg-mgmt-01"
+        - id: ib_vcenter_net_mgmt_pg_vlan_id
+          name: "Management Port Group VLAN ID"
+          optional: 1
+        - id: ib_vcenter_net_mgmt_port_binding
+          name: "Management Port Group Binding"
+          optional: 1
+          hide: 1
+          default: "ephemeral"
+{% if (storage_scheme == 'NFS') or (storage_scheme == 'iSCSI') %}
+        - id: ib_vcenter_net_storage_pg_name
+          name: "IP Storage Port Group Name"
+          optional: 1
+          default: "ib-mgmt_pg-storage-01"
+        - id: ib_vcenter_net_storage_pg_vlan_id
+          name: "IP Storage Port Group VLAN ID"
+          optional: 1
+        - id: ib_vcenter_net_storage_ip_pool
+          name: "IP Storage IP Pool"
+          optional: 1
+        - id: ib_vcenter_net_storage_port_binding
+          name: "IP Storage Port Group Binding"
+          optional: 1
+          hide: 1
+          default: "ephemeral"
 {% endif %}
+        - id: ib_vcenter_net_vmotion_pg_name
+          name: "vMotion Port Group Name"
+          optional: 0
+          default: "ib-mgmt_pg-vmotion-01"
+        - id: ib_vcenter_net_vmotion_vlan_id
+          name: "vMotion Port Group VLAN ID"
+          optional: 1
+        - id: ib_vcenter_net_vmotion_ip_pool
+          name: "vMotion IP Pool"
+          optional: 1
+        - id: ib_vcenter_net_vmotion_port_binding
+          name: "vMotion Port Group Binding"
+          optional: 1
+          hide: 1
+          default: "ephemeral"
+{% if deploy_vio == '1' %}
+        - id: ib_vcenter_net_vio_ext_pg_name
+          name: "VIO API Port Group Name"
+          optional: 0
+          default: "vio-ext"
+        - id: ib_vcenter_net_vio_ext_pg_vlan_id
+          name: "VIO API Port Group VLAN ID"
+          optional: 1
+        - id: ib_vcenter_net_vio_ext_pg_binding
+          name: "VIO API Port Group Port Binding"
+          optional: 1
+          hide: 1
+          default: "ephemeral"
+        - id: ib_vcenter_net_vio_ext_pg_name
+          name: "VIO External Port Group Name"
+          optional: 0
+          default: "vio-ext"
+        - id: ib_vcenter_net_vio_ext_pg_vlan_id
+          name: "VIO External Port Group VLAN ID"
+          optional: 1
+        - id: ib_vcenter_net_vio_ext_pg_binding
+          name: "VIO External Port Group Port Binding"
+          optional: 1
+          hide: 1
+          default: "ephemeral"
+{% endif %}
+### PORTGROUPS END ###

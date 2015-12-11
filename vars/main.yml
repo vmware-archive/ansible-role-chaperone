@@ -52,3 +52,6 @@ django_pip_packages:
 
 django_pip_versioned_packages:
   - { name: "django", version: "1.8.5" }
+
+roles_directory_base: "/opt/chaperone-ansible/roles"
+vcenter_task_directory: "{{ roles_directory_base }}/vcenter/tasks"

@@ -1,5 +1,5 @@
 #!/bin/bash
 
-#python /opt/{{ django_app }}/prepare_variables.py
+python /opt/{{ django_app }}/prepare_variables.py
 cd /opt/{{ django_app }}-ansible/playbooks/{{ django_app }}
-ansible-playbook -i inventory -v $1 --tags $2
+ansible-playbook -i examples/inventory -v $1 --tags $2

@@ -14,8 +14,15 @@
 #  limitations under the License.
 #
 ---
-- include: packages.yml
-- include: chaperone-ui.yml
-- include: admin-ui.yml
-- include: update-ui.yml
-- include: prestage-tasks.yml
+- name: Create placeholder tasks for vCenter role
+  command: touch "{{ vcenter_task_directory }}/{{ item }}"
+  args:
+    creates: "{{ vcenter_task_directory }}/{{ item }}"
+  sudo: no
+  with_items:
+    - create_ib_datacenter.yml
+    - create_oob_datacenter.yml
+    - destroy_ib_datacenter.yml
+    - destroy_oob_datacenter.yml
+  tags:
+    - rsync
