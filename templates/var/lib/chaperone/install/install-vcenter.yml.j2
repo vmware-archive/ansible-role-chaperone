@@ -14,33 +14,78 @@
    limitations under the License.
 #}
   - "vCenter Config":
-    - id: install_oob_datacenter
-      name: "Create OOB vSphere Datacenter"
+    - id: create_oob_vcenter_objects
+      name: "Create OOB vCenter DC+ESX Clusters+Networking"
       commands:
-        - "/opt/{{ django_app }}/{{ django_app }}_play_tags vcenter.yml create_oob_datacenter_task"
-        - "/opt/{{ django_app }}/{{ django_app }}_play_tags vcenter.yml oob_datacenter"
-    - id: install_ib_datacenter
-      name: "Create IB vSphere Datacenter"
+        - "/opt/{{ django_app }}/{{ django_app }}_play_tags vcenter_config.yml prereqs"
+        - "/opt/{{ django_app }}/{{ django_app }}_play_tags vcenter_config.yml create_oob_datacenter_create_task"
+        - "/opt/{{ django_app }}/{{ django_app }}_play_tags vcenter_config.yml create_oob_datacenter"
+        - "/opt/{{ django_app }}/{{ django_app }}_play_tags vcenter_config.yml create_oob_clusters"
+        - "/opt/{{ django_app }}/{{ django_app }}_play_tags vcenter_config.yml create_oob_vcenter_dvs"
+    - id: create_ib_vcenter_objects
+      name: "Create IB vCenter DC+ESX Clusters+Networking"
       commands:
-        - "/opt/{{ django_app }}/{{ django_app }}_play_tags vcenter.yml create_ib_datacenter_task"
-        - "/opt/{{ django_app }}/{{ django_app }}_play_tags vcenter.yml ib_datacenter"
-    - id: install_vds
-      name: "Create VDS portgroups"
+        - "/opt/{{ django_app }}/{{ django_app }}_play_tags vcenter_config.yml prereqs"
+        - "/opt/{{ django_app }}/{{ django_app }}_play_tags vcenter_config.yml create_ib_datacenter_create_task"
+        - "/opt/{{ django_app }}/{{ django_app }}_play_tags vcenter_config.yml create_ib_datacenter"
+        - "/opt/{{ django_app }}/{{ django_app }}_play_tags vcenter_config.yml create_ib_clusters"
+        - "/opt/{{ django_app }}/{{ django_app }}_play_tags vcenter_config.yml create_ib_vcenter_dvs"
+    - id: destroy_oob_dc_and_clusters
+      name: "Destroy OOB vCenter Datacenter and ESX Clusters"
       commands:
-        - "/opt/{{ django_app }}/{{ django_app }}_play_tags vcenter.yml vds"
+        - "/opt/{{ django_app }}/{{ django_app }}_play_tags vcenter_config.yml prereqs"
+        - "/opt/{{ django_app }}/{{ django_app }}_play_tags vcenter_config.yml destroy_oob_clusters"
+        - "/opt/{{ django_app }}/{{ django_app }}_play_tags vcenter_config.yml create_oob_datacenter_destroy_task"
+        - "/opt/{{ django_app }}/{{ django_app }}_play_tags vcenter_config.yml destroy_oob_datacenter"
+    - id: destroy_ib_dc_and_clusters
+      name: "Destroy IB vCenter Datacenter and ESX Clusters"
+      commands:
+        - "/opt/{{ django_app }}/{{ django_app }}_play_tags vcenter_config.yml prereqs"
+        - "/opt/{{ django_app }}/{{ django_app }}_play_tags vcenter_config.yml destroy_ib_clusters"
+        - "/opt/{{ django_app }}/{{ django_app }}_play_tags vcenter_config.yml create_ib_datacenter_destroy_task"
+        - "/opt/{{ django_app }}/{{ django_app }}_play_tags dc.yml destroy_ib_datacenter"
+    - id: install_oob_vcenter_dvs
+      name: "Create OOB vCenter DVS"
+      commands:
+        - "/opt/{{ django_app }}/{{ django_app }}_play_tags vcenter_config.yml prereqs"
+        - "/opt/{{ django_app }}/{{ django_app }}_play_tags vcenter_config.yml create_oob_vcenter_dvs"
+    - id: install_ib_vcenter_dvs
+      name: "Create IB vCenter DVS"
+      commands:
+        - "/opt/{{ django_app }}/{{ django_app }}_play_tags vcenter_config.yml prereqs"
+        - "/opt/{{ django_app }}/{{ django_app }}_play_tags vcenter_config.yml create_ib_vcenter_dvs"
+    - id: destroy_oob_vcenter_dvs
+      name: "Destroy OOB vCenter DVS"
+      commands:
+        - "/opt/{{ django_app }}/{{ django_app }}_play_tags vcenter_config.yml prereqs"
+        - "/opt/{{ django_app }}/{{ django_app }}_play_tags vcenter_config.yml destroy_oob_vcenter_dvs"
+    - id: destroy_ib_vcenter_dvs
+      name: "Destroy IB vCenter DVS"
+      commands:
+        - "/opt/{{ django_app }}/{{ django_app }}_play_tags vcenter_config.yml prereqs"
+        - "/opt/{{ django_app }}/{{ django_app }}_play_tags vcenter_config.yml destroy_ib_vcenter_dvs"
+    - id: create_oob_vcenter_portgroups
+      name: "Create OOB vCenter Portgroups"
+      commands:
+        - "/opt/{{ django_app }}/{{ django_app }}_play_tags vcenter_config.yml prereqs"
+        - "/opt/{{ django_app }}/{{ django_app }}_play_tags vcenter_config.yml create_oob_vcenter_portgroups"
     - id: install_datacenter_addhosts
       name: "Add Hosts"
       commands:
-        - "/opt/{{ django_app }}/{{ django_app }}_play_tags vcenter.yml addhosts"
+        - "/opt/{{ django_app }}/{{ django_app }}_play_tags vcenter_config.yml prereqs"
+        - "/opt/{{ django_app }}/{{ django_app }}_play_tags vcenter_config.yml addhosts"
     - id: install_datacenter_confighosts
       name: "Configure Hosts vds"
       commands:
-        - "/opt/{{ django_app }}/{{ django_app }}_play_tags vcenter.yml confighosts"
+        - "/opt/{{ django_app }}/{{ django_app }}_play_tags vcenter_config.yml prereqs"
+        - "/opt/{{ django_app }}/{{ django_app }}_play_tags vcenter_config.yml confighosts"
     - id: install_datacenter_hostprofile
       name: "Create Host Profiles"
       commands:
-        - "/opt/{{ django_app }}/{{ django_app }}_play_tags vcenter.yml hostprofile"
+        - "/opt/{{ django_app }}/{{ django_app }}_play_tags vcenter_config.yml prereqs"
+        - "/opt/{{ django_app }}/{{ django_app }}_play_tags vcenter_config.yml hostprofile"
     - id: install_applyprofiles
       name: "Apply Host Profiles"
       commands:
-        - "/opt/{{ django_app }}/{{ django_app }}_play_tags vcenter.yml applyprofile"
+        - "/opt/{{ django_app }}/{{ django_app }}_play_tags vcenter_config.yml prereqs"
+        - "/opt/{{ django_app }}/{{ django_app }}_play_tags vcenter_config.yml applyprofile"

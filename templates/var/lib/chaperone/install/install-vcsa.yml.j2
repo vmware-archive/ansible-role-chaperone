@@ -28,6 +28,36 @@
         - "/opt/{{ django_app }}/{{ django_app }}_play_tags vcsa.yml create_oob_vcenter_task"
         - "/opt/{{ django_app }}/{{ django_app }}_play_tags vcsa.yml prereqs,deploy_vcenter_psc_ova,cleanup"
 {% endif %}
+{% if enable_oob_mgmt_svcs == '1' and psc_appliance_deployment_scheme == 'Embedded' %}
+    - id: oob_vcenterpsc_ova_deploy
+      name: "Deploy out-of-band vCenter with embedded PSC"
+      commands:
+        - "/opt/{{ django_app }}/{{ django_app }}_play_tags vcsa.yml create_oob_vcenterpsc_task"
+        - "/opt/{{ django_app }}/{{ django_app }}_play_tags vcsa.yml prereqs,deploy_vcenter_psc_ova,cleanup"
+{% endif %}
+
+{% if enable_oob_mgmt_svcs == '1' and psc_appliance_deployment_scheme == 'Dedicated' %}
+    - id: oob_psc_ova_cleanup
+      name: "Destroy out-of-band dedicated PSC"
+      commands:
+        - "/opt/{{ django_app }}/{{ django_app }}_play_tags vcsa.yml create_oob_psc_cleanup_task"
+        - "/opt/{{ django_app }}/{{ django_app }}_play_tags vcsa.yml destroy_appliance"
+{% endif %}
+{% if (enable_oob_mgmt_svcs == '1' and psc_appliance_deployment_scheme == 'Dedicated') or psc_appliance_deployment_scheme == 'Existing' %}
+  - id: oob_vcenter_ova_cleanup
+    name: "Destroy out-of-band dedicated vCenter"
+    commands:
+      - "/opt/{{ django_app }}/{{ django_app }}_play_tags vcsa.yml create_oob_vcenter_cleanup_task"
+      - "/opt/{{ django_app }}/{{ django_app }}_play_tags vcsa.yml destroy_appliance"
+{% endif %}
+{% if enable_oob_mgmt_svcs == '1' and psc_appliance_deployment_scheme == 'Embedded' %}
+    - id: oob_vcenterpsc_ova_cleanup
+      name: "Destroy out-of-band vCenter with embedded PSC"
+      commands:
+        - "/opt/{{ django_app }}/{{ django_app }}_play_tags vcsa.yml create_oob_vcenterpsc_cleanup_task"
+        - "/opt/{{ django_app }}/{{ django_app }}_play_tags vcsa.yml destroy_appliance"
+{% endif %}
+
 {% if psc_appliance_deployment_scheme == 'Dedicated' %}
     - id: ib_psc_ova_deploy
       name: "Deploy in-band dedicated PSC"
@@ -40,13 +70,6 @@
       name: "Deploy in-band dedicated vCenter"
       commands:
         - "/opt/{{ django_app }}/{{ django_app }}_play_tags vcsa.yml create_ib_vcenter_task"
-        - "/opt/{{ django_app }}/{{ django_app }}_play_tags vcsa.yml prereqs,deploy_vcenter_psc_ova,cleanup"
-{% endif %}
-{% if enable_oob_mgmt_svcs == '1' and psc_appliance_deployment_scheme == 'Embedded' %}
-    - id: oob_vcenterpsc_ova_deploy
-      name: "Deploy out-of-band vCenter with embedded PSC"
-      commands:
-        - "/opt/{{ django_app }}/{{ django_app }}_play_tags vcsa.yml create_oob_vcenterpsc_task"
         - "/opt/{{ django_app }}/{{ django_app }}_play_tags vcsa.yml prereqs,deploy_vcenter_psc_ova,cleanup"
 {% endif %}
 {% if psc_appliance_deployment_scheme == 'Embedded' %}
@@ -64,13 +87,6 @@
         - "/opt/{{ django_app }}/{{ django_app }}_play_tags vcsa.yml create_ib_psc_cleanup_task"
         - "/opt/{{ django_app }}/{{ django_app }}_play_tags vcsa.yml destroy_appliance"
 {% endif %}
-{% if enable_oob_mgmt_svcs == '1' and psc_appliance_deployment_scheme == 'Dedicated' %}
-    - id: oob_psc_ova_cleanup
-      name: "Destroy out-of-band dedicated PSC"
-      commands:
-        - "/opt/{{ django_app }}/{{ django_app }}_play_tags vcsa.yml create_oob_psc_cleanup_task"
-        - "/opt/{{ django_app }}/{{ django_app }}_play_tags vcsa.yml destroy_appliance"
-{% endif %}
 {% if psc_appliance_deployment_scheme == 'Dedicated' or psc_appliance_deployment_scheme == 'Existing' %}
     - id: ib_vcenter_ova_cleanup
       name: "Destroy in-band dedicated vCenter"
@@ -78,24 +94,10 @@
         - "/opt/{{ django_app }}/{{ django_app }}_play_tags vcsa.yml create_ib_vcenter_cleanup_task"
         - "/opt/{{ django_app }}/{{ django_app }}_play_tags vcsa.yml destroy_appliance"
 {% endif %}
-{% if (enable_oob_mgmt_svcs == '1' and psc_appliance_deployment_scheme == 'Dedicated') or psc_appliance_deployment_scheme == 'Existing' %}
-    - id: oob_vcenter_ova_cleanup
-      name: "Destroy out-of-band dedicated vCenter"
-      commands:
-        - "/opt/{{ django_app }}/{{ django_app }}_play_tags vcsa.yml create_oob_vcenter_cleanup_task"
-        - "/opt/{{ django_app }}/{{ django_app }}_play_tags vcsa.yml destroy_appliance"
-{% endif %}
 {% if psc_appliance_deployment_scheme == 'Embedded' %}
     - id: ib_vcenterpsc_ova_cleanup
       name: "Destroy in-band vCenter with embedded PSC"
       commands:
         - "/opt/{{ django_app }}/{{ django_app }}_play_tags vcsa.yml create_ib_vcenterpsc_cleanup_task"
-        - "/opt/{{ django_app }}/{{ django_app }}_play_tags vcsa.yml destroy_appliance"
-{% endif %}
-{% if enable_oob_mgmt_svcs == '1' and psc_appliance_deployment_scheme == 'Embedded' %}
-    - id: oob_vcenterpsc_ova_cleanup
-      name: "Destroy out-of-band vCenter with embedded PSC"
-      commands:
-        - "/opt/{{ django_app }}/{{ django_app }}_play_tags vcsa.yml create_oob_vcenterpsc_cleanup_task"
         - "/opt/{{ django_app }}/{{ django_app }}_play_tags vcsa.yml destroy_appliance"
 {% endif %}

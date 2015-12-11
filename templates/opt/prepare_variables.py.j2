@@ -22,33 +22,48 @@ answerfile = "{{ chaperone_answer_dir }}/answerfile.yml"
 
 if __name__ == "__main__":
   context = yaml.load(file(answerfile,'r'))
-  mgmt_ct = len([v for v in context.keys() if 'mgmt_esx_ip_' in v])
-  compute_ct = len([v for v in context.keys() if 'compute_esx_ip_' in v])
-  edge_ct = len([v for v in context.keys() if 'edge_esx_ip_' in v])
+  ib_mgmt_ct = len([v for v in context.keys() if 'ib_vcenter_mgmt_esx_server_name-' in v])
+  oob_mgmt_ct = len([v for v in context.keys() if 'oob_vcenter_mgmt_esx_server_name-' in v])
+  compute_ct = len([v for v in context.keys() if 'compute_esx_server_name-' in v])
+  edge_ct = len([v for v in context.keys() if 'nsxedge_esx_server_name-' in v])
 
-  context['mgmt_hosts'] = []
-  for n in range(mgmt_ct):
+  context['ib_mgmt_hosts'] = []
+  for n in range(ib_mgmt_ct):
     try:
       host = {}
-      host['mac'] = context.get("mgmt_esx_mac_%d" % n)
-      host['name'] = context.get("mgmt_esx_name_%d" % n)
-      host['ip'] = context.get("mgmt_esx_ip_%d" % n)
-      host['username'] = context.get("mgmt_esx_username_%d" % n)
-      host['password'] = context.get("mgmt_esx_password_%d" % n)
+      host['mac'] = context.get("ib_vcenter_mgmt_esx_server_mac_address-%d" % n)
+      host['name'] = context.get("ib_vcenter_mgmt_esx_server_name-%d" % n)
+      host['ip'] = context.get("ib_vcenter_mgmt_esx_server_url-%d" % n)
+      host['username'] = context.get("ib_vcenter_mgmt_esx_server_username-%d" % n)
+      host['password'] = context.get("ib_vcenter_mgmt_esx_server_password-%d" % n)
     except KeyError:
       pass
     else:
-      context['mgmt_hosts'].append(host)
+      context['ib_mgmt_hosts'].append(host)
+
+  context['oob_mgmt_hosts'] = []
+  for n in range(oob_mgmt_ct):
+    try:
+      host = {}
+      host['mac'] = context.get("oob_vcenter_mgmt_esx_server_mac_address-%d" % n)
+      host['name'] = context.get("oob_vcenter_mgmt_esx_server_name-%d" % n)
+      host['ip'] = context.get("oob_vcenter_mgmt_esx_server_url-%d" % n)
+      host['username'] = context.get("oob_vcenter_mgmt_esx_server_username-%d" % n)
+      host['password'] = context.get("oob_vcenter_mgmt_esx_server_password-%d" % n)
+    except KeyError:
+      pass
+    else:
+      context['oob_mgmt_hosts'].append(host)
 
   context['edge_hosts'] = []
   for n in range(edge_ct):
     try:
       host = {}
-      host['mac'] = context.get("edge_esx_mac_%d" % n)
-      host['name'] = context.get("edge_esx_name_%d" % n)
-      host['ip'] = context.get("edge_esx_ip_%d" % n)
-      host['username'] = context.get("edge_esx_username_%d" % n)
-      host['password'] = context.get("edge_esx_password_%d" % n)
+      host['mac'] = context.get("nsxedge_esx_server_mac_address-%d" % n)
+      host['name'] = context.get("nsxedge_esx_server_name-%d" % n)
+      host['ip'] = context.get("nsxedge_esx_server_url-%d" % n)
+      host['username'] = context.get("nsxedge_esx_server_username-%d" % n)
+      host['password'] = context.get("nsxedge_esx_server_password-%d" % n)
     except KeyError:
       pass
     else:
@@ -58,11 +73,11 @@ if __name__ == "__main__":
   for n in range(compute_ct):
     host = {}
     try:
-      host['mac'] = context.get("compute_esx_mac_%d" % n)
-      host['name'] = context.get("compute_esx_name_%d" % n)
-      host['ip'] = context.get("compute_esx_ip_%d" % n)
-      host['username'] = context.get("compute_esx_username_%d" % n)
-      host['password'] = context.get("compute_esx_password_%d" % n)
+      host['mac'] = context.get("compute_esx_server_mac_address-%d" % n)
+      host['name'] = context.get("compute_esx_server_name-%d" % n)
+      host['ip'] = context.get("compute_esx_server_url-%d" % n)
+      host['username'] = context.get("compute_esx_server_username-%d" % n)
+      host['password'] = context.get("compute_esx_server_password-%d" % n)
     except KeyError:
       pass
     else:
