@@ -7,6 +7,7 @@
     - id: install_ib_datacenter
       name: "Create IB vSphere Datacenter"
       commands:
+        - "/opt/{{ django_app }}/{{ django_app }}_play_tags dc.yml create_ib_datacenter_task"
         - "/opt/{{ django_app }}/{{ django_app }}_play_tags dc.yml ib_datacenter"
     - id: install_vds
       name: "Create VDS portgroups"

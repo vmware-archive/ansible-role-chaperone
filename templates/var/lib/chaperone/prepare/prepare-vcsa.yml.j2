@@ -1,4 +1,61 @@
   - "vCenter Services - Deploy":
+{% if enable_oob_mgmt_svcs == '1' and psc_appliance_deployment_scheme == 'Dedicated' %}
+    - "Out-of-band PSC":
+      - "Appliance Configuration":
+        - id: oob_psc_appliance_name
+          name: "PSC Appliance Name"
+          optional: 0
+        - id: oob_psc_admin_password
+          name: "PSC administrator password"
+          input: password
+          optional: 0
+      - "Appliance Deployment Target":
+        - id: oob_psc_deploy_target_url
+          name: "ESXi Server FQDN or IP Address"
+          optional: 0
+        - id: oob_psc_deploy_target_user_name
+          name: "ESXi User"
+          optional: 0
+        - id: oob_psc_deploy_target_user_password
+          name: "ESXi User Password"
+          optional: 0
+          input: password
+      - "Storage Configuration":
+        - id: oob_psc_esx_datastore
+          name: "Datastore"
+          optional: 0
+        - id: oob_psc_appliance_thin_disk_mode
+          name: "Thin Disk Mode"
+          optional: 0
+          input: checkbox
+      - "Network Configuration":
+        - id: oob_psc_esx_portgroup
+          name: "Portgroup"
+          optional: 0
+{% if network_ip_scheme == 'Static' %}
+        - id: oob_psc_ip_address
+          name: "IP address"
+          optional: 0
+        - id: oob_psc_ip_netmask
+          name: "IP netmask"
+          optional: 0
+        - id: oob_psc_ip_gateway
+          name: "IP gateway"
+          optional: 0
+{% endif %}
+      - "SSO Information":
+        - id: oob_psc_sso_domain_name
+          name: "SSO Domain Name"
+          optional: 0
+        - id: oob_psc_sso_site_name
+          name: "SSO Site Name"
+          optional: 0
+        - id: oob_psc_sso_password
+          name: "SSO administrator password"
+          input: password
+          optional: 0
+{% endif %}
+
 {% if enable_oob_mgmt_svcs == '1' %}
     - "Out-of-band vCenter":
       - "Appliance Configuration":
@@ -14,13 +71,12 @@
             - id: small
             - id: medium
             - id: large
-          help: "The size for this vCenter appliance."
         - id: oob_vcenter_admin_password
           name: "vCenter administrator password"
           input: password
           optional: 0
       - "Appliance Deployment Target":
-        - id: oob_vcenter_deploy_url
+        - id: oob_vcenter_deploy_target_url
           name: "ESXi Server FQDN or IP Address"
           optional: 0
         - id: oob_vcenter_deploy_target_user_name
@@ -34,17 +90,14 @@
         - id: oob_vcenter_esx_datastore
           name: "Datastore"
           optional: 0
-          help: "Datastore to deploy the OVA to"
         - id: oob_vcenter_appliance_thin_disk_mode
           name: "Thin Disk Mode"
           optional: 0
           input: checkbox
-          help: "Disk provisioning mode."
       - "Network Configuration":
         - id: oob_vcenter_esx_portgroup
           name: "Portgroup"
           optional: 0
-          help: "Network name to use for the vCenter NIC (which MUST be set to Ephemeral binding)."
 {% if network_ip_scheme == 'Static' %}
         - id: oob_vcenter_ip_address
           name: "IP address"
@@ -60,163 +113,28 @@
       - "SSO Information":
         - id: oob_vcenter_psc_appliance_dns_name_manual
           name: "PSC FQDN"
-          optional: 1
-          help: "PSC FQDN, required for SSO integration."
+          optional: 0
+        - id: oob_vcenter_psc_sso_password
+          name: "PSC Administrator password"
+          input: password
+          optional: 0
 {% endif %}
 {% if psc_appliance_deployment_scheme == 'Embedded' %}
       - "SSO Information":
-        - id: oob_vcenter_sso_domain_name
+        - id: oob_vcenter_embedded_sso_domain_name
           name: "SSO Domain Name"
           optional: 0
-          help: "The single sign-on domain name for identity management."
-        - id: oob_vcenter_sso_site_name
+        - id: oob_vcenter_embedded_sso_site_name
           name: "SSO Site Name"
           optional: 0
-          help: "The single sign-on site name for identity management."
-        - id: oob_vcenter_sso_password
+        - id: oob_vcenter_embedded_sso_password
           name: "SSO administrator password"
           input: password
           optional: 0
-          help: "The single sign-on admin password."
 {% endif %}
 {% endif %}
 
-{% if enable_oob_mgmt_svcs == '1' and psc_appliance_deployment_scheme == 'Dedicated' %}
-    - "Out-of-band PSC":
-      - "Appliance Configuration":
-        - id: oob_psc_appliance_name
-          name: "PSC Appliance Name"
-          optional: 0
-        - id: oob_psc_admin_password
-          name: "PSC administrator password"
-          input: password
-          optional: 0
-      - "Appliance Deployment Target":
-        - id: oob_psc_deploy_target
-          name: "ESXi Server target"
-          optional: 0
-        - id: oob_psc_esx_username
-          name: "ESXi User"
-          optional: 0
-          help: "Host login name."
-        - id: oob_psc_esx_password
-          name: "ESXi User Password"
-          optional: 0
-          input: password
-          help: "Host login password."
-      - "Storage Configuration":
-        - id: oob_psc_esx_datastore
-          name: "Datastore"
-          optional: 0
-          help: "Datastore to deploy the OVA to"
-        - id: oob_psc_appliance_thin_disk_mode
-          name: "Thin Disk Mode"
-          optional: 0
-          input: checkbox
-          help: "Disk provisioning mode."
-      - "Network Configuration":
-        - id: oob_psc_esx_portgroup
-          name: "Portgroup"
-          optional: 0
-{% if network_ip_scheme == 'Static' %}
-        - id: oob_psc_ip_address
-          name: "PSC static IP address"
-          optional: 0
-        - id: oob_psc_ip_netmask
-          name: "PSC VLSM"
-          optional: 0
-        - id: oob_psc_ip_gateway
-          name: "PSC static IP gateway"
-          optional: 0
-{% endif %}
-      - "SSO Information":
-        - id: oob_psc_sso_domain_name
-          name: "SSO Domain Name"
-          optional: 0
-          help: "The single sign-on domain name for identity management."
-        - id: oob_psc_sso_site_name
-          name: "SSO Site Name"
-          optional: 0
-          help: "The single sign-on site name for identity management."
-        - id: oob_psc_sso_password
-          name: "SSO administrator password"
-          input: password
-          optional: 0
-          help: "The single sign-on admin password."
-{% endif %}
-
-    - "In-band vCenter":
-      - "Appliance Configuration":
-        - id: ib_vcenter_appliance_name
-          name: "vCenter Appliance Name"
-          optional: 0
-        - id: ib_vcenter_deployment_option
-          name: "vCenter Deployment Type"
-          input: dropdown
-          optional: 0
-          options:
-            - id: tiny
-            - id: small
-            - id: medium
-            - id: large
-          help: "The size for this vCenter appliance."
-        - id: ib_vcenter_admin_password
-          name: "vCenter administrator password"
-          input: password
-          optional: 0
-{% include 'app-specific/oob_vcenter_login.yml' %}
-
-      - "Storage Configuration":
-        - id: ib_vcenter_datastore
-          name: "Datastore"
-          optional: 0
-        - id: ib_vcenter_appliance_thin_disk_mode
-          name: "Thin Disk Mode"
-          optional: 0
-          input: checkbox
-      - "Network Configuration":
-        - id: ib_vcenter_portgroup
-          name: "Portgroup"
-          optional: 0
-          help: "Network name to use for the vCenter NIC (which MUST be set to Ephemeral binding)."
-{% if network_ip_scheme == 'Static' %}
-        - id: ib_vcenter_ip_address
-          name: "PSC static IP address"
-          optional: 0
-          help: "PSC IP address, required when Networking mode is set to static"
-        - id: ib_vcenter_ip_netmask
-          name: "PSC VLSM"
-          optional: 0
-          help: "PSC variable length subnet mask, required when Networking mode is set to static"
-        - id: ib_vcenter_ip_gateway
-          name: "PSC static IP gateway"
-          optional: 0
-          help: "PSC IP gateway, required when Networking mode is set to static"
-{% endif %}
-      - "SSO Information":
-{% if psc_appliance_deployment_scheme == 'Existing' or psc_appliance_deployment_scheme == 'Dedicated' %}
-        - id: ib_vcenter_psc_appliance_dns_name_manual
-          name: "PSC FQDN"
-          optional: 1
-          help: "PSC FQDN, required for SSO integration."
-{% endif %}
-{% if psc_appliance_deployment_scheme == 'Embedded' %}
-        - id: ib_vcenter_sso_domain_name
-          name: "SSO Domain Name"
-          optional: 0
-          help: "The single sign-on domain name for identity management."
-        - id: ib_vcenter_sso_site_name
-          name: "SSO Site Name"
-          optional: 0
-          help: "The single sign-on site name for identity management."
-        - id: ib_vcenter_sso_password
-          name: "SSO administrator password"
-          input: password
-          optional: 0
-          help: "The single sign-on admin password."
-{% endif %}
-
-{% if (enable_oob_mgmt_svcs == '0' and psc_appliance_deployment_scheme == 'Dedicated') or enable_oob_mgmt_svcs == '1' %}
+{% if psc_appliance_deployment_scheme == 'Dedicated' %}
     - "In-band PSC":
       - "Appliance Configuration":
         - id: ib_psc_appliance_name
@@ -229,17 +147,15 @@
 {% include 'app-specific/oob_vcenter_login.yml' %}
 
       - "Storage Configuration":
-        - id: ib_psc_datastore
+        - id: ib_psc_esx_datastore
           name: "Datastore"
           optional: 0
-          help: "Datastore to deploy the OVA to"
         - id: ib_psc_appliance_thin_disk_mode
           name: "Thin Disk Mode"
           optional: 0
           input: checkbox
-          help: "Disk provisioning mode."
       - "Network Configuration":
-        - id: ib_psc_portgroup
+        - id: ib_psc_esx_portgroup
           name: "Portgroup"
           optional: 0
 {% if network_ip_scheme == 'Static' %}
@@ -257,14 +173,78 @@
         - id: ib_psc_sso_domain_name
           name: "SSO Domain Name"
           optional: 0
-          help: "The single sign-on domain name for identity management."
         - id: ib_psc_sso_site_name
           name: "SSO Site Name"
           optional: 0
-          help: "The single sign-on site name for identity management."
         - id: ib_psc_sso_password
-          name: "SSO administrator password"
+          name: "SSO Administrator password"
           input: password
           optional: 0
-          help: "The single sign-on admin password."
+{% endif %}
+
+    - "In-band vCenter":
+      - "Appliance Configuration":
+        - id: ib_vcenter_appliance_name
+          name: "vCenter Appliance Name"
+          optional: 0
+        - id: ib_vcenter_deployment_option
+          name: "vCenter Deployment Type"
+          input: dropdown
+          optional: 0
+          options:
+            - id: tiny
+            - id: small
+            - id: medium
+            - id: large
+        - id: ib_vcenter_admin_password
+          name: "vCenter administrator password"
+          input: password
+          optional: 0
+{% include 'app-specific/oob_vcenter_login.yml' %}
+
+      - "Storage Configuration":
+        - id: ib_vcenter_esx_datastore
+          name: "Datastore"
+          optional: 0
+        - id: ib_vcenter_appliance_thin_disk_mode
+          name: "Thin Disk Mode"
+          optional: 0
+          input: checkbox
+      - "Network Configuration":
+        - id: ib_vcenter_esx_portgroup
+          name: "Portgroup"
+          optional: 0
+{% if network_ip_scheme == 'Static' %}
+        - id: ib_vcenter_ip_address
+          name: "IP address"
+          optional: 0
+        - id: ib_vcenter_ip_netmask
+          name: "IP netmask"
+          optional: 0
+        - id: ib_vcenter_ip_gateway
+          name: "IP gateway"
+          optional: 0
+{% endif %}
+{% if psc_appliance_deployment_scheme == 'Existing' or psc_appliance_deployment_scheme == 'Dedicated' %}
+      - "SSO Information":
+        - id: ib_vcenter_psc_appliance_dns_name_manual
+          name: "PSC FQDN"
+          optional: 0
+        - id: ib_vcenter_psc_sso_password
+          name: "PSC Administrator password"
+          input: password
+          optional: 0
+{% endif %}
+{% if psc_appliance_deployment_scheme == 'Embedded' %}
+      - "SSO Information":
+        - id: ib_vcenter_embedded_sso_domain_name
+          name: "SSO Domain Name"
+          optional: 0
+        - id: ib_vcenter_embedded_sso_site_name
+          name: "SSO Site Name"
+          optional: 0
+        - id: ib_vcenter_embedded_sso_password
+          name: "SSO Administrator password"
+          input: password
+          optional: 0
 {% endif %}
