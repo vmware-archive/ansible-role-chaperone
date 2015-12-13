@@ -15,7 +15,6 @@
 #
 ---
 - include: packages.yml
-- include: sites.yml
-- include: superbase-ui.yml
-- include: superbase-admin-ui.yml
+- include: chaperone-ui.yml
+- include: admin-ui.yml
 - include: updatebase-ui.yml
