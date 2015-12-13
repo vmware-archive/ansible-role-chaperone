@@ -64,6 +64,11 @@
 
 # Installer (action) menus
 - Install:
+# from install/install-ambient.yml.j2
+{% if deploy_ambient == '1' -%}
+{% include 'install/install-ambient.yml.j2' %}
+{% endif -%}
+
 # from install/install-esx.yml.j2
 {% if deploy_esx == '1' -%}
 {% include 'install/install-esx.yml.j2' %}
