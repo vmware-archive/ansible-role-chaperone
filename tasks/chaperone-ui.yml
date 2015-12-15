@@ -36,7 +36,13 @@
 
 - name: recursively sync the ui code from local repos
   sudo: no
-  synchronize: src=../../../ui/ dest=/opt/{{ django_app }}/ recursive=yes rsync_opts=--no-motd,--exclude=.git archive=no
+  synchronize:
+    src: "../../../ui/"
+    dest: "/opt/{{ django_app }}/"
+    recursive: yes
+    rsync_opts: "--no-motd,--exclude=.git"
+    archive: no
+    delete: yes
   tags:
     - rsync
 
@@ -52,19 +58,42 @@
 
 - name: recursively sync the ansible playbooks from local repos
   sudo: no
-  synchronize: src=../../../ansible/playbooks dest=/opt/{{ django_app }}-ansible/ recursive=yes rsync_opts=--no-motd,--exclude=.git archive=no
+  synchronize:
+    src: "../../../ansible/playbooks"
+    dest: "/opt/{{ django_app }}-ansible/"
+    recursive: yes
+    rsync_opts:
+      - "--no-motd"
+      - "--exclude=.git"
+    archive: no
+    delete: yes
   tags:
     - rsync
 
 - name: recursively sync the ansible roles from local repos
   sudo: no
-  synchronize: src=../../../ansible/roles dest=/opt/{{ django_app }}-ansible/ recursive=yes rsync_opts=--no-motd,--exclude=.git archive=no
+  synchronize:
+    src: "../../../ansible/roles"
+    dest: "/opt/{{ django_app }}-ansible/"
+    recursive: yes
+    rsync_opts:
+      - "--no-motd"
+      - "--exclude=.git"
+    archive: no
   tags:
     - rsync
 
 - name: recursively sync the ansible library from local repos
   sudo: no
-  synchronize: src=../../../ansible/library dest=/opt/{{ django_app }}-ansible/ recursive=yes rsync_opts=--no-motd,--exclude=.git archive=no
+  synchronize:
+    src: "../../../ansible/library"
+    dest: "/opt/{{ django_app }}-ansible/"
+    recursive: yes
+    rsync_opts:
+      - "--no-motd"
+      - "--exclude=.git"
+    archive: no
+    delete: yes
   tags:
     - rsync
 
@@ -80,7 +109,15 @@
 
 - name: recursively sync the containers built by ansible from local repos
   sudo: no
-  synchronize: src=../../../containers dest=/opt/ recursive=yes rsync_opts=--no-motd,--exclude=.git archive=no
+  synchronize:
+    src: "../../../containers"
+    dest: "/opt/"
+    recursive: yes
+    rsync_opts:
+      - "--no-motd"
+      - "--exclude=.git"
+    archive: no
+    delete: yes
   tags:
     - rsync
 
