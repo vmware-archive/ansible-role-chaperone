@@ -200,8 +200,17 @@
           name: "vCenter administrator password"
           input: password
           optional: 0
-{% include 'app-specific/oob_vcenter_login.yml' %}
-
+      - "Appliance Deployment Target":
+        - id: ib_vcenter_deploy_target_url
+          name: "ESXi Server FQDN or IP Address"
+          optional: 0
+        - id: ib_vcenter_deploy_target_user_name
+          name: "ESXi User"
+          optional: 0
+        - id: ib_vcenter_deploy_target_user_password
+          name: "ESXi User Password"
+          optional: 0
+          input: password
       - "Storage Configuration":
         - id: ib_vcenter_esx_datastore
           name: "Datastore"

@@ -34,48 +34,54 @@
           name: DNS Domain Name
           optional: 0
     - "Apps & Services":
+      - "Multiple Services":
+        - id: deploy_phase1
+          name: "Deploy Phase 1"
+          optional: 1
+          input: checkbox
+          help: "Provisions and configures all vCenters"
       - "Infrastructure Services":
         - id: deploy_ambient
           name: "Ambient Services (NTP/DNS/PXE/etc.)"
-          optional: 0
+          optional: 1
           input: checkbox
         - id: deploy_esx
           name: "ESX"
-          optional: 0
+          optional: 1
           input: checkbox
         - id: deploy_nsx
           name: "NSX"
-          optional: 0
+          optional: 1
           input: checkbox
         - id: deploy_vcenter
           name: "vCenter Server"
-          optional: 0
+          optional: 1
           input: checkbox
       - "Cloud Management Platforms":
         - id: deploy_cna
           name: "Cloud-Native Applications"
-          optional: 0
+          optional: 1
           input: checkbox
         - id: deploy_vio
           name: "VMware Integrated OpenStack"
-          optional: 0
+          optional: 1
           input: checkbox
         - id: deploy_vra
           name: "vRealize Automation"
-          optional: 0
+          optional: 1
           input: checkbox
       - "Infrastructure Applications":
         - id: deploy_vrli
           name: "vRealize Log Insight"
-          optional: 0
+          optional: 1
           input: checkbox
         - id: deploy_vrops
           name: "vRealize Operations"
-          optional: 0
+          optional: 1
           input: checkbox
         - id: deploy_vrb
           name: "vRealize Business"
-          optional: 0
+          optional: 1
           input: checkbox
     - "General":
       - "Out-of-band Management Services":

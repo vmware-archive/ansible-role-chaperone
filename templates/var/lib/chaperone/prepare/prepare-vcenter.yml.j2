@@ -304,18 +304,28 @@
           hide: 1
           default: "ephemeral"
 {% if deploy_vio == '1' %}
-        - id: ib_vcenter_net_vio_ext_pg_name
+        - id: ib_vcenter_net_vio_api_pg_name
           name: "VIO API Port Group Name"
           optional: 0
-          default: "vio-ext"
-        - id: ib_vcenter_net_vio_ext_pg_vlan_id
+          default: "vio-api"
+        - id: ib_vcenter_net_vio_api_pg_vlan_id
           name: "VIO API Port Group VLAN ID"
           optional: 1
-        - id: ib_vcenter_net_vio_ext_pg_binding
+        - id: ib_vcenter_net_vio_api_pg_binding
           name: "VIO API Port Group Port Binding"
           optional: 1
           hide: 1
           default: "ephemeral"
+        - id: ib_vcenter_net_vio_api_pg_ports
+          name: "VIO API Port Group Ports"
+          optional: 1
+          hide: 1
+          default: "16"
+        - id: ib_vcenter_vio_api_pg_port_allocation
+          name: "VIO API Port Group Port Allocation"
+          optional: 1
+          hide: 1
+          default: "elastic"
         - id: ib_vcenter_net_vio_ext_pg_name
           name: "VIO External Port Group Name"
           optional: 0
@@ -328,5 +338,15 @@
           optional: 1
           hide: 1
           default: "ephemeral"
+        - id: ib_vcenter_net_vio_ext_pg_ports
+          name: "VIO External Port Group Ports"
+          optional: 1
+          hide: 1
+          default: "16"
+        - id: ib_vcenter_vio_ext_pg_port_allocation
+          name: "VIO External Port Group Port Allocation"
+          optional: 1
+          hide: 1
+          default: "elastic"
 {% endif %}
 ### PORTGROUPS END ###

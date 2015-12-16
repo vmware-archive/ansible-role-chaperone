@@ -22,6 +22,7 @@
         - "/opt/{{ django_app }}/{{ django_app }}_play_tags vcenter_config.yml create_oob_datacenter"
         - "/opt/{{ django_app }}/{{ django_app }}_play_tags vcenter_config.yml create_oob_clusters"
         - "/opt/{{ django_app }}/{{ django_app }}_play_tags vcenter_config.yml create_oob_vcenter_dvs"
+        - "/opt/{{ django_app }}/{{ django_app }}_play_tags vcenter_config.yml create_oob_vcenter_portgroups"
     - id: create_ib_vcenter_objects
       name: "Create IB vCenter DC+ESX Clusters+Networking"
       commands:
@@ -30,6 +31,7 @@
         - "/opt/{{ django_app }}/{{ django_app }}_play_tags vcenter_config.yml create_ib_datacenter"
         - "/opt/{{ django_app }}/{{ django_app }}_play_tags vcenter_config.yml create_ib_clusters"
         - "/opt/{{ django_app }}/{{ django_app }}_play_tags vcenter_config.yml create_ib_vcenter_dvs"
+        - "/opt/{{ django_app }}/{{ django_app }}_play_tags vcenter_config.yml create_ib_vcenter_portgroups"
     - id: destroy_oob_dc_and_clusters
       name: "Destroy OOB vCenter Datacenter and ESX Clusters"
       commands:
@@ -69,6 +71,21 @@
       commands:
         - "/opt/{{ django_app }}/{{ django_app }}_play_tags vcenter_config.yml prereqs"
         - "/opt/{{ django_app }}/{{ django_app }}_play_tags vcenter_config.yml create_oob_vcenter_portgroups"
+    - id: create_ib_vcenter_portgroups
+      name: "Create IB vCenter Portgroups"
+      commands:
+        - "/opt/{{ django_app }}/{{ django_app }}_play_tags vcenter_config.yml prereqs"
+        - "/opt/{{ django_app }}/{{ django_app }}_play_tags vcenter_config.yml create_ib_vcenter_portgroups"
+    - id: destroy_oob_vcenter_portgroups
+      name: "Destroy OOB vCenter Portgroups"
+      commands:
+        - "/opt/{{ django_app }}/{{ django_app }}_play_tags vcenter_config.yml prereqs"
+        - "/opt/{{ django_app }}/{{ django_app }}_play_tags vcenter_config.yml destroy_oob_vcenter_portgroups"
+    - id: destroy_ib_vcenter_portgroups
+      name: "Destroy IB vCenter Portgroups"
+      commands:
+        - "/opt/{{ django_app }}/{{ django_app }}_play_tags vcenter_config.yml prereqs"
+        - "/opt/{{ django_app }}/{{ django_app }}_play_tags vcenter_config.yml destroy_ib_vcenter_portgroups"
     - id: install_datacenter_addhosts
       name: "Add Hosts"
       commands:
