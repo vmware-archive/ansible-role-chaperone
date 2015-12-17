@@ -266,11 +266,21 @@
         - id: ib_vcenter_net_mgmt_pg_vlan_id
           name: "Management Port Group VLAN ID"
           optional: 1
-        - id: ib_vcenter_net_mgmt_port_binding
+        - id: ib_vcenter_net_mgmt_pg_port_binding
           name: "Management Port Group Binding"
           optional: 1
           hide: 1
           default: "ephemeral"
+        - id: ib_vcenter_net_mgmt_pg_ports
+          name: "Number of Management Port Group Ports"
+          optional: 1
+          hide: 1
+          default: "16"
+        - id: ib_vcenter_net_mgmt_pg_port_allocation
+          name: "Management Port Group Port Allocation"
+          optional: 1
+          hide: 1
+          default: "elastic"
 {% if (storage_scheme == 'NFS') or (storage_scheme == 'iSCSI') %}
         - id: ib_vcenter_net_storage_pg_name
           name: "IP Storage Port Group Name"
@@ -279,30 +289,50 @@
         - id: ib_vcenter_net_storage_pg_vlan_id
           name: "IP Storage Port Group VLAN ID"
           optional: 1
-        - id: ib_vcenter_net_storage_ip_pool
-          name: "IP Storage IP Pool"
-          optional: 1
-        - id: ib_vcenter_net_storage_port_binding
+        - id: ib_vcenter_net_storage_pg_port_binding
           name: "IP Storage Port Group Binding"
           optional: 1
           hide: 1
           default: "ephemeral"
+        - id: ib_vcenter_net_storage_pg_ports
+          name: "Number of IP Storage Port Group Ports"
+          optional: 1
+          hide: 1
+          default: "16"
+        - id: ib_vcenter_net_storage_pg_port_allocation
+          name: "IP Storage Port Group Port Allocation"
+          optional: 1
+          hide: 1
+          default: "elastic"
+        - id: ib_vcenter_net_storage_ip_pool
+          name: "IP Storage IP Pool"
+          optional: 1
 {% endif %}
         - id: ib_vcenter_net_vmotion_pg_name
           name: "vMotion Port Group Name"
           optional: 0
           default: "ib-mgmt_pg-vmotion-01"
-        - id: ib_vcenter_net_vmotion_vlan_id
+        - id: ib_vcenter_net_vmotion_pg_vlan_id
           name: "vMotion Port Group VLAN ID"
           optional: 1
-        - id: ib_vcenter_net_vmotion_ip_pool
-          name: "vMotion IP Pool"
-          optional: 1
-        - id: ib_vcenter_net_vmotion_port_binding
+        - id: ib_vcenter_net_vmotion_pg_port_binding
           name: "vMotion Port Group Binding"
           optional: 1
           hide: 1
           default: "ephemeral"
+        - id: ib_vcenter_net_vmotion_pg_ports
+          name: "Number of vMotion Port Group Ports"
+          optional: 1
+          hide: 1
+          default: "16"
+        - id: ib_vcenter_net_vmotion_pg_port_allocation
+          name: "vMotion Port Group Port Allocation"
+          optional: 1
+          hide: 1
+          default: "elastic"
+        - id: ib_vcenter_net_vmotion_ip_pool
+          name: "vMotion IP Pool"
+          optional: 1
 {% if deploy_vio == '1' %}
         - id: ib_vcenter_net_vio_api_pg_name
           name: "VIO API Port Group Name"
@@ -348,5 +378,32 @@
           optional: 1
           hide: 1
           default: "elastic"
+{% endif %}
+{% if (deploy_nsx == '1') or (deploy_vra == '1') or (deploy_vcenter == '1') or (deploy_vrb == '1') or (deploy_vrli == '1') or (deploy_vrops == '1') %}
+        - id: ib_vcenter_net_vm_pg_name
+          name: "VM Port Group Name"
+          optional: 0
+          default: "ib-mgmt_pg-vm-01"
+        - id: ib_vcenter_net_vm_pg_vlan_id
+          name: "VM Port Group VLAN ID"
+          optional: 1
+        - id: ib_vcenter_net_vm_pg_port_binding
+          name: "VM Port Group Binding"
+          optional: 1
+          hide: 1
+          default: "ephemeral"
+        - id: ib_vcenter_net_vm_pg_ports
+          name: "Number of VM Port Group Ports"
+          optional: 1
+          hide: 1
+          default: "16"
+        - id: ib_vcenter_net_vm_pg_port_allocation
+          name: "VM Port Group Port Allocation"
+          optional: 1
+          hide: 1
+          default: "elastic"
+        - id: ib_vcenter_net_vm_ip_pool
+          name: "VM IP Pool"
+          optional: 1
 {% endif %}
 ### PORTGROUPS END ###

@@ -37,4 +37,3 @@ downloads_dir: /var/www/html/downloads
 downloads_timeout: 10
 
 ovftool: /usr/local/bin/ovftool/ovftool
-deploy_vcsa_ovf_role_path: "/opt/{{ django_app }}-ansible/roles/vcsa"

@@ -16,12 +16,15 @@
 #
 from jinja2 import Template
 import yaml
+import hiyapyco
 
 roles = [ 'vcenter', 'net', 'autodeploy']
 answerfile = "{{ chaperone_answer_dir }}/answerfile.yml"
+admin_answerfile = "{{ chaperone_admin_answer_dir }}/answerfile.yml"
 
 if __name__ == "__main__":
-  context = yaml.load(file(answerfile,'r'))
+  context = hiyapyco.load(answerfile,admin_answerfile)
+
   ib_mgmt_ct = len([v for v in context.keys() if 'ib_vcenter_mgmt_esx_server_name-' in v])
   oob_mgmt_ct = len([v for v in context.keys() if 'oob_vcenter_mgmt_esx_server_name-' in v])
   compute_ct = len([v for v in context.keys() if 'compute_esx_server_name-' in v])

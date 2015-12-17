@@ -17,92 +17,90 @@
     - id: create_oob_vcenter_objects
       name: "Create OOB vCenter DC+ESX Clusters+Networking"
       commands:
-        - "/opt/{{ django_app }}/{{ django_app }}_play_tags vcenter_config.yml prereqs"
         - "/opt/{{ django_app }}/{{ django_app }}_play_tags vcenter_config.yml create_oob_datacenter_create_task"
         - "/opt/{{ django_app }}/{{ django_app }}_play_tags vcenter_config.yml create_oob_datacenter"
         - "/opt/{{ django_app }}/{{ django_app }}_play_tags vcenter_config.yml create_oob_clusters"
         - "/opt/{{ django_app }}/{{ django_app }}_play_tags vcenter_config.yml create_oob_vcenter_dvs"
         - "/opt/{{ django_app }}/{{ django_app }}_play_tags vcenter_config.yml create_oob_vcenter_portgroups"
+        - "/opt/{{ django_app }}/{{ django_app }}_play_tags vcenter_config.yml add_esx_hosts_to_oob_esx_cluster"
     - id: create_ib_vcenter_objects
       name: "Create IB vCenter DC+ESX Clusters+Networking"
       commands:
-        - "/opt/{{ django_app }}/{{ django_app }}_play_tags vcenter_config.yml prereqs"
         - "/opt/{{ django_app }}/{{ django_app }}_play_tags vcenter_config.yml create_ib_datacenter_create_task"
         - "/opt/{{ django_app }}/{{ django_app }}_play_tags vcenter_config.yml create_ib_datacenter"
         - "/opt/{{ django_app }}/{{ django_app }}_play_tags vcenter_config.yml create_ib_clusters"
         - "/opt/{{ django_app }}/{{ django_app }}_play_tags vcenter_config.yml create_ib_vcenter_dvs"
         - "/opt/{{ django_app }}/{{ django_app }}_play_tags vcenter_config.yml create_ib_vcenter_portgroups"
+        - "/opt/{{ django_app }}/{{ django_app }}_play_tags vcenter_config.yml add_esx_hosts_to_ib_esx_cluster"
     - id: destroy_oob_dc_and_clusters
       name: "Destroy OOB vCenter Datacenter and ESX Clusters"
       commands:
-        - "/opt/{{ django_app }}/{{ django_app }}_play_tags vcenter_config.yml prereqs"
         - "/opt/{{ django_app }}/{{ django_app }}_play_tags vcenter_config.yml destroy_oob_clusters"
         - "/opt/{{ django_app }}/{{ django_app }}_play_tags vcenter_config.yml create_oob_datacenter_destroy_task"
         - "/opt/{{ django_app }}/{{ django_app }}_play_tags vcenter_config.yml destroy_oob_datacenter"
     - id: destroy_ib_dc_and_clusters
       name: "Destroy IB vCenter Datacenter and ESX Clusters"
       commands:
-        - "/opt/{{ django_app }}/{{ django_app }}_play_tags vcenter_config.yml prereqs"
         - "/opt/{{ django_app }}/{{ django_app }}_play_tags vcenter_config.yml destroy_ib_clusters"
         - "/opt/{{ django_app }}/{{ django_app }}_play_tags vcenter_config.yml create_ib_datacenter_destroy_task"
         - "/opt/{{ django_app }}/{{ django_app }}_play_tags dc.yml destroy_ib_datacenter"
     - id: install_oob_vcenter_dvs
       name: "Create OOB vCenter DVS"
       commands:
-        - "/opt/{{ django_app }}/{{ django_app }}_play_tags vcenter_config.yml prereqs"
         - "/opt/{{ django_app }}/{{ django_app }}_play_tags vcenter_config.yml create_oob_vcenter_dvs"
     - id: install_ib_vcenter_dvs
       name: "Create IB vCenter DVS"
       commands:
-        - "/opt/{{ django_app }}/{{ django_app }}_play_tags vcenter_config.yml prereqs"
         - "/opt/{{ django_app }}/{{ django_app }}_play_tags vcenter_config.yml create_ib_vcenter_dvs"
     - id: destroy_oob_vcenter_dvs
       name: "Destroy OOB vCenter DVS"
       commands:
-        - "/opt/{{ django_app }}/{{ django_app }}_play_tags vcenter_config.yml prereqs"
         - "/opt/{{ django_app }}/{{ django_app }}_play_tags vcenter_config.yml destroy_oob_vcenter_dvs"
     - id: destroy_ib_vcenter_dvs
       name: "Destroy IB vCenter DVS"
       commands:
-        - "/opt/{{ django_app }}/{{ django_app }}_play_tags vcenter_config.yml prereqs"
         - "/opt/{{ django_app }}/{{ django_app }}_play_tags vcenter_config.yml destroy_ib_vcenter_dvs"
     - id: create_oob_vcenter_portgroups
       name: "Create OOB vCenter Portgroups"
       commands:
-        - "/opt/{{ django_app }}/{{ django_app }}_play_tags vcenter_config.yml prereqs"
         - "/opt/{{ django_app }}/{{ django_app }}_play_tags vcenter_config.yml create_oob_vcenter_portgroups"
     - id: create_ib_vcenter_portgroups
       name: "Create IB vCenter Portgroups"
       commands:
-        - "/opt/{{ django_app }}/{{ django_app }}_play_tags vcenter_config.yml prereqs"
         - "/opt/{{ django_app }}/{{ django_app }}_play_tags vcenter_config.yml create_ib_vcenter_portgroups"
     - id: destroy_oob_vcenter_portgroups
       name: "Destroy OOB vCenter Portgroups"
       commands:
-        - "/opt/{{ django_app }}/{{ django_app }}_play_tags vcenter_config.yml prereqs"
         - "/opt/{{ django_app }}/{{ django_app }}_play_tags vcenter_config.yml destroy_oob_vcenter_portgroups"
     - id: destroy_ib_vcenter_portgroups
       name: "Destroy IB vCenter Portgroups"
       commands:
-        - "/opt/{{ django_app }}/{{ django_app }}_play_tags vcenter_config.yml prereqs"
         - "/opt/{{ django_app }}/{{ django_app }}_play_tags vcenter_config.yml destroy_ib_vcenter_portgroups"
-    - id: install_datacenter_addhosts
-      name: "Add Hosts"
+    - id: add_esx_hosts_to_oob_esx_cluster
+      name: "Add ESX Hosts to OOB vCenter"
       commands:
-        - "/opt/{{ django_app }}/{{ django_app }}_play_tags vcenter_config.yml prereqs"
-        - "/opt/{{ django_app }}/{{ django_app }}_play_tags vcenter_config.yml addhosts"
-    - id: install_datacenter_confighosts
-      name: "Configure Hosts vds"
+        - "/opt/{{ django_app }}/{{ django_app }}_play_tags vcenter_config.yml add_esx_hosts_to_oob_esx_cluster"
+    - id: add_esx_hosts_to_ib_esx_cluster
+      name: "Add ESX Hosts to IB vCenter"
       commands:
-        - "/opt/{{ django_app }}/{{ django_app }}_play_tags vcenter_config.yml prereqs"
+        - "/opt/{{ django_app }}/{{ django_app }}_play_tags vcenter_config.yml add_esx_hosts_to_ib_esx_cluster"
+    - id: remove_esx_hosts_to_oob_esx_cluster
+      name: "Remove ESX Hosts from OOB vCenter"
+      commands:
+        - "/opt/{{ django_app }}/{{ django_app }}_play_tags vcenter_config.yml remove_esx_hosts_from_oob_esx_cluster"
+    - id: remove_esx_hosts_to_ib_esx_cluster
+      name: "Remove ESX Hosts from IB vCenter"
+      commands:
+        - "/opt/{{ django_app }}/{{ django_app }}_play_tags vcenter_config.yml remove_esx_hosts_from_ib_esx_cluster"
+    - id: config_hosts_networking
+      name: "Configure Hosts Networking"
+      commands:
         - "/opt/{{ django_app }}/{{ django_app }}_play_tags vcenter_config.yml confighosts"
     - id: install_datacenter_hostprofile
       name: "Create Host Profiles"
       commands:
-        - "/opt/{{ django_app }}/{{ django_app }}_play_tags vcenter_config.yml prereqs"
         - "/opt/{{ django_app }}/{{ django_app }}_play_tags vcenter_config.yml hostprofile"
     - id: install_applyprofiles
       name: "Apply Host Profiles"
       commands:
-        - "/opt/{{ django_app }}/{{ django_app }}_play_tags vcenter_config.yml prereqs"
         - "/opt/{{ django_app }}/{{ django_app }}_play_tags vcenter_config.yml applyprofile"

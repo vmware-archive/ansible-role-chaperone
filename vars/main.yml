@@ -28,6 +28,7 @@ django_latest_packages:
   - openssl
   - libssl-dev
   - libssl-doc
+  - libffi-dev
 
 django_base_packages:
   - build-essential
@@ -45,13 +46,14 @@ django_base_packages:
   - sqlite3
 
 django_pip_packages:
-  - pyvmomi
   - pywinrm
   - virtualenv
-  - django
 
 django_pip_versioned_packages:
   - { name: "django", version: "1.8.5" }
+  - { name: "pyvmomi", version: "5.5.0-2014.1.1" }
+  - { name: "pysphere", version: "0.1.7" }
+  - { name: "hiyapyco", version: "0.4.4" }
 
 roles_directory_base: "/opt/chaperone-ansible/roles"
 vcenter_task_directory: "{{ roles_directory_base }}/vcenter/tasks"
