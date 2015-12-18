@@ -17,14 +17,37 @@
           name: "ESX Name"
           optional: 0
           default: "oob-mgmt_esx-{{ oobmgmtesx }}"
-        - id: oob_vcenter_mgmt_esx_server_url-{{ oobmgmtesx }}
-          name: "ESX Server IP"
+        # Management/DCUI
+        - id: oob_vcenter_mgmt_esx_server_mgmt_url-{{ oobmgmtesx }}
+          name: "ESX Server Management IP"
           optional: 0
 {% if deploy_esx == '1' %}
         - id: oob_vcenter_mgmt_esx_server_mac_address-{{ oobmgmtesx }}
           name: "ESX Server MAC Address"
           optional: 1
           default: ""
+{% endif %}
+        - id: oob_vcenter_mgmt_esx_server_mgmt_netmask-{{ oobmgmtesx }}
+          name: "ESX Server Management IP Netmask"
+          optional: 0
+          default: "255.255.255.0"
+        # vMotion
+        - id: oob_vcenter_mgmt_esx_server_vmotion_url-{{ oobmgmtesx }}
+          name: "ESX Server vMotion IP"
+          optional: 0
+        - id: oob_vcenter_mgmt_esx_server_vmotion_netmask-{{ oobmgmtesx }}
+          name: "ESX Server vMotion IP Netmask"
+          optional: 0
+          default: "255.255.255.0"
+{% if storage_scheme == 'NFS' or storage_scheme == 'iSCSI' %}
+        # Storage
+        - id: oob_vcenter_mgmt_esx_server_storage_url-{{ oobmgmtesx }}
+          name: "ESX Server Storage Network IP"
+          optional: 0
+        - id: oob_vcenter_mgmt_esx_server_storage_netmask-{{ oobmgmtesx }}
+          name: "ESX Server Storage Network IP Netmask"
+          optional: 0
+          default: "255.255.255.0"
 {% endif %}
         - id: oob_vcenter_mgmt_esx_server_username-{{ oobmgmtesx }}
           name: "ESX Server username"
@@ -57,8 +80,12 @@
           default: "False"
         - id: oob_vcenter_net_vds_version
           name: "vDS version"
-          optional: 1
-          hide: 1
+          optional: 0
+          hide: 0
+          input: dropdown
+          options:
+            - id: "5.5.0"
+            - id: "6.0.0"
           default: "6.0.0"
 ### PORTGROUPS START ###
         - id: oob_vcenter_net_mgmt_pg_name
@@ -158,25 +185,48 @@
           optional: 0
 
       - "Management ESX Cluster":
-{% for ibesx in range(ib_vcenter_mgmt_esx_count|int) %}
-        - id: ib_vcenter_mgmt_esx_server_name-{{ ibesx }}
+{% for ibmgmtesx in range(ib_vcenter_mgmt_esx_count|int) %}
+        - id: ib_vcenter_mgmt_esx_server_name-{{ ibmgmtesx }}
           name: "ESX Name"
           optional: 0
-          default: "ib-mgmt_esx-{{ ibesx }}"
-        - id: ib_vcenter_mgmt_esx_server_url-{{ ibesx }}
-          name: "ESX Server IP"
+          default: "ib-mgmt_esx-{{ ibmgmtesx }}"
+        # Management/DCUI
+        - id: ib_vcenter_mgmt_esx_server_mgmt_url-{{ ibmgmtesx }}
+          name: "ESX Server Management IP"
           optional: 0
 {% if deploy_esx == '1' %}
-        - id: ib_vcenter_mgmt_esx_server_mac_address-{{ ibesx }}
+        - id: ib_vcenter_mgmt_esx_server_mac_address-{{ ibmgmtesx }}
           name: "ESX Server MAC Address"
           optional: 1
           default: ""
 {% endif %}
-        - id: ib_vcenter_mgmt_esx_server_username-{{ ibesx }}
+        - id: ib_vcenter_mgmt_esx_server_mgmt_netmask-{{ ibmgmtesx }}
+          name: "ESX Server Management IP Netmask"
+          optional: 0
+          default: "255.255.255.0"
+        # vMotion
+        - id: ib_vcenter_mgmt_esx_server_vmotion_url-{{ ibmgmtesx }}
+          name: "ESX Server vMotion IP"
+          optional: 0
+        - id: ib_vcenter_mgmt_esx_server_vmotion_netmask-{{ ibmgmtesx }}
+          name: "ESX Server vMotion IP Netmask"
+          optional: 0
+          default: "255.255.255.0"
+{% if storage_scheme == 'NFS' or storage_scheme == 'iSCSI' %}
+        # Storage
+        - id: ib_vcenter_mgmt_esx_server_storage_url-{{ ibmgmtesx }}
+          name: "ESX Server Storage Network IP"
+          optional: 0
+        - id: ib_vcenter_mgmt_esx_server_storage_netmask-{{ ibmgmtesx }}
+          name: "ESX Server Storage Network IP Netmask"
+          optional: 0
+          default: "255.255.255.0"
+{% endif %}
+        - id: ib_vcenter_mgmt_esx_server_username-{{ ibmgmtesx }}
           name: "ESX Server username"
           optional: 0
           default: "root"
-        - id: ib_vcenter_mgmt_esx_server_password-{{ ibesx }}
+        - id: ib_vcenter_mgmt_esx_server_password-{{ ibmgmtesx }}
           name: "ESX Server User password"
           optional: 0
           input: password
@@ -188,15 +238,38 @@
         - id: nsxedge_esx_server_name-{{ nsxesx }}
           name: "ESX Name"
           optional: 0
-          default: "nsx_edge-{{ nsxesx }}"
-        - id: nsxedge_esx_server_url-{{ nsxesx }}
-          name: "ESX Server IP"
+          default: "nsx_edge_esx-{{ nsxesx }}"
+        # Management/DCUI
+        - id: nsxedge_esx_server_mgmt_url-{{ nsxesx }}
+          name: "ESX Server Management IP"
           optional: 0
 {% if deploy_esx == '1' %}
         - id: nsxedge_esx_server_mac_address-{{ nsxesx }}
           name: "ESX Server MAC Address"
           optional: 1
           default: ""
+{% endif %}
+        - id: nsxedge_esx_server_mgmt_netmask-{{ nsxesx }}
+          name: "ESX Server Management IP Netmask"
+          optional: 0
+          default: "255.255.255.0"
+        # vMotion
+        - id: nsxedge_esx_server_vmotion_url-{{ nsxesx }}
+          name: "ESX Server vMotion IP"
+          optional: 0
+        - id: nsxedge_esx_server_vmotion_netmask-{{ nsxesx }}
+          name: "ESX Server vMotion IP Netmask"
+          optional: 0
+          default: "255.255.255.0"
+{% if storage_scheme == 'NFS' or storage_scheme == 'iSCSI' %}
+        # Storage
+        - id: nsxedge_esx_server_storage_url-{{ nsxesx }}
+          name: "ESX Server Storage Network IP"
+          optional: 0
+        - id: nsxedge_esx_server_storage_netmask-{{ nsxesx }}
+          name: "ESX Server Storage Network IP Netmask"
+          optional: 0
+          default: "255.255.255.0"
 {% endif %}
         - id: nsxedge_esx_server_username-{{ nsxesx }}
           name: "ESX Server username"
@@ -214,15 +287,38 @@
         - id: compute_esx_server_name-{{ computeesx }}
           name: "ESX Name"
           optional: 0
-          default: compute-{{ computeesx }}
-        - id: compute_esx_server_url-{{ computeesx }}
-          name: "ESX Server IP or FQDN"
+          default: "compute_esx-{{ computeesx }}"
+        # Management/DCUI
+        - id: compute_esx_server_mgmt_url-{{ computeesx }}
+          name: "ESX Server Management IP"
           optional: 0
 {% if deploy_esx == '1' %}
         - id: compute_esx_server_mac_address-{{ computeesx }}
           name: "ESX Server MAC Address"
           optional: 1
           default: ""
+{% endif %}
+        - id: compute_esx_server_mgmt_netmask-{{ computeesx }}
+          name: "ESX Server Management IP Netmask"
+          optional: 0
+          default: "255.255.255.0"
+        # vMotion
+        - id: compute_esx_server_vmotion_url-{{ computeesx }}
+          name: "ESX Server vMotion IP"
+          optional: 0
+        - id: compute_esx_server_vmotion_netmask-{{ computeesx }}
+          name: "ESX Server vMotion IP Netmask"
+          optional: 0
+          default: "255.255.255.0"
+{% if storage_scheme == 'NFS' or storage_scheme == 'iSCSI' %}
+        # Storage
+        - id: compute_esx_server_storage_url-{{ computeesx }}
+          name: "ESX Server Storage Network IP"
+          optional: 0
+        - id: compute_esx_server_storage_netmask-{{ computeesx }}
+          name: "ESX Server Storage Network IP Netmask"
+          optional: 0
+          default: "255.255.255.0"
 {% endif %}
         - id: compute_esx_server_username-{{ computeesx }}
           name: "ESX Server username"
@@ -255,8 +351,12 @@
           default: "False"
         - id: ib_vcenter_net_vds_version
           name: "vDS version"
-          optional: 1
-          hide: 1
+          optional: 0
+          hide: 0
+          input: dropdown
+          options:
+            - id: "5.5.0"
+            - id: "6.0.0"
           default: "6.0.0"
 ### PORTGROUPS START ###
         - id: ib_vcenter_net_mgmt_pg_name

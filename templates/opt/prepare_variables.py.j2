@@ -36,7 +36,12 @@ if __name__ == "__main__":
       host = {}
       host['mac'] = context.get("ib_vcenter_mgmt_esx_server_mac_address-%d" % n)
       host['name'] = context.get("ib_vcenter_mgmt_esx_server_name-%d" % n)
-      host['ip'] = context.get("ib_vcenter_mgmt_esx_server_url-%d" % n)
+      host['mgmt_ip'] = context.get("ib_vcenter_mgmt_esx_server_mgmt_url-%d" % n)
+      host['mgmt_netmask'] = context.get("ib_vcenter_mgmt_esx_server_mgmt_netmask-%d" % n)
+      host['vmotion_ip'] = context.get("ib_vcenter_mgmt_esx_server_vmotion_url-%d" % n)
+      host['vmotion_netmask'] = context.get("ib_vcenter_mgmt_esx_server_vmotion_netmask-%d" % n)
+      host['storage_ip'] = context.get("ib_vcenter_mgmt_esx_server_storage_url-%d" % n)
+      host['storage_netmask'] = context.get("ib_vcenter_mgmt_esx_server_storage_netmask-%d" % n)
       host['username'] = context.get("ib_vcenter_mgmt_esx_server_username-%d" % n)
       host['password'] = context.get("ib_vcenter_mgmt_esx_server_password-%d" % n)
     except KeyError:
@@ -50,7 +55,12 @@ if __name__ == "__main__":
       host = {}
       host['mac'] = context.get("oob_vcenter_mgmt_esx_server_mac_address-%d" % n)
       host['name'] = context.get("oob_vcenter_mgmt_esx_server_name-%d" % n)
-      host['ip'] = context.get("oob_vcenter_mgmt_esx_server_url-%d" % n)
+      host['mgmt_ip'] = context.get("oob_vcenter_mgmt_esx_server_mgmt_url-%d" % n)
+      host['mgmt_netmask'] = context.get("oob_vcenter_mgmt_esx_server_mgmt_netmask-%d" % n)
+      host['vmotion_ip'] = context.get("oob_vcenter_mgmt_esx_server_vmotion_url-%d" % n)
+      host['vmotion_netmask'] = context.get("oob_vcenter_mgmt_esx_server_vmotion_netmask-%d" % n)
+      host['storage_ip'] = context.get("oob_vcenter_mgmt_esx_server_storage_url-%d" % n)
+      host['storage_netmask'] = context.get("oob_vcenter_mgmt_esx_server_storage_netmask-%d" % n)
       host['username'] = context.get("oob_vcenter_mgmt_esx_server_username-%d" % n)
       host['password'] = context.get("oob_vcenter_mgmt_esx_server_password-%d" % n)
     except KeyError:
@@ -64,7 +74,12 @@ if __name__ == "__main__":
       host = {}
       host['mac'] = context.get("nsxedge_esx_server_mac_address-%d" % n)
       host['name'] = context.get("nsxedge_esx_server_name-%d" % n)
-      host['ip'] = context.get("nsxedge_esx_server_url-%d" % n)
+      host['mgmt_ip'] = context.get("nsxedge_esx_server_mgmt_url-%d" % n)
+      host['mgmt_netmask'] = context.get("nsxedge_esx_server_mgmt_netmask-%d" % n)
+      host['vmotion_ip'] = context.get("nsxedge_esx_server_vmotion_url-%d" % n)
+      host['vmotion_netmask'] = context.get("nsxedge_esx_server_vmotion_netmask-%d" % n)
+      host['storage_ip'] = context.get("nsxedge_esx_server_storage_url-%d" % n)
+      host['storage_netmask'] = context.get("nsxedge_esx_server_storage_netmask-%d" % n)
       host['username'] = context.get("nsxedge_esx_server_username-%d" % n)
       host['password'] = context.get("nsxedge_esx_server_password-%d" % n)
     except KeyError:
@@ -78,7 +93,12 @@ if __name__ == "__main__":
     try:
       host['mac'] = context.get("compute_esx_server_mac_address-%d" % n)
       host['name'] = context.get("compute_esx_server_name-%d" % n)
-      host['ip'] = context.get("compute_esx_server_url-%d" % n)
+      host['mgmt_ip'] = context.get("compute_esx_server_mgmt_url-%d" % n)
+      host['mgmt_netmask'] = context.get("compute_esx_server_mgmt_netmask-%d" % n)
+      host['vmotion_ip'] = context.get("compute_esx_server_vmotion_url-%d" % n)
+      host['vmotion_netmask'] = context.get("compute_esx_server_vmotion_netmask-%d" % n)
+      host['storage_ip'] = context.get("compute_esx_server_storage_url-%d" % n)
+      host['storage_netmask'] = context.get("compute_esx_server_storage_netmask-%d" % n)
       host['username'] = context.get("compute_esx_server_username-%d" % n)
       host['password'] = context.get("compute_esx_server_password-%d" % n)
     except KeyError:

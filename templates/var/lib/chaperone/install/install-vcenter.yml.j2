@@ -92,15 +92,19 @@
       name: "Remove ESX Hosts from IB vCenter"
       commands:
         - "/opt/{{ django_app }}/{{ django_app }}_play_tags vcenter_config.yml remove_esx_hosts_from_ib_esx_cluster"
-    - id: config_hosts_networking
-      name: "Configure Hosts Networking"
+    - id: add_oob_esx_hosts_to_dvs
+      name: "Add OOB ESX Hosts to Distributed vSwitch"
       commands:
-        - "/opt/{{ django_app }}/{{ django_app }}_play_tags vcenter_config.yml confighosts"
-    - id: install_datacenter_hostprofile
-      name: "Create Host Profiles"
+        - "/opt/{{ django_app }}/{{ django_app }}_play_tags vcenter_config.yml add_oob_esx_hosts_to_dvs"
+    - id: add_ib_esx_hosts_to_dvs
+      name: "Add IB ESX Hosts to Distributed vSwitch"
       commands:
-        - "/opt/{{ django_app }}/{{ django_app }}_play_tags vcenter_config.yml hostprofile"
-    - id: install_applyprofiles
-      name: "Apply Host Profiles"
+        - "/opt/{{ django_app }}/{{ django_app }}_play_tags vcenter_config.yml add_ib_esx_hosts_to_dvs"
+    - id: migrate_oob_vmk_to_vds
+      name: "Migrate OOB ESX VMkernel Ports to Distributed vSwitch"
       commands:
-        - "/opt/{{ django_app }}/{{ django_app }}_play_tags vcenter_config.yml applyprofile"
+        - "/opt/{{ django_app }}/{{ django_app }}_play_tags vcenter_config.yml migrate_oob_vmks_to_vds"
+    - id: migrate_ib_vmk_to_vds
+      name: "Migrate IB ESX VMkernel Ports to Distributed vSwitch"
+      commands:
+        - "/opt/{{ django_app }}/{{ django_app }}_play_tags vcenter_config.yml migrate_ib_vmks_to_vds"
