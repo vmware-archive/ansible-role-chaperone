@@ -11,6 +11,7 @@
           name: "Management ESX Cluster Name"
           optional: 0
           default: "oob-mgmt_esxcluster-01"
+{% if oob_vcenter_mgmt_esx_count|int > 0 %}
       - "Management ESX Cluster":
 {% for oobmgmtesx in range(oob_vcenter_mgmt_esx_count|int) %}
         - id: oob_vcenter_mgmt_esx_server_name-{{ oobmgmtesx }}
@@ -58,6 +59,7 @@
           optional: 0
           input: password
 {% endfor %}
+{% endif %}
       - "Networking":
         - id: oob_vcenter_net_vds_name
           name: "Distributed vSwitch Name"
@@ -184,6 +186,7 @@
           name: "Compute ESX Cluster Name"
           optional: 0
 
+{% if ib_vcenter_mgmt_esx_count|int > 0 %}
       - "Management ESX Cluster":
 {% for ibmgmtesx in range(ib_vcenter_mgmt_esx_count|int) %}
         - id: ib_vcenter_mgmt_esx_server_name-{{ ibmgmtesx }}
@@ -231,8 +234,9 @@
           optional: 0
           input: password
 {% endfor %}
+{% endif %}
 
-{% if deploy_nsx == '1' %}
+{% if (deploy_nsx == '1') and (nsxedge_esx_count|int > 0) %}
       - "NSX Edge ESX Cluster":
 {% for nsxesx in range(nsxedge_esx_count|int) %}
         - id: nsxedge_esx_server_name-{{ nsxesx }}
@@ -282,6 +286,7 @@
 {% endfor %}
 {% endif %}
 
+{% if compute_esx_count|int > 0 %}
       - "Compute ESX Cluster":
 {% for computeesx in range(compute_esx_count|int) %}
         - id: compute_esx_server_name-{{ computeesx }}
@@ -329,6 +334,7 @@
           optional: 0
           input: password
 {% endfor %}
+{% endif %}
       - "Networking":
         - id: ib_vcenter_net_vds_name
           name: "Distributed vSwitch Name"

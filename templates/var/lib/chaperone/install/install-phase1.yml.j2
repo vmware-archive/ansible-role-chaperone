@@ -3,39 +3,50 @@
       name: "Provision and Configure Phase 1"
       commands:
         - "/opt/{{ django_app }}/{{ django_app }}_play_tags vcenter_config.yml prereqs"
+        # Deploy dedicated OOB PSC
 {% if enable_oob_mgmt_svcs == '1' and psc_appliance_deployment_scheme == 'Dedicated' %}
         - "/opt/{{ django_app }}/{{ django_app }}_play_tags vcsa.yml create_oob_psc_task"
         - "/opt/{{ django_app }}/{{ django_app }}_play_tags vcsa.yml prereqs,deploy_vcenter_psc_ova,cleanup"
 {% endif %}
+        # Deploy dedicated OOB vCenter
 {% if (enable_oob_mgmt_svcs == '1' and psc_appliance_deployment_scheme == 'Dedicated') or psc_appliance_deployment_scheme == 'Existing' %}
         - "/opt/{{ django_app }}/{{ django_app }}_play_tags vcsa.yml create_oob_vcenter_task"
         - "/opt/{{ django_app }}/{{ django_app }}_play_tags vcsa.yml prereqs,deploy_vcenter_psc_ova,cleanup"
 {% endif %}
+        # Deploy OOB vCenter with embedded PSC
 {% if enable_oob_mgmt_svcs == '1' and psc_appliance_deployment_scheme == 'Embedded' %}
         - "/opt/{{ django_app }}/{{ django_app }}_play_tags vcsa.yml create_oob_vcenterpsc_task"
         - "/opt/{{ django_app }}/{{ django_app }}_play_tags vcsa.yml prereqs,deploy_vcenter_psc_ova,cleanup"
 {% endif %}
+        # Deploy dedicated IB PSC
 {% if psc_appliance_deployment_scheme == 'Dedicated' %}
         - "/opt/{{ django_app }}/{{ django_app }}_play_tags vcsa.yml create_ib_psc_task"
         - "/opt/{{ django_app }}/{{ django_app }}_play_tags vcsa.yml prereqs,deploy_vcenter_psc_ova,cleanup"
 {% endif %}
+        # Deploy dedicated IB vCenter
 {% if psc_appliance_deployment_scheme == 'Dedicated' or psc_appliance_deployment_scheme == 'Existing' %}
         - "/opt/{{ django_app }}/{{ django_app }}_play_tags vcsa.yml create_ib_vcenter_task"
         - "/opt/{{ django_app }}/{{ django_app }}_play_tags vcsa.yml prereqs,deploy_vcenter_psc_ova,cleanup"
 {% endif %}
+        # Deploy IB vCenter with embedded PSC
 {% if psc_appliance_deployment_scheme == 'Embedded' %}
         - "/opt/{{ django_app }}/{{ django_app }}_play_tags vcsa.yml create_ib_vcenterpsc_task"
         - "/opt/{{ django_app }}/{{ django_app }}_play_tags vcsa.yml prereqs,deploy_vcenter_psc_ova,cleanup"
 {% endif %}
+        # Create OOB vCenter objects (create dc, cluster, dvs, port groups) and add ESX hosts
         - "/opt/{{ django_app }}/{{ django_app }}_play_tags vcenter_config.yml create_oob_datacenter_create_task"
         - "/opt/{{ django_app }}/{{ django_app }}_play_tags vcenter_config.yml create_oob_datacenter"
         - "/opt/{{ django_app }}/{{ django_app }}_play_tags vcenter_config.yml create_oob_clusters"
         - "/opt/{{ django_app }}/{{ django_app }}_play_tags vcenter_config.yml create_oob_vcenter_dvs"
         - "/opt/{{ django_app }}/{{ django_app }}_play_tags vcenter_config.yml create_oob_vcenter_portgroups"
         - "/opt/{{ django_app }}/{{ django_app }}_play_tags vcenter_config.yml add_esx_hosts_to_oob_esx_cluster"
+        # Create IB vCenter objects (create dc, clusters, dvs, port groups) and add ESX hosts
         - "/opt/{{ django_app }}/{{ django_app }}_play_tags vcenter_config.yml create_ib_datacenter_create_task"
         - "/opt/{{ django_app }}/{{ django_app }}_play_tags vcenter_config.yml create_ib_datacenter"
         - "/opt/{{ django_app }}/{{ django_app }}_play_tags vcenter_config.yml create_ib_clusters"
         - "/opt/{{ django_app }}/{{ django_app }}_play_tags vcenter_config.yml create_ib_vcenter_dvs"
         - "/opt/{{ django_app }}/{{ django_app }}_play_tags vcenter_config.yml create_ib_vcenter_portgroups"
         - "/opt/{{ django_app }}/{{ django_app }}_play_tags vcenter_config.yml add_esx_hosts_to_ib_esx_cluster"
+        # Deploy NSX appliance
+        - "/opt/{{ django_app }}/{{ django_app }}_play_tags nsx.yml create_vars_files"
+        - "/opt/{{ django_app }}/{{ django_app }}_play_tags nsx.yml nsx_deploy_ova"

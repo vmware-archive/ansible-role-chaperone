@@ -13,3 +13,14 @@
    See the License for the specific language governing permissions and
    limitations under the License.
 #}
+  - "NSX Config":
+    - id: deploy_nsx_mgr_appliance
+      name: "Deploy NSX Manager appliance"
+      commands:
+        - "/opt/{{ django_app }}/{{ django_app }}_play_tags nsx.yml create_vars_files"
+        - "/opt/{{ django_app }}/{{ django_app }}_play_tags nsx.yml nsx_deploy_ova"
+    - id: register_nsx_mgr_to_vcenter
+      name: "Register NSX Manager to vCenter"
+      commands:
+        - "/opt/{{ django_app }}/{{ django_app }}_play_tags nsx.yml create_vars_files"
+        - "/opt/{{ django_app }}/{{ django_app }}_play_tags nsx.yml nsx_vc_registration"

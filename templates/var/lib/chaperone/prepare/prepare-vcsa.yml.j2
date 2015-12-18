@@ -47,9 +47,16 @@
         - id: oob_psc_sso_domain_name
           name: "SSO Domain Name"
           optional: 0
+          default: "vsphere.local"
         - id: oob_psc_sso_site_name
           name: "SSO Site Name"
           optional: 0
+          default: "Default-First-Site"
+        - id: oob_psc_sso_user_nanme
+          name: "SSO Admin User Name"
+          optional: 1
+          hide: 1
+          default: "administrator"
         - id: oob_psc_sso_password
           name: "SSO administrator password"
           input: password
@@ -114,8 +121,11 @@
         - id: oob_vcenter_psc_appliance_dns_name_manual
           name: "PSC FQDN"
           optional: 0
+        - id: oob_vcenter_psc_sso_user_name
+          name: "PSC Admin User Name"
+          optional: 0
         - id: oob_vcenter_psc_sso_password
-          name: "PSC Administrator password"
+          name: "PSC User Password"
           input: password
           optional: 0
 {% endif %}
