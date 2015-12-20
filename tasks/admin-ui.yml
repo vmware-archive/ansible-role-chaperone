@@ -53,7 +53,7 @@
 
 - name: Create admin settings.py
   template:
-    src: "opt/superbase-admin-ui/settings.py.j2"
+    src: "opt/chaperone-admin-ui/settings.py.j2"
     dest: "/opt/{{ django_admin_app }}/chaperone/settings.py"
     owner: "{{ ansible_ssh_user }}"
     group: "{{ ansible_ssh_user }}"
@@ -63,7 +63,7 @@
 
 - name: Create admin local_settings.py
   template:
-    src: "opt/superbase-admin-ui/local_settings.py.j2"
+    src: "opt/chaperone-admin-ui/local_settings.py.j2"
     dest: "/opt/{{ django_admin_app }}/chaperone/local_settings.py"
     owner: "{{ ansible_ssh_user }}"
     group: "{{ ansible_ssh_user }}"
@@ -129,6 +129,7 @@
   register: db
   tags:
     - db
+    - rsync
 
 # Stat the db and if zero sized, rebuild it because either
 # the above 'touch' created it, or someone else truncated it.
@@ -139,6 +140,7 @@
   register: dbstat
   tags:
     - db
+    - rsync
 
 - name: Initialize admin database
   command: python manage.py syncdb --noinput
@@ -148,10 +150,11 @@
   when: db.changed or dbstat.stat.size == 0
   tags:
     - db
+    - rsync
 
 - name: (Re)Generate admin site-available ui config
   template:
-    src: "etc/apache2/sites-available/superbase-admin-ui.conf.j2"
+    src: "etc/apache2/sites-available/chaperone-admin-ui.conf.j2"
     dest: "/etc/apache2/sites-available/{{ django_admin_app }}.conf"
     owner: "{{ ansible_ssh_user }}"
     group: "{{ ansible_ssh_user }}"

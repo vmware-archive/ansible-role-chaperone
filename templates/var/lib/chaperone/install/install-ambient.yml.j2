@@ -14,7 +14,11 @@
    limitations under the License.
 #}
   - "Ambient Services":
-    - id: stg_configure_nfs
+    - id: ambient_base_setup
+      name: "Rotate Passwords and Keys"
+      commands:
+        - "/opt/{{ django_app }}/{{ django_app }}_play base.yml"
+    - id: ambient_configure_nfs
       name: "Install NFS Datastores"
       commands:
         - "/opt/{{ django_app }}/{{ django_app }}_play nfs.yml"
