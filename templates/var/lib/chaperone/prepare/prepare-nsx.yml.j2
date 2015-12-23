@@ -1,88 +1,254 @@
   - NSX:
-    - "NSX Manager":
-{% if (deploy_vcenter == '1' and enable_oob_mgmt_svcs == '0') or deploy_vcenter == '0' %}
-{% include 'app-specific/ib_vcenter_login.yml' %}
+{% if deploy_nsx == '1' %}
+{% set configure_nsx_manager = '1' %}
+{% if deploy_nsx_ib_oob == "In Band vCenter" %}
+{% set vcenter_target = "comp" %}
+{% elif deploy_nsx_ib_oob == "Out of Band vCenter" %}
+{% set vcenter_target = "mgmt" %}
+{% endif %}
+    - "NSX Deployment":
+      - "NSX vCenter Deployment Information":
+        - id: deployVcIPAddress
+          name: "Deploy NSX vCenter"
+          optional: 0
+          input: dropdown
+          options: {{ vcenter_target }}_vc
+          help: "Select the vCenter where you would like to deploy NSX Manager"
+        - id: deployVcUser
+          name: "Deploy NSX vCenter Username"
+          optional: 0
+          input: dropdown
+          options: {{ vcenter_target }}_vc_username
+        - id: deployVcPassword
+          name: "Deploy NSX vCenter Password"
+          optional: 0
+          input: password
+      - "NSX vCenter Resources":
+        - id: deployDataCenterName
+          name: "vCenter Datacenter Name"
+          optional: 0
+          input: dropdown
+          options: {{ vcenter_target }}_vc_datacenter
+        - id: deployCluster
+          name: "vCenter Cluster name"
+          optional: 0
+          input: dropdown
+          options: {{ vcenter_target }}_vc_cluster
+        - id: deployMgmtPortGroup
+          name: "vCenter Portgroup"
+          optional: 0
+          input: dropdown
+          options: {{ vcenter_target }}_vc_networks
+        - id: deployMgmtDatastoreName
+          name: "vCenter Datastore"
+          optional: 0
+          input: dropdown
+          options: {{ vcenter_target }}_vc_datastores
+      - "NSX Deploy Network Information":
+        - id: deployMgmtIpAddress
+          name: "NSX Manager IP address"
+          optional: 0
+          help: "get help"
+        - id: deployMgmtNetmask
+          name: "NSX Manager Subnet"
+          optional: 0
+          help: "enter the subnet"
+        - id: deployMgmtDefaultGateway
+          name: "NSX Manager Gateway"
+          optional: 0
+          help: "enter the gateway"
+      - "NSX Deploy VM Information":
+        - id: deployVmName
+          name: "NSX Manager Host Name"
+          optional: 0
+        - id: nsxCliPass
+          name: "NSX Manager cli password"
+          optional: 0
+          input: password
+{% endif %}
+    - "NSX Configuration":
+{% if (configure_nsx_manager == '1') and (deploy_nsx == '0') %}
+      - "NSX Configure vCenter":
+        - id: deployMgmtIpAddress
+          name: "NSX Manager Ip Address"
+          optional: 0
+        - id: nsxCliPass
+          name: "NSX Manager Admin Password"
+          optional: 0
+          input: password
+{% endif %}
+{% if configure_nsx_manager == '1' %}
+{% if configure_nsx_ib_oob == "In Band vCenter" %}
+{% set vcenter_target = "comp" %}
+{% elif configure_nsx_ib_oob == "Out of Band vCenter" %}
+{% set vcenter_target = "mgmt" %}
+{% endif %}
+      - "NSX Configure vCenter Information":
+        - id: vcHostname
+          name: "vCenter Hostname"
+          optional: 0
+          input: dropdown
+          options: {{ vcenter_target }}_vc
+        - id: vcIpAddress
+          name: "vCenter Ip address"
+          optional: 0
+          input: dropdown
+          options: {{ vcenter_target }}_vc
+        - id: vcUser
+          name: "vCenter Username"
+          optional: 0
+          input: dropdown
+          options: {{ vcenter_target }}_vc_username
+        - id: vcPassword
+          name: "vCenter Password"
+          optional: 0
+          input: password
+      - "NSX Configure vCenter SSO":
+        - id: vcSsoHostname
+          name: "vCenter SSO hostname"
+          optional: 0
+          input: dropdown
+          options: {{ vcenter_target }}_vc
+        - id: vcSsoUser
+          name: "vCenter SSO Username"
+          optional: 0
+          input: dropdown
+          options: {{ vcenter_target }}_vc_username
+        - id: vcSsoPassword
+          name: "vCenter SSO password"
+          optional: 0
+          input: password
+      - "NSX Configure Controller vCenter Information":
+        - id: targetDatacenterName
+          name: "NSX Controller Datacenter"
+          optional: 0
+          input: dropdown
+          options: {{ vcenter_target }}_vc_datacenter
+          help: "Select the datacenter"
+        - id: nsxControllerVcCluster
+          name: "NSX Controller Cluster"
+          optional: 0
+          input: dropdown
+          options: {{ vcenter_target }}_vc_cluster
+        - id: targetVdsName
+          name: "NSX Controller vds name"
+          optional: 0
+          help: "Enter the vds name"
+        - id: nsxControllerPortGroup
+          name: "NSX Controller Portgroup"
+          optional: 0
+          input: dropdown
+          options: {{ vcenter_target }}_vc_networks
+        - id: nsxControllerDatastore
+          name: "NSX Controller Datastore"
+          optional: 0
+          input: dropdown
+          options: {{ vcenter_target }}_vc_datastores
+        - id: numControllers
+          name: "Number of Controllers"
+          optional: 0
+          input: dropdown
+          options:
+            - id: 3
+            - id: 1
+          help: "Select the number of Controllers to deploy choose 3 for a production environment and 1 for a lab environment"
+        - id: controllerPassword
+          name: "Controller Password"
+          optional: 0
+          input: password
+          help: "Password must be at least 12 chars and have a special char"
+      - "NSX Controller IP Pool Information":
+        - id: controllerIPpoolStartAddr
+          name: "Controller IP Pool Start Address"
+          optional: 0
+          help: "Enter the START ip range for the controller ip pool"
+        - id: controllerIPpoolEndAddr
+          name: "Controller IP Pool End Address"
+          optional: 0
+          help: "Enter the END ip range for the controller ip pool"
+        - id: controllerIPpoolPrefix
+          name: "Controller IP Pool Prefix"
+          optional: 0
+          help: "Enter the network prefix ex: 24 for a /24"
+        - id: controllerIPpoolGateway
+          name: "Controller IP Pool Gateway"
+          optional: 0
+          help: "Enter the controller ip pool gateway"
+        - id: controllerIPpoolSecondDns
+          name: "Controller IP Pool Secondary DNS"
+          optional: 0
+          help: "Enter the Secondary DNS server"
+      - "NSX VTEP IP Pool Information":
+        - id: vtepIPpoolStartAddr
+          name: "VTEP Ip Pool Start Address"
+          optional: 0
+          help: "Enter the START address for the VTEP IP Pool"
+        - id: vtepIPpoolEndAddr
+          name: "VTEP Ip Pool END Address"
+          optional: 0
+          help: "Enter the END address for the VTEP IP Pool"
+        - id: vtepIPpoolPrefix
+          name: "VTEP Ip Pool Prefix"
+          optional: 0
+          help: "Enter the network prefix ex: 24 for a /24"
+        - id: vtepIPpoolGateway
+          name: "VTEP Ip Pool Gateway"
+          optional: 0
+          help: "Enter the VTEP Ip pool gateway"
+        - id: vtepIPpoolSecondDns
+          name: "VTEP IP Pool Secondary DNS"
+          optional: 0
+          help: "Enter the Secondary DNS server"
+      - "NSX Host Preparation":
+        - id: hostPrepClusterA
+          name: "Cluster Prep"
+          optional: 0
+          help: "Select the Compute Cluster to host prep"
+          input: dropdown
+          options: {{ vcenter_target }}_vc_cluster
+        - id: hostPrepClusterB
+          name: "Cluster Prep"
+          optional: 0
+          help: "Select the Edge Cluster to host prep"
+          input: dropdown
+          options: {{ vcenter_target }}_vc_cluster
+      - "NSX Transport Zone and Segment ID":
+        - id: transportZoneName
+          name: "Transport Zone Name"
+          optional: 0
+          help: "Enter the name for the transport zone"
+        - id: transportZoneDescription
+          name: "Transport Zone Description"
+          optional: 0
+          help: "Description for the Transport Zone being created"
+        - id: defaultControllPlaneMode
+          name: "Default Control Plane Mode"
+          optional: 0
+          input: dropdown
+          options:
+            - id: "HYBRID_MODE"
+            - id: "MULTICAST_MODE"
+            - id: "UNICAST_MODE"
+        - id: segmentIdPoolStart
+          name: "Segment ID Pool Start"
+          optional: 0
+          help: "Enter a Segment ID Pool Start: 5000-16777216"
+        - id: segmentIdPoolEnd
+          name: "Segment ID Pool End"
+          optional: 0
+          help: "Enter a Segment ID Pool End: 5000-16777216"
+        - id: mcastIsEnabled
+          name: "Enable MULTICAST Addressing"
+          optional: 1
+          input: checkbox
+          help: "Multicast addresses are required only for Hybrid and Multicast control plane modes"
+        - id: mcastAddrStart
+          name: "Enter Multicast Address Start"
+          optional: 1
+          help: "Multicast addresses are required only for Hybrid and Multicast control plane modes: ex: 239.0.0.0"
+        - id: mcastAddrEnd
+          name: "Enter Multicast Address End"
+          optional: 1
+          help: "Multicas addresses are required only for Hybrid and Multicast control plane modes: ex: 239.255.255.255"
 {% endif %}
 
-      - "Deployment Configuration":
-        - id: nsxmgr_appliance_name
-          name: "Appliance Name"
-          optional: 0
-        - id: nsxmgr_datastore
-          name: "Datastore"
-          optional: 0
-        - id: nsxmgr_mgmt_portgroup
-          name: "Port Group Name"
-          optional: 0
-{% if (deploy_vcenter == '1' and enable_oob_mgmt_svcs == '0') or deploy_vcenter == '0' %}
-        - id: nsxmgr_cluster_deploy
-          name: "Target ESX Cluster"
-          optional: 0
-{% endif %}
-        - id: nsxmgr_admin_password
-          name: "Admin CLI password"
-          optional: 0
-          input: password
-        - id: nsxmgr_enable_password
-          name: "Enable password"
-          optional: 0
-          input: password
-      - "Network":
-        - id: nsxmgr_ip_address
-          name: "IP Address"
-          optional: 0
-        - id: nsxmgr_ip_netmask
-          name: "IP Netmask"
-          optional: 0
-        - id: nsxmgr_ip_gateway
-          name: "IP Gateway"
-          optional: 0
-    - "Controllers":
-      - "Deployment Configuration":
-        - id: nsxcontroller_appliance_name
-          name: "Appliance Name"
-          optional: 0
-        - id: nsxcontroller_datastore
-          name: "Datastore"
-          optional: 0
-        - id: nsxcontroller_admin_password
-          name: "Admin Password"
-          optional: 0
-    - "IP Pools":
-      - "Controller":
-        - id: nsxcontroller_ippool_name
-          name: "Name"
-          optional: 0
-        - id: nsxcontroller_ippool_gw
-          name: "Gateway"
-          optional: 0
-        - id: nsxcontroller_ippool_prefix
-          name: "VLSM Prefix"
-          optional: 0
-        - id: nsxcontroller_ippool_range_start
-          name: "Range Start"
-          optional: 0
-        - id: nsxcontroller_ippool_range_end
-          name: "Range End"
-          optional: 0
-      - "Edge VTEP":
-        - id: nsxedge_vtep_ippool_name
-          name: "Name"
-          optional: 0
-        - id: nsxedge_vtep_ippool_gw
-          name: "Gateway"
-          optional: 0
-        - id: nsxedge_vtep_ippool_prefix
-          name: "VLSM Prefix"
-          optional: 0
-        - id: nsxedge_vtep_ippool_range_start
-          name: "Range Start"
-          optional: 0
-        - id: nsxedge_vtep_ippool_range_end
-          name: "Range End"
-          optional: 0
-    - "Logical Switching":
-      - "Transport Zone":
-        - id: nsx_transport_zone_name
-          name: "Name"
-          optional: 0

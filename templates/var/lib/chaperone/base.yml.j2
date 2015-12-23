@@ -33,7 +33,7 @@
 {% endif -%}
 
 # from prepare/prepare-nsx.yml.j2
-{% if (deploy_phase1 == '0') and (deploy_nsx == '1') -%}
+{% if (deploy_nsx == '1') or (configure_nsx_manager == '1') -%}
 {% include 'prepare/prepare-nsx.yml.j2' %}
 {% endif -%}
 
@@ -92,7 +92,7 @@
 {% endif -%}
 
 # from install/install-nsx.yml.j2
-{% if (deploy_phase1 == '0') and (deploy_nsx == '1') -%}
+{% if (deploy_nsx == '1') or (configure_nsx_manager == '1') -%}
 {% include 'install/install-nsx.yml.j2' %}
 {% endif -%}
 

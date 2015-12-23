@@ -18,9 +18,10 @@
       name: "Deploy NSX Manager appliance"
       commands:
         - "/opt/{{ django_app }}/{{ django_app }}_play_tags nsx.yml create_vars_files"
-        - "/opt/{{ django_app }}/{{ django_app }}_play_tags nsx.yml nsx_deploy_ova"
+        - "/opt/{{ django_app }}/{{ django_app }}_play_tags nsx.yml deploy_nsx_manager"
     - id: register_nsx_mgr_to_vcenter
-      name: "Register NSX Manager to vCenter"
+      name: "Configure NSX Manager"
       commands:
         - "/opt/{{ django_app }}/{{ django_app }}_play_tags nsx.yml create_vars_files"
-        - "/opt/{{ django_app }}/{{ django_app }}_play_tags nsx.yml nsx_vc_registration"
+        - "/opt/{{ django_app }}/{{ django_app }}_play_tags nsx.yml configure_nsx_manager"
+
