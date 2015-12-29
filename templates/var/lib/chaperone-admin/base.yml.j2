@@ -141,7 +141,8 @@
           help: "Check the box if you want to both deploy and configure NSX Manager Leave UNCHECKED if you just want to configure"
         - id: deploy_nsx_ib_oob
           name: "NSX Deploy To vCenter"
-          optional: 1
+          default: "In Band vCenter"
+          optional: 0
           help: "Select either In Band or Out of band vCenter to deploy NSX manager to"
           input: dropdown
           options:
@@ -155,7 +156,8 @@
           help: "Check the box if you want to just configure NSX Manager"
         - id: configure_nsx_ib_oob
           name: "NSX Configure To vCenter"
-          optional: 1
+          default: "In Band vCenter"
+          optional: 0
           help: "Select either In Band or Out of band vCenter to sync NSX manager to"
           input: dropdown
           options:
