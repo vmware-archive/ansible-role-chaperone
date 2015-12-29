@@ -144,6 +144,15 @@
           optional: 0
           input: dropdown
           options: {{ vcenter_target }}_vc_datastores
+        - id: controllerDeploySize
+          name: "NSX Controller Deployment Size"
+          optional: 0
+          input: dropdown
+          options:
+            - id: "small"
+            - id: "medium"
+            - id: "large"
+          help: "Select the VM size for the controllers in the controller cluster for your environment"
         - id: numControllers
           name: "Number of Controllers"
           optional: 0
