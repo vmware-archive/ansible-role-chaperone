@@ -13,3 +13,51 @@
    See the License for the specific language governing permissions and
    limitations under the License.
 #}
+  - "vRealize Automation Appliance":
+    - id: install_vra
+      name: "Deploy Appliance"
+      commands:
+        - "/opt/{{ django_app }}/{{ django_app }}_play_tags vra.yml vra_deploy"
+    - id: configure_vra
+      name: "Configure Host Settings"
+      commands:
+        - "/opt/{{ django_app }}/{{ django_app }}_play_tags vra.yml  vra_configure_settings"
+    - id: network_vra
+      name: "Configure Network"
+      commands:
+        - "/opt/{{ django_app }}/{{ django_app }}_play_tags vra.yml vra_network"
+    - id: configure_http_proxy
+      name: "Configure HTTP Proxy"
+      commands:
+        - "/opt/{{ django_app }}/{{ django_app }}_play_tags vra.yml  vra_http_proxy"
+    - id: configure_sso
+      name: "Configure SSO and License"
+      commands:
+        - "/opt/{{ django_app }}/{{ django_app }}_play_tags vra.yml  vra_configure_sso"
+    - id: configure_postgresdb
+      name: "Configure Postgres Database"
+      commands:
+        - "/opt/{{ django_app }}/{{ django_app }}_play_tags vra.yml vra_configure_postgresdb"
+    - id: configure_messaging
+      name: "Configure Messaging"
+      commands:
+        - "/opt/{{ django_app }}/{{ django_app }}_play_tags vra.yml vra_configure_messaging"
+    - id: configure_tenant
+      name: "Configure Tenant"
+      commands:
+        - "/opt/{{ django_app }}/{{ django_app }}_play_tags vra.yml vra_configure_tenant"
+  - "vRealize IaaS":
+    - id: prepare_vra_win
+      name: "Prepare Windows Installer"
+      commands:
+        - "/opt/{{ django_app }}/{{ django_app }}_play_tags vra.yml vra_win_script"
+    - id: install_vra_win
+      name: "Install vRA IaaS"
+      commands:
+        - "/opt/{{ django_app }}/{{ django_app }}_play_tags vra.yml vra_win_deploy"
+{% if chaperone_developer_menus -%}
+    - id: delete_vra
+      name: "(Optional for Devs) Delete VRA"
+      commands:
+        - "/opt/{{ django_app }}/{{ django_app }}_play_tags vra.yml vra_delete"
+{% endif %}

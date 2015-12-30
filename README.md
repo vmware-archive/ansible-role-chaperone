@@ -9,45 +9,56 @@ This role currently supports only Debian/Ubuntu distros.
 
 ## Role Variables
 
-Available variables are listed below, along with default values (see `defaults/main.yml`):
+The following variables are available for overriding, with defaults provided:
 
-    chaperone_ui_port: 80
+```yaml
+# The userid to use for rsync'ing the UI and ansible code
+# to the UI Deployment server.
+rsync_user_id: vmware
 
-The port on which the Chaperone UI should listen for inbound (HTTP) requests.
+# Where to log Django operations
+chaperone_log_dir: "/var/log/{{ django_app }}"
 
-    chaperone_allowed_hosts:
-      - '*.vmware.local'
-      - '*.vmware.com'
-      - '*.corp.local'
+# Where to the answerfile should be created by UI 'Save's
+chaperone_answer_dir: "/var/lib/{{ django_app }}"
 
-The hostnames that the UI will serve (it will deny other connections).
+# Where the django UI will look for additional files
+chaperone_prepare_files_dir: "/var/lib/{{ django_app }}/prepare"
 
-    chaperone_answer_dir: "/var/lib/{{ chaperone_django_app }}"
+# Whether to include developer menu items in the UI.
+chaperone_developer_menus: false
 
-The directory on which the UI should store the (YAML) answer files for inclusing in various plays.
+# Where to log Django operations for the admin UI
+chaperone_admin_log_dir: "/var/log/{{ django_admin_app }}"
 
-    chaperone_prepare_files_dir: "/var/lib/{{ chaperone_django_app }}/prepare"
+# Where to the admin answerfile should be created by UI 'Save's
+chaperone_admin_answer_dir: "/var/lib/{{ django_admin_app }}"
 
-The directory in which files for preparing (see the Prepare menu) systems should exist.
+# Where the django admin UI will look for additional files
+chaperone_admin_prepare_files_dir: "/var/lib/{{ django_admin_app }}/prepare"
 
-    chaperone_log_dir: "/var/log/{{ chaperone_django_app }}"
+# Whether to allow debug level in the log files
+django_debug: False
 
-The directory into which the UI should log operations. Note that the logs are read via
-AJAX callbacks for disploy in various UI pages.
+# Whether to allow template debug logs
+django_template_debug: False
 
-    django_app: "chaperone"
+# The log level for the Apache server
+apache_loglevel: info
 
-The name for the application.
+# The port on which to expect vCenter to listen for API calls
+vcenter_port: 443
 
-    download_files: false
+# The full name of the django app (shows up in title UI pagees)
+django_fullname: "VMware {{ django_shortname }}"
 
-Whether to download ova and depot files and make them available at
-http://<{{ django_app }}-ui>/downloads. These are large and can take a very
-long time to pull.
+# The full name of the admin django app (shows up in title UI pagees)
+django_admin_fullname: "VMware {{ django_shortname }} Administration"
+```
 
 ## Example playbook
 
-```
+```yaml
 ---
 - hosts: chaperone-ui
   sudo: yes

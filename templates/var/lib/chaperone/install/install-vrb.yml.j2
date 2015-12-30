@@ -13,3 +13,42 @@
    See the License for the specific language governing permissions and
    limitations under the License.
 #}
+  - "vRealize Business":
+    - id: install_vrealizeb
+      name: "Deploy to vCenter"
+      commands:
+        - "/opt/{{ django_app }}/{{ django_app }}_play vrealizeb.yml --tags vrbova_deploy"
+    - id: delete_vra
+      name: "Delete  VRB"
+      commands:
+        - "/opt/{{ django_app }}/{{ django_app }}_play vrealizeb.yml --tags vrb_delete"
+    - id: configure_network
+      name: "Configure Network"
+      commands:
+        - "/opt/{{ django_app }}/{{ django_app }}_play vrealizeb.yml --tags vrb_network"
+    - id: configure_http_proxy
+      name: "Configure HTTP Proxy"
+      commands:
+        - "/opt/{{ django_app }}/{{ django_app }}_play vrealizeb.yml --tags vrb_http_proxy"
+    - id: register_vrealizeb
+      name: "Configure VRA SSO"
+      commands:
+        - "/opt/{{ django_app }}/{{ django_app }}_play vrealizeb.yml --tags vrb_sso"
+    - id: toggle_ssh_vrealizeb
+      name: "Toggle SSH"
+      commands:
+        - "/opt/{{ django_app }}/{{ django_app }}_play vrealizeb.yml --tags vrb_toggle_ssh"
+    - id: configure_time_vrealizeb
+      name: "Configure Time"
+      commands:
+        - "/opt/{{ django_app }}/{{ django_app }}_play vrealizeb.yml --tags vrb_time_settings"
+    - id: configure_ssl_certificate
+      name: "Configure SSL Certificate"
+      commands:
+        - "/opt/{{ django_app }}/{{ django_app }}_play vrealizeb.yml --tags vrb_ssl_certificate"
+{% if chaperone_developer_menus -%}
+    - id: power_vrb
+      name: "Power VRB"
+      commands:
+        - "/opt/{{ django_app }}/{{ django_app }}_play vrealizeb.yml --tags vrb_poweron"
+{% endif %}

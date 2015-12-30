@@ -96,6 +96,16 @@
 {% include 'install/install-nsx.yml.j2' %}
 {% endif -%}
 
+# from install/install-vrops.yml.j2
+{% if (deploy_phase1 == '0') and (deploy_vrops == '1') -%}
+{% include 'install/install-vrops.yml.j2' %}
+{% endif -%}
+
+# from install/install-vrli.yml.j2
+{% if (deploy_phase1 == '0') and (deploy_vrli == '1') -%}
+{% include 'install/install-vrli.yml.j2' %}
+{% endif -%}
+
 # from install/install-vio.yml.j2
 {% if (deploy_phase1 == '0') and (deploy_vio == '1') -%}
 {% include 'install/install-vio.yml.j2' %}
@@ -106,19 +116,11 @@
 {% include 'install/install-cna.yml.j2' %}
 {% endif -%}
 
-# from install/install-vrops.yml.j2
-{% if (deploy_phase1 == '0') and (deploy_vrops == '1') -%}
-{% include 'install/install-vrops.yml.j2' %}
-{% endif -%}
-
-# from install/install-vra.yml.j2
 {% if (deploy_phase1 == '0') and (deploy_vra == '1') -%}
+# from install/install-vra.yml.j2
 {% include 'install/install-vra.yml.j2' %}
-{% endif -%}
-
-# from install/install-vrli.yml.j2
-{% if (deploy_phase1 == '0') and (deploy_vrli == '1') -%}
-{% include 'install/install-vrli.yml.j2' %}
+# from install/install-vrpt.yml.j2
+{% include 'install/install-vrpt.yml.j2' %}
 {% endif -%}
 
 # from install/install-vrb.yml.j2
