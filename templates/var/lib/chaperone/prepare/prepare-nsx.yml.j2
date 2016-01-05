@@ -1,10 +1,11 @@
   - NSX:
 {% if deploy_nsx == '1' %}
 {% set configure_nsx_manager = '1' %}
-{% if deploy_nsx_ib_oob == "In Band vCenter" %}
-{% set vcenter_target = "comp" %}
-{% elif deploy_nsx_ib_oob == "Out of Band vCenter" %}
+{% endif %}
+{% if enable_oob_mgmt_svcs == '1' %}
 {% set vcenter_target = "mgmt" %}
+{% else %}
+{% set vcenter_target = "comp" %}
 {% endif %}
     - "NSX Deployment":
       - "NSX vCenter Deployment Information":
@@ -65,7 +66,6 @@
           name: "NSX Manager cli password"
           optional: 0
           input: password
-{% endif %}
     - "NSX Configuration":
 {% if (configure_nsx_manager == '1') and (deploy_nsx == '0') %}
       - "NSX Configure vCenter":
@@ -78,10 +78,10 @@
           input: password
 {% endif %}
 {% if configure_nsx_manager == '1' %}
-{% if configure_nsx_ib_oob == "In Band vCenter" %}
+{% if enable_oob_mgmt_svcs == '1' %}
 {% set vcenter_target = "comp" %}
-{% elif configure_nsx_ib_oob == "Out of Band vCenter" %}
-{% set vcenter_target = "mgmt" %}
+{% else %}
+{% set vcenter_target = "comp" %}
 {% endif %}
       - "NSX Configure vCenter Information":
         - id: vcHostname
@@ -221,7 +221,7 @@
           help: "Select the Edge Cluster to host prep"
           input: dropdown
           options: {{ vcenter_target }}_vc_cluster
-      - "NSX Transport Zone and Segment ID":
+      - "NSX Transport Zone":
         - id: transportZoneName
           name: "Transport Zone Name"
           optional: 0
@@ -233,11 +233,14 @@
         - id: defaultControllPlaneMode
           name: "Default Control Plane Mode"
           optional: 0
+          default: "UNICAST_MODE"
+          hide: 1
           input: dropdown
           options:
             - id: "HYBRID_MODE"
             - id: "MULTICAST_MODE"
             - id: "UNICAST_MODE"
+      - "NSX Segment ID":
         - id: segmentIdPoolStart
           name: "Segment ID Pool Start"
           optional: 0
@@ -248,16 +251,20 @@
           help: "Enter a Segment ID Pool End: 5000-16777216"
         - id: mcastIsEnabled
           name: "Enable MULTICAST Addressing"
-          optional: 1
+          optional: 0
+          default: 0
+          hide: 1
           input: checkbox
           help: "Multicast addresses are required only for Hybrid and Multicast control plane modes"
         - id: mcastAddrStart
           name: "Enter Multicast Address Start"
           optional: 1
+          hide: 1
           help: "Multicast addresses are required only for Hybrid and Multicast control plane modes: ex: 239.0.0.0"
         - id: mcastAddrEnd
           name: "Enter Multicast Address End"
           optional: 1
+          hide: 1
           help: "Multicas addresses are required only for Hybrid and Multicast control plane modes: ex: 239.255.255.255"
 {% endif %}
 

@@ -13,15 +13,39 @@
    See the License for the specific language governing permissions and
    limitations under the License.
 #}
-  - "NSX Config":
+  - "NSX Manager":
     - id: deploy_nsx_mgr_appliance
       name: "Deploy NSX Manager appliance"
       commands:
         - "/opt/{{ django_app }}/{{ django_app }}_play_tags nsx.yml create_vars_files"
         - "/opt/{{ django_app }}/{{ django_app }}_play_tags nsx.yml deploy_nsx_manager"
     - id: register_nsx_mgr_to_vcenter
-      name: "Configure NSX Manager"
+      name: "NSX Register Manager"
       commands:
         - "/opt/{{ django_app }}/{{ django_app }}_play_tags nsx.yml create_vars_files"
-        - "/opt/{{ django_app }}/{{ django_app }}_play_tags nsx.yml configure_nsx_manager"
-
+        - "/opt/{{ django_app }}/{{ django_app }}_play_tags nsx.yml nsx_vc_registration"
+    - id: nsx_mgr_cluster_prep
+      name: "NSX Cluster Prep"
+      commands:
+        - "/opt/{{ django_app }}/{{ django_app }}_play_tags nsx.yml create_vars_files"
+        - "/opt/{{ django_app }}/{{ django_app }}_play_tags nsx.yml vsphere_facts,nsx_cluster_prep"
+    - id: nsx_mgr_vtep_vxlan
+      name: "NSX VTEP VXLAN"
+      commands:
+        - "/opt/{{ django_app }}/{{ django_app }}_play_tags nsx.yml create_vars_files"
+        - "/opt/{{ django_app }}/{{ django_app }}_play_tags nsx.yml vsphere_facts,vtep_nsx_ippools,nsx_vxlan_prep"
+    - id: nsx_mgr_seg_id
+      name: "NSX Segment ID"
+      commands:
+        - "/opt/{{ django_app }}/{{ django_app }}_play_tags nsx.yml create_vars_files"
+        - "/opt/{{ django_app }}/{{ django_app }}_play_tags nsx.yml vsphere_facts,nsx_segment_pool"
+    - id: nsx_mgr_tz
+      name: "NSX Transport Zone"
+      commands:
+        - "/opt/{{ django_app }}/{{ django_app }}_play_tags nsx.yml create_vars_files"
+        - "/opt/{{ django_app }}/{{ django_app }}_play_tags nsx.yml vsphere_facts,nsx_transport_zone"
+    - id: nsx_mgr_controller
+      name: "NSX Controller"
+      commands:
+        - "/opt/{{ django_app }}/{{ django_app }}_play_tags nsx.yml create_vars_files"
+        - "/opt/{{ django_app }}/{{ django_app }}_play_tags nsx.yml vsphere_facts,controller_nsx_ippools,nsx_controllers"

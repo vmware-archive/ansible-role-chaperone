@@ -44,11 +44,11 @@
         - "/opt/{{ django_app }}/{{ django_app }}_play_tags vcsa.yml destroy_appliance"
 {% endif %}
 {% if (enable_oob_mgmt_svcs == '1' and psc_appliance_deployment_scheme == 'Dedicated') or psc_appliance_deployment_scheme == 'Existing' %}
-  - id: oob_vcenter_ova_cleanup
-    name: "Destroy out-of-band dedicated vCenter"
-    commands:
-      - "/opt/{{ django_app }}/{{ django_app }}_play_tags vcsa.yml create_oob_vcenter_cleanup_task"
-      - "/opt/{{ django_app }}/{{ django_app }}_play_tags vcsa.yml destroy_appliance"
+    - id: oob_vcenter_ova_cleanup
+      name: "Destroy out-of-band dedicated vCenter"
+      commands:
+        - "/opt/{{ django_app }}/{{ django_app }}_play_tags vcsa.yml create_oob_vcenter_cleanup_task"
+        - "/opt/{{ django_app }}/{{ django_app }}_play_tags vcsa.yml destroy_appliance"
 {% endif %}
 {% if enable_oob_mgmt_svcs == '1' and psc_appliance_deployment_scheme == 'Embedded' %}
     - id: oob_vcenterpsc_ova_cleanup

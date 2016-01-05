@@ -53,6 +53,11 @@
           name: "vCenter Server"
           optional: 1
           input: checkbox
+        - id: deploy_nsx
+          name: "NSX Deploy"
+          optional: 1
+          input: checkbox
+          help: "Select if you want to both deploy and configure NSX Manager. If General>Enable out-of-band vCenter is checked NSX manager will be deployed to the out of band vcenter and registed to the inband vcenter"
       - "Cloud Management Platforms":
         - id: deploy_cna
           name: "Cloud-Native Applications"
@@ -85,6 +90,7 @@
           name: "Enable out-of-band vCenter and NSX management services?"
           optional: 0
           input: checkbox
+          help: "Select if you want 2 vcenters one vcenter will be an out-of-band management with a single management cluster and a specified number of hosts. The other vcenter will be an in-band vcenter with a management cluster, edge cluster and a compute cluster with specified number of hosts per cluster from the ESX section"
       - "vCenter PSC Deployment Scheme":
         - id: psc_appliance_deployment_scheme
           name: "Select the PSC deployment scheme"
@@ -133,36 +139,6 @@
           name: "Number of ESX hosts to provision"
           default: 4
     - "NSX":
-      - "NSX Deploy":
-        - id: deploy_nsx
-          name: "NSX Deploy"
-          optional: 1
-          input: checkbox
-          help: "Check the box if you want to both deploy and configure NSX Manager Leave UNCHECKED if you just want to configure"
-        - id: deploy_nsx_ib_oob
-          name: "NSX Deploy To vCenter"
-          default: "In Band vCenter"
-          optional: 0
-          help: "Select either In Band or Out of band vCenter to deploy NSX manager to"
-          input: dropdown
-          options:
-            - id: "In Band vCenter"
-            - id: "Out of Band vCenter"
-      - "NSX Configure":
-        - id: configure_nsx_manager
-          name: "Configure NSX Manager"
-          optional: 1
-          input: checkbox
-          help: "Check the box if you want to just configure NSX Manager"
-        - id: configure_nsx_ib_oob
-          name: "NSX Configure To vCenter"
-          default: "In Band vCenter"
-          optional: 0
-          help: "Select either In Band or Out of band vCenter to sync NSX manager to"
-          input: dropdown
-          options:
-            - id: "In Band vCenter"
-            - id: "Out of Band vCenter"
       - "Service Gateways":
         - id: nsx_esg_edge_count
           name: "Number of edges to provision"
@@ -171,6 +147,33 @@
         - id: nsx_lr_edge_count
           name: "Number of edges to provision"
           default: 1
+        - id: deploy_nsx_ib_oob
+          name: "NSX Deploy To vCenter"
+          default: "In Band vCenter"
+          optional: 0
+          hide: 1
+          help: "Select either In Band or Out of band vCenter to deploy NSX manager to"
+          input: dropdown
+          options:
+            - id: "In Band vCenter"
+            - id: "Out of Band vCenter"
+        - id: configure_nsx_manager
+          name: "Configure NSX Manager"
+          optional: 0
+          default: 0
+          hide: 1
+          input: checkbox
+          help: "Check the box if you want to just configure NSX Manager"
+        - id: configure_nsx_ib_oob
+          name: "NSX Configure To vCenter"
+          default: "In Band vCenter"
+          optional: 0
+          hide: 1
+          help: "Select either In Band or Out of band vCenter to sync NSX manager to"
+          input: dropdown
+          options:
+            - id: "In Band vCenter"
+            - id: "Out of Band vCenter"
 - Install:
   - Chaperone Configuration:
     - id: config_chaperone
