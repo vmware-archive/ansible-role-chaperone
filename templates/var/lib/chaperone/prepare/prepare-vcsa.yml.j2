@@ -32,7 +32,6 @@
         - id: oob_psc_esx_portgroup
           name: "Portgroup"
           optional: 0
-{% if network_ip_scheme == 'Static' %}
         - id: oob_psc_ip_address
           name: "IP address"
           optional: 0
@@ -42,7 +41,6 @@
         - id: oob_psc_ip_gateway
           name: "IP gateway"
           optional: 0
-{% endif %}
       - "SSO Information":
         - id: oob_psc_sso_domain_name
           name: "SSO Domain Name"
@@ -103,9 +101,8 @@
           input: checkbox
       - "Network Configuration":
         - id: oob_vcenter_esx_portgroup
-          name: "Portgroup"
+          name: "Port Group Name"
           optional: 0
-{% if network_ip_scheme == 'Static' %}
         - id: oob_vcenter_ip_address
           name: "IP address"
           optional: 0
@@ -115,7 +112,6 @@
         - id: oob_vcenter_ip_gateway
           name: "IP gateway"
           optional: 0
-{% endif %}
 {% if psc_appliance_deployment_scheme == 'Existing' or psc_appliance_deployment_scheme == 'Dedicated' %}
       - "SSO Information":
         - id: oob_vcenter_psc_appliance_dns_name_manual
@@ -166,9 +162,8 @@
           input: checkbox
       - "Network Configuration":
         - id: ib_psc_esx_portgroup
-          name: "Portgroup"
+          name: "Port Group Name"
           optional: 0
-{% if network_ip_scheme == 'Static' %}
         - id: ib_psc_ip_address
           name: "IP address"
           optional: 0
@@ -178,7 +173,6 @@
         - id: ib_psc_ip_gateway
           name: "IP gateway"
           optional: 0
-{% endif %}
       - "SSO Information":
         - id: ib_psc_sso_domain_name
           name: "SSO Domain Name"
@@ -231,9 +225,8 @@
           input: checkbox
       - "Network Configuration":
         - id: ib_vcenter_esx_portgroup
-          name: "Portgroup"
+          name: "Port Group Name"
           optional: 0
-{% if network_ip_scheme == 'Static' %}
         - id: ib_vcenter_ip_address
           name: "IP address"
           optional: 0
@@ -243,7 +236,6 @@
         - id: ib_vcenter_ip_gateway
           name: "IP gateway"
           optional: 0
-{% endif %}
 {% if psc_appliance_deployment_scheme == 'Existing' or psc_appliance_deployment_scheme == 'Dedicated' %}
       - "SSO Information":
         - id: ib_vcenter_psc_appliance_dns_name_manual

@@ -5,9 +5,6 @@
           name: "viouser password"
           optional: 0
           input: password
-        - id: vio_oms_ntp_server
-          name: "VIO NTP server"
-          optional: 0
       - "Target vCenter":
         - id: vio_oms_vcenter_hostname
           name: "vCenter name"
@@ -33,20 +30,18 @@
         - id: vio_oms_network
           name: "Network"
           optional: 0
-{% if network_ip_scheme == 'Static' %}
         - id: vio_oms_ip_address
-          name: "VIO OMS static IP address"
+          name: "OMS static IP address"
           optional: 0
         - id: vio_oms_ip_subnet
-          name: "VIO OMS IP subnet"
+          name: "OMS IP subnet"
           optional: 0
         - id: vio_oms_ip_gw
-          name: "VIO OMS IP gateway"
+          name: "OMS IP gateway"
           optional: 0
         - id: vio_oms_dns_server
-          name: "VIO OMS DNS server"
+          name: "OMS DNS server"
           optional: 0
-{% endif %}
     - "VIO Initial Configuration":
       - "General Configuration":
         - id: syslog_server

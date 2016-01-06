@@ -90,7 +90,7 @@
           name: "Enable out-of-band vCenter and NSX management services?"
           optional: 0
           input: checkbox
-          help: "Select if you want 2 vcenters one vcenter will be an out-of-band management with a single management cluster and a specified number of hosts. The other vcenter will be an in-band vcenter with a management cluster, edge cluster and a compute cluster with specified number of hosts per cluster from the ESX section"
+          help: "Select if you want 2 vCenters - one vCenter will be provisioned out-of-band into a single management cluster and a specified number of hosts. A second vCenter will be provisioned in-band into the OOB vCenter management cluster and dedicated management, edge, and compute clusters are created with specified number of hosts per cluster from the ESX section"
       - "vCenter PSC Deployment Scheme":
         - id: psc_appliance_deployment_scheme
           name: "Select the PSC deployment scheme"
@@ -100,11 +100,13 @@
             - id: Existing
             - id: Embedded
             - id: Dedicated
+      # Network IP Scheme is hidden as of now as it not applicable until later releases
       - "Network IP Scheme":
         - id: network_ip_scheme
           name: "Select the IP scheme (where applicable)"
           input: dropdown
-          optional: 0
+          optional: 1
+          hide: 1
           options:
             - id: DHCP
             - id: Static
