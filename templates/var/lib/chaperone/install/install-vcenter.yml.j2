@@ -14,6 +14,7 @@
    limitations under the License.
 #}
   - "vCenter Config":
+{% if enable_oob_mgmt_svcs == '1' %}
     - id: create_oob_vcenter_objects
       name: "Create OOB vCenter DC+ESX Clusters+Networking"
       commands:
@@ -23,6 +24,12 @@
         - "/opt/{{ django_app }}/{{ django_app }}_play_tags vcenter_config.yml create_oob_vcenter_dvs"
         - "/opt/{{ django_app }}/{{ django_app }}_play_tags vcenter_config.yml create_oob_vcenter_portgroups"
         - "/opt/{{ django_app }}/{{ django_app }}_play_tags vcenter_config.yml add_esx_hosts_to_oob_esx_cluster"
+        - "/opt/{{ django_app }}/{{ django_app }}_play_tags vcenter_config.yml add_oob_esx_hosts_to_vds"
+        - "/opt/{{ django_app }}/{{ django_app }}_play_tags vcenter_config.yml migrate_oob_vmks_to_vds"
+{% if storage_scheme == 'NFS' %}
+        - "/opt/{{ django_app }}/{{ django_app }}_play_tags vcenter_config.yml add_nfs_ds_to_oob_esx"
+{% endif %}
+{% endif %}
     - id: create_ib_vcenter_objects
       name: "Create IB vCenter DC+ESX Clusters+Networking"
       commands:
@@ -32,78 +39,125 @@
         - "/opt/{{ django_app }}/{{ django_app }}_play_tags vcenter_config.yml create_ib_vcenter_dvs"
         - "/opt/{{ django_app }}/{{ django_app }}_play_tags vcenter_config.yml create_ib_vcenter_portgroups"
         - "/opt/{{ django_app }}/{{ django_app }}_play_tags vcenter_config.yml add_esx_hosts_to_ib_esx_cluster"
+        - "/opt/{{ django_app }}/{{ django_app }}_play_tags vcenter_config.yml add_ib_esx_hosts_to_vds"
+        - "/opt/{{ django_app }}/{{ django_app }}_play_tags vcenter_config.yml migrate_ib_vmks_to_vds"
+{% if storage_scheme == 'NFS' %}
+        - "/opt/{{ django_app }}/{{ django_app }}_play_tags vcenter_config.yml add_nfs_ds_to_ib_esx"
+{% endif %}
+{% if enable_oob_mgmt_svcs == '1' %}
     - id: destroy_oob_dc_and_clusters
       name: "Destroy OOB vCenter Datacenter and ESX Clusters"
       commands:
         - "/opt/{{ django_app }}/{{ django_app }}_play_tags vcenter_config.yml destroy_oob_clusters"
         - "/opt/{{ django_app }}/{{ django_app }}_play_tags vcenter_config.yml create_oob_datacenter_destroy_task"
         - "/opt/{{ django_app }}/{{ django_app }}_play_tags vcenter_config.yml destroy_oob_datacenter"
+{% endif %}
     - id: destroy_ib_dc_and_clusters
       name: "Destroy IB vCenter Datacenter and ESX Clusters"
       commands:
         - "/opt/{{ django_app }}/{{ django_app }}_play_tags vcenter_config.yml destroy_ib_clusters"
         - "/opt/{{ django_app }}/{{ django_app }}_play_tags vcenter_config.yml create_ib_datacenter_destroy_task"
         - "/opt/{{ django_app }}/{{ django_app }}_play_tags dc.yml destroy_ib_datacenter"
+{% if enable_oob_mgmt_svcs == '1' %}
     - id: install_oob_vcenter_dvs
       name: "Create OOB vCenter DVS"
       commands:
         - "/opt/{{ django_app }}/{{ django_app }}_play_tags vcenter_config.yml create_oob_vcenter_dvs"
+{% endif %}
     - id: install_ib_vcenter_dvs
       name: "Create IB vCenter DVS"
       commands:
         - "/opt/{{ django_app }}/{{ django_app }}_play_tags vcenter_config.yml create_ib_vcenter_dvs"
+{% if enable_oob_mgmt_svcs == '1' %}
     - id: destroy_oob_vcenter_dvs
       name: "Destroy OOB vCenter DVS"
       commands:
         - "/opt/{{ django_app }}/{{ django_app }}_play_tags vcenter_config.yml destroy_oob_vcenter_dvs"
+{% endif %}
     - id: destroy_ib_vcenter_dvs
       name: "Destroy IB vCenter DVS"
       commands:
         - "/opt/{{ django_app }}/{{ django_app }}_play_tags vcenter_config.yml destroy_ib_vcenter_dvs"
+{% if enable_oob_mgmt_svcs == '1' %}
     - id: create_oob_vcenter_portgroups
       name: "Create OOB vCenter Portgroups"
       commands:
         - "/opt/{{ django_app }}/{{ django_app }}_play_tags vcenter_config.yml create_oob_vcenter_portgroups"
+{% endif %}
     - id: create_ib_vcenter_portgroups
       name: "Create IB vCenter Portgroups"
       commands:
         - "/opt/{{ django_app }}/{{ django_app }}_play_tags vcenter_config.yml create_ib_vcenter_portgroups"
+{% if enable_oob_mgmt_svcs == '1' %}
     - id: destroy_oob_vcenter_portgroups
       name: "Destroy OOB vCenter Portgroups"
       commands:
         - "/opt/{{ django_app }}/{{ django_app }}_play_tags vcenter_config.yml destroy_oob_vcenter_portgroups"
+{% endif %}
     - id: destroy_ib_vcenter_portgroups
       name: "Destroy IB vCenter Portgroups"
       commands:
         - "/opt/{{ django_app }}/{{ django_app }}_play_tags vcenter_config.yml destroy_ib_vcenter_portgroups"
+{% if enable_oob_mgmt_svcs == '1' %}
     - id: add_esx_hosts_to_oob_esx_cluster
       name: "Add ESX Hosts to OOB vCenter"
       commands:
         - "/opt/{{ django_app }}/{{ django_app }}_play_tags vcenter_config.yml add_esx_hosts_to_oob_esx_cluster"
+{% endif %}
     - id: add_esx_hosts_to_ib_esx_cluster
       name: "Add ESX Hosts to IB vCenter"
       commands:
         - "/opt/{{ django_app }}/{{ django_app }}_play_tags vcenter_config.yml add_esx_hosts_to_ib_esx_cluster"
+{% if enable_oob_mgmt_svcs == '1' %}
     - id: remove_esx_hosts_to_oob_esx_cluster
       name: "Remove ESX Hosts from OOB vCenter"
       commands:
         - "/opt/{{ django_app }}/{{ django_app }}_play_tags vcenter_config.yml remove_esx_hosts_from_oob_esx_cluster"
+{% endif %}
     - id: remove_esx_hosts_to_ib_esx_cluster
       name: "Remove ESX Hosts from IB vCenter"
       commands:
         - "/opt/{{ django_app }}/{{ django_app }}_play_tags vcenter_config.yml remove_esx_hosts_from_ib_esx_cluster"
+{% if storage_scheme == 'NFS' and enable_oob_mgmt_svcs == '1' %}
+    - id: add_nfs_ds_to_oob_esx
+      name: "Add NFS datastore to OOB ESX Hosts"
+      commands:
+        - "/opt/{{ django_app }}/{{ django_app }}_play_tags vcenter_config.yml add_nfs_ds_to_oob_esx"
+{% endif %}
+{% if storage_scheme == 'NFS' %}
+    - id: add_nfs_ds_to_ib_esx
+      name: "Add NFS datastore to IB ESX Hosts"
+      commands:
+        - "/opt/{{ django_app }}/{{ django_app }}_play_tags vcenter_config.yml add_nfs_ds_to_ib_esx"
+{% endif %}
+{% if storage_scheme == 'NFS' and enable_oob_mgmt_svcs == '1' %}
+    - id: remove_nfs_ds_from_oob_esx
+      name: "Remove NFS datastore from OOB ESX hosts"
+      commands:
+        - "/opt/{{ django_app }}/{{ django_app }}_play_tags vcenter_config.yml remove_nfs_ds_from_oob_esx"
+{% endif %}
+{% if storage_scheme == 'NFS' %}
+    - id: remove_nfs_ds_from_ib_esx
+      name: "Remove NFS datastore from IB ESX hosts"
+      commands:
+        - "/opt/{{ django_app }}/{{ django_app }}_play_tags vcenter_config.yml remove_nfs_ds_from_ib_esx"
+{% endif %}
+{% if enable_oob_mgmt_svcs == '1' %}
     - id: add_oob_esx_hosts_to_dvs
       name: "Add OOB ESX Hosts to Distributed vSwitch"
       commands:
-        - "/opt/{{ django_app }}/{{ django_app }}_play_tags vcenter_config.yml add_oob_esx_hosts_to_dvs"
+        - "/opt/{{ django_app }}/{{ django_app }}_play_tags vcenter_config.yml add_oob_esx_hosts_to_vds"
+{% endif %}
     - id: add_ib_esx_hosts_to_dvs
       name: "Add IB ESX Hosts to Distributed vSwitch"
       commands:
-        - "/opt/{{ django_app }}/{{ django_app }}_play_tags vcenter_config.yml add_ib_esx_hosts_to_dvs"
+        - "/opt/{{ django_app }}/{{ django_app }}_play_tags vcenter_config.yml add_ib_esx_hosts_to_vds"
+{% if enable_oob_mgmt_svcs == '1' %}
     - id: migrate_oob_vmk_to_vds
       name: "Migrate OOB ESX VMkernel Ports to Distributed vSwitch"
       commands:
         - "/opt/{{ django_app }}/{{ django_app }}_play_tags vcenter_config.yml migrate_oob_vmks_to_vds"
+{% endif %}
     - id: migrate_ib_vmk_to_vds
       name: "Migrate IB ESX VMkernel Ports to Distributed vSwitch"
       commands:

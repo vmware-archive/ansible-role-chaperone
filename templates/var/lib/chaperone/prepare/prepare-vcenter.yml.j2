@@ -59,6 +59,30 @@
           optional: 0
           input: password
 {% endfor %}
+{% if storage_scheme == 'NFS' %}
+      - "Storage":
+        - id: oob_esx_server_nfs_ds_name
+          name: "NFS Datastore Name"
+          optional: 1
+        - id: oob_esx_server_nfs_host_name
+          name: "NFS Mount Host"
+          optional: 1
+        - id: oob_esx_server_nfs_path
+          name: "NFS Mount Path"
+          optional: 1
+        - id: oob_esx_server_nfs_access
+          name: "NFS Mount Access"
+          optional: 1
+          hide: 1
+          default: "readWrite"
+        - id: oob_esx_server_nfs_type
+          name: "NFS Type"
+          optional: 1
+          hide: 1
+          default: 'nfs'
+{% endif %}
+{% if storage_scheme == 'iSCSI' %}
+{% endif %}
 {% endif %}
       - "Networking":
         - id: oob_vcenter_net_vds_name
@@ -67,8 +91,8 @@
           default: "oob-mgmt_vds-01"
         - id: oob_vcenter_net_vds_uplinks
           name: "Number of vDS uplinks"
-          optional: 1
-          hide: 1
+          optional: 0
+          hide: 0
           default: "1"
         - id: oob_vcenter_net_vds_ports
           name: "Initial number of vDS ports"
@@ -82,8 +106,8 @@
           default: "False"
         - id: oob_vcenter_net_vds_version
           name: "vDS version"
-          optional: 0
-          hide: 0
+          optional: 1
+          hide: 1
           input: dropdown
           options:
             - id: "5.5.0"
@@ -334,6 +358,30 @@
           optional: 0
           input: password
 {% endfor %}
+{% if storage_scheme == 'NFS' %}
+      - "Storage":
+        - id: ib_esx_server_nfs_ds_name
+          name: "NFS Datastore Name"
+          optional: 1
+        - id: ib_esx_server_nfs_host_name
+          name: "NFS Mount Host"
+          optional: 1
+        - id: ib_esx_server_nfs_path
+          name: "NFS Mount Path"
+          optional: 1
+        - id: ib_esx_server_nfs_access
+          name: "NFS Mount Access"
+          optional: 1
+          hide: 1
+          default: "readWrite"
+        - id: ib_esx_server_nfs_type
+          name: "NFS Type"
+          optional: 1
+          hide: 1
+          default: 'nfs'
+{% endif %}
+{% if storage_scheme == 'iSCSI' %}
+{% endif %}
 {% endif %}
       - "Networking":
         - id: ib_vcenter_net_vds_name
@@ -342,8 +390,8 @@
           default: "ib-mgmt_vds-01"
         - id: ib_vcenter_net_vds_uplinks
           name: "Number of vDS uplinks"
-          optional: 1
-          hide: 1
+          optional: 0
+          hide: 0
           default: "1"
         - id: ib_vcenter_net_vds_ports
           name: "Initial number of vDS ports"
@@ -357,8 +405,8 @@
           default: "False"
         - id: ib_vcenter_net_vds_version
           name: "vDS version"
-          optional: 0
-          hide: 0
+          optional: 1
+          hide: 1
           input: dropdown
           options:
             - id: "5.5.0"
