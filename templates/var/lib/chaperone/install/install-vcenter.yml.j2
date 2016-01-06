@@ -25,7 +25,7 @@
         - "/opt/{{ django_app }}/{{ django_app }}_play_tags vcenter_config.yml create_oob_vcenter_portgroups"
         - "/opt/{{ django_app }}/{{ django_app }}_play_tags vcenter_config.yml add_esx_hosts_to_oob_esx_cluster"
         - "/opt/{{ django_app }}/{{ django_app }}_play_tags vcenter_config.yml add_oob_esx_hosts_to_vds"
-        - "/opt/{{ django_app }}/{{ django_app }}_play_tags vcenter_config.yml migrate_oob_vmks_to_vds"
+        - "/opt/{{ django_app }}/{{ django_app }}_play_tags vcenter_config.yml create_oob_vmkernel_ports"
 {% if storage_scheme == 'NFS' %}
         - "/opt/{{ django_app }}/{{ django_app }}_play_tags vcenter_config.yml add_nfs_ds_to_oob_esx"
 {% endif %}
@@ -40,7 +40,7 @@
         - "/opt/{{ django_app }}/{{ django_app }}_play_tags vcenter_config.yml create_ib_vcenter_portgroups"
         - "/opt/{{ django_app }}/{{ django_app }}_play_tags vcenter_config.yml add_esx_hosts_to_ib_esx_cluster"
         - "/opt/{{ django_app }}/{{ django_app }}_play_tags vcenter_config.yml add_ib_esx_hosts_to_vds"
-        - "/opt/{{ django_app }}/{{ django_app }}_play_tags vcenter_config.yml migrate_ib_vmks_to_vds"
+        - "/opt/{{ django_app }}/{{ django_app }}_play_tags vcenter_config.yml create_ib_vmkernel_ports"
 {% if storage_scheme == 'NFS' %}
         - "/opt/{{ django_app }}/{{ django_app }}_play_tags vcenter_config.yml add_nfs_ds_to_ib_esx"
 {% endif %}
@@ -57,7 +57,7 @@
       commands:
         - "/opt/{{ django_app }}/{{ django_app }}_play_tags vcenter_config.yml destroy_ib_clusters"
         - "/opt/{{ django_app }}/{{ django_app }}_play_tags vcenter_config.yml create_ib_datacenter_destroy_task"
-        - "/opt/{{ django_app }}/{{ django_app }}_play_tags dc.yml destroy_ib_datacenter"
+        - "/opt/{{ django_app }}/{{ django_app }}_play_tags vcenter_config.yml destroy_ib_datacenter"
 {% if enable_oob_mgmt_svcs == '1' %}
     - id: install_oob_vcenter_dvs
       name: "Create OOB vCenter DVS"
@@ -156,9 +156,9 @@
     - id: migrate_oob_vmk_to_vds
       name: "Migrate OOB ESX VMkernel Ports to Distributed vSwitch"
       commands:
-        - "/opt/{{ django_app }}/{{ django_app }}_play_tags vcenter_config.yml migrate_oob_vmks_to_vds"
+        - "/opt/{{ django_app }}/{{ django_app }}_play_tags vcenter_config.yml create_oob_vmkernel_ports"
 {% endif %}
     - id: migrate_ib_vmk_to_vds
       name: "Migrate IB ESX VMkernel Ports to Distributed vSwitch"
       commands:
-        - "/opt/{{ django_app }}/{{ django_app }}_play_tags vcenter_config.yml migrate_ib_vmks_to_vds"
+        - "/opt/{{ django_app }}/{{ django_app }}_play_tags vcenter_config.yml create_ib_vmkernel_ports"
