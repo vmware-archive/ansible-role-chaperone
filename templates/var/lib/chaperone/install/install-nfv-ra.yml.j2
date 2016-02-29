@@ -1,0 +1,13 @@
+  - "Deploy vCloud Reference Architecture":
+    - id: install_management_cluster
+      name: "Provision and Configure Management Cluster"
+      commands:
+        - "/opt/{{ django_app }}/{{ django_app }}_play_tags vcloud_nfv_mgmt.yml deploy_management_cluster"
+    - id: install_edge_cluster
+      name: "Provision and Configure Edge Cluster"
+      commands:
+        - "/opt/{{ django_app }}/{{ django_app }}_play_tags vcloud_nfv_edge.yml prereqs"
+    - id: install_resource_cluster
+      name: "Provision and Configure Resource Cluster"
+      commands:
+        - "/opt/{{ django_app }}/{{ django_app }}_play_tags vcloud_nfv_resource.yml prereqs"

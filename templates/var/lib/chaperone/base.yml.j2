@@ -25,6 +25,11 @@
 {% include 'prepare/prepare-esx.yml.j2' %}
 {% endif -%}
 
+# from prepare/prepare-nfv-ra.yml.j2
+{% if (deploy_phase1 == '0') and (deploy_ra == '1') -%}
+{% include 'prepare/prepare-nfv-ra.yml.j2' %}
+{% endif -%}
+
 {% if (deploy_phase1 == '0') and (deploy_vcenter == '1') -%}
 # from prepare/prepare-vcsa.yml.j2
 {% include 'prepare/prepare-vcsa.yml.j2' %}
@@ -82,6 +87,11 @@
 # from install/install-esx.yml.j2
 {% if (deploy_phase1 == '0') and (deploy_esx == '1') -%}
 {% include 'install/install-esx.yml.j2' %}
+{% endif -%}
+
+# from install/install-nfv-ra.yml.j2
+{% if (deploy_phase1 == '0') and (deploy_ra == '1') -%}
+{% include 'install/install-nfv-ra.yml.j2' %}
 {% endif -%}
 
 {% if (deploy_phase1 == '0') and (deploy_vcenter == '1') -%}
