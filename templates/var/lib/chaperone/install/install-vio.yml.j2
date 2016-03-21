@@ -13,3 +13,22 @@
    See the License for the specific language governing permissions and
    limitations under the License.
 #}
+  - "VIO Deploy":
+    - id: deploy_vio
+      name: "Deploy VIO OVA"
+      commands:
+        - "/opt/{{ django_app }}/{{ django_app }}_play_tags vio.yml deploy_vio_ova"
+    - id: upgrade_vio
+      name: "VIO Upgrade"
+      commands:
+        - "/opt/{{ django_app }}/{{ django_app }}_play_tags vio_upgrade.yml vio_upgrade"
+        - "/opt/{{ django_app }}/{{ django_app }}_play_tags vio.yml vio_upgrade_restart"
+    - id: config_vio
+      name: "Deploy VIO Cluster"
+      commands:
+        - "/opt/{{ django_app }}/{{ django_app }}_play_tags vio.yml config"
+    - id: validate_openstack
+      name: "Validate Openstack"
+      commands:
+        - "/opt/{{ django_app }}/{{ django_app }}_play_tags vio.yml validate_openstack"
+

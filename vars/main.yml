@@ -41,6 +41,7 @@ django_base_packages:
   - python-pip
   - python-pycurl
   - python-yaml
+  - python-ldap
   - supervisor
   - libapache2-mod-wsgi
   - sqlite3
@@ -48,6 +49,8 @@ django_base_packages:
 django_pip_packages:
   - pywinrm
   - virtualenv
+  - shade
+  - netaddr
 
 django_pip_versioned_packages:
   - { name: "django", version: "1.8.5" }

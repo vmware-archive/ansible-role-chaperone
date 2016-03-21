@@ -5,9 +5,24 @@
           name: "viouser password"
           optional: 0
           input: password
+        - id: vio_oms_syslog_protocol
+          name: "VIO OMS Syslog Protocol"
+          help: "The syslog server will be the on you specified in the Admin UI specify Protocol here. Defaults to UDP"
+          optional: 0
+          default: "udp"
+          input: dropdown
+          options:
+            - id: "udp"
+            - id: "tcp"
+        - id: vio_oms_syslog_port
+          name: "VIO OMS Syslog Port"
+          help: "The syslog server will be the on you specified in the Admin UI specify port here. Defaults to 514"
+          optional: 0
+          default: 514
       - "Target vCenter":
         - id: vio_oms_vcenter_hostname
-          name: "vCenter name"
+          name: "vCenter"
+          help: "vCenter IP or FQDN"
           optional: 0
         - id: vio_oms_vcenter_username
           name: "vCenter user"
@@ -19,17 +34,25 @@
         - id: vio_oms_datacenter_name
           name: "vCenter Datacenter name"
           optional: 0
+          input: dropdown
+          options: comp_vc_datacenter
         - id: vio_oms_cluster_name
           name: "vCenter management cluster name"
           optional: 0
+          input: dropdown
+          options: comp_vc_cluster
       - "Storage":
         - id: vio_oms_datastore
           name: "Datastore"
           optional: 0
+          input: dropdown
+          options: comp_vc_datastores
       - "Network":
         - id: vio_oms_network
           name: "Network"
           optional: 0
+          input: dropdown
+          options: comp_vc_networks
         - id: vio_oms_ip_address
           name: "OMS static IP address"
           optional: 0
@@ -42,173 +65,340 @@
         - id: vio_oms_dns_server
           name: "OMS DNS server"
           optional: 0
-    - "VIO Initial Configuration":
-      - "General Configuration":
-        - id: syslog_server
-          name: "Syslog server"
+    - "VIO Configuration":
+      - "VIO Management Network Information":
+        - id: vio_cluster_name
+          name: "VIO Deployment Name"
+          help: "Name the VIO Deployment Cluster"
           optional: 0
-        - id: vio_oms_cluster_name
-          name: "Destination ESX cluster"
-          optional: 0
-      - "Storage":
-        - id: nova_datastore
-          name: "Nova datastore"
-          optional: 0
-        - id: glance_datastores
-          name: "Glance datastores"
-          optional: 0
-      - "Network":
-        - id: vio_public_lb_fqdn
-          name: "Public FQDN for API VIP"
-          optional: 0
-        - id: vio_public_lb_ip
-          name: "Public VIP"
-          optional: 0
-        - id: vio_network_mode
-          name: "VIO networking mode"
+        - id: vio_management_cluster
+          name: "VIO Management Cluster"
+          help: "Select the management cluster to deploy the Openstack Infrastructure Services"
           optional: 0
           input: dropdown
-          options:
-            - id: "vDS"
-            - id: "NSX"
-        - id: vio_nsx_mgr_ip
-          name: "VIO NSX Manager IP"
+          options: comp_vc_cluster
+        - id: vio_management_network_portgroup
+          name: "VIO Management Network Portgroup"
+          help: "Select the management portgroup"
           optional: 0
-      - "Network (NSX-General)":
-        - id: vio_nsx_username
-          name: "VIO NSX Manager Username"
+          input: dropdown
+          options: comp_vc_networks
+        - id: vio_management_network_ip_start
+          name: "VIO Management network IP Range Start"
+          help: "Input Starting IP address for the VIO Management components must have MINIMUN 13 IPs"
           optional: 0
-        - id: vio_nsx_user_pwd
-          name: "VIO NSX Manager Password"
+        - id: vio_management_network_ip_end
+          name: "VIO Management network IP Range End"
+          help: "Input Ending IP address for the VIO Management components must have MINIMUN 13 IPs"
+          optional: 0
+        - id: vio_management_network_subnet
+          name: "VIO Management network Subnet"
+          help: "Input the subnet mask for the VIO Management Network ex 255.255.255.0"
+          optional: 0
+        - id: vio_management_network_gateway
+          name: "VIO Management network Gateway"
+          help: "Input the gateway for the VIO Management Network ex 192.168.110.1"
+          optional: 0
+        - id: vio_management_network_dns
+          name: "VIO Management network DNS"
+          help: "This DNS server is optional as a secondary DNS server, the primary DNS server used will be the DNS server you entered in the Admin Interface"
+          optional: 1
+      - "VIO Openstack API Access Settings":
+        - id: vio_management_openstack_api_network_portgroup
+          name: "VIO Management Openstack API Access Portgroup"
+          help: "Select the portgroup to use for the Openstack API access"
+          optional: 0
+          input: dropdown
+          options: comp_vc_networks
+        - id: vio_management_openstack_api_network_ip_start
+          name: "VIO Management Openstack API Access IP Range Start MINIMUM 2 Contiguous IPs"
+          help: "Input the Starting IP"
+          optional: 0
+        - id: vio_management_openstack_api_network_ip_end
+          name: "VIO Management Openstack API Access IP Range End MINIMUM 2 Contiguous IPs"
+          help: "Input the Ending IP"
+          optional: 0
+        - id: vio_management_openstack_api_network_subnet
+          name: "VIO Management Openstack API Access Subnet Mask"
+          help: "Input the subnet mask ex: 255.255.255.0"
+          optional: 0
+        - id: vio_management_openstack_api_network_gateway
+          name: "VIO Management Openstack API Access Gateway"
+          help: "Input the Gateway ex 192.168.0.1"
+          optional: 0
+        - id: vio_management_openstack_api_network_dns
+          name: "VIO Management Openstack API Access DNS"
+          help: "This DNS server is optional as a secondary DNS server, the primary DNS server used will be the DNS server you entered in the Admin Interface"
+          optional: 1
+      - "VIO Load Balancer":
+        - id: vio_loadbalancer_hostname
+          name: "VIO Load Balancer Hostname"
+          help: "Provide the hostname for the VIO Openstack Load Balancer"
+          optional: 1
+        - id: vio_loadbalancer_vip
+          name: "VIO Load Balancer Public Virtual IP"
+          help: "Provide the Public Virtual IP for the VIO Openstack Load Balancer"
+          optional: 0
+      - "VIO Nova and Glance Setting Information":
+        - id: vio_nova_cluster
+          name: "VIO Nova Cluster"
+          help: "Select the Cluster to use for the Instance VMs created through Openstack"
+          optional: 0
+          input: dropdown
+          options: comp_vc_cluster
+        - id: vio_nova_datastore
+          name: "VIO Nova Datastore"
+          help: "Select the Datastore to be used by Nova for creating instances"
+          optional: 0
+          input: dropdown
+          options: comp_vc_datastores
+        - id: vio_glance_datastore
+          name: "VIO Glance Datastore"
+          help: "Select the Datastore to be used by Glance to store Images"
+          optional: 0
+          input: dropdown
+          options: comp_vc_datastores
+      - "VIO NSX Networking Options for Neutron":
+        - id: vio_nsx_manager_ip
+          name: "VIO NSX Manager IP address or DNS name"
+          help: "Input the NSX Manager IP address or the DNS Name"
+          optional: 0
+        - id: vio_nsx_manager_username
+          name: "VIO NSX Manager Admin Username"
+          help: "Input the NSX Manager Username ex admin"
+          optional: 0
+          default: "admin"
+        - id: vio_nsx_manager_password
+          name: "VIO NSX Admin Password"
+          help: "Input the NSX Manager Password for the Admin User"
           optional: 0
           input: password
-        - id: vio_nsx_tz_name
+        - id: vio_nsx_transport_zone
           name: "VIO NSX Transport Zone"
+          help: "Input the Name for the Transport Zone"
           optional: 0
         - id: vio_nsx_edge_cluster
-          name: "VIO NSX Edge ESX Cluster"
+          name: "VIO NSX Edge Cluster"
+          help: "Select the Edge Cluster to use"
           optional: 0
+          input: dropdown
+          options: comp_vc_cluster
         - id: vio_nsx_vds
           name: "VIO NSX vDS"
+          help: "Input the name of the vDS"
           optional: 0
-        - id: vio_nsx_ext_dvpg
-          name: "VIO NSX External Portgroup"
+        - id: vio_nsx_external_network
+          name: "VIO NSX External Network"
+          help: "Select the Portgroup for the External Network"
           optional: 0
-      - "Network (VIO-Management)":
-        - id: vio_net_mgmt_dvpg
-          name: "VIO Management Portgroup"
+          input: dropdown
+          options: comp_vc_networks
+    - "VIO Keystone":
+      - "VIO Keystone Information":
+        - id: vio_use_keystone
+          name: "Use Keystone Authentication"
+          help: "Select for using Keystone Authentication"
           optional: 0
-        - id: vio_nsx_mgmt_ip_range_start
-          name: "VIO NSX Management IP range START"
+          input: checkbox
+          default: "1"
+        - id: vio_authentication_keystone_username
+          name: "VIO Keystone Admin Username"
+          help: "Input the admin username for openstack defaults to: admin"
           optional: 0
-        - id: vio_nsx_mgmt_ip_range_end
-          name: "VIO NSX Management IP range END"
+          default: "admin"
+        - id: vio_authentication_keystone_password
+          name: "VIO Keystone Admin Password"
+          help: "Input the Admin users password"
           optional: 0
-        - id: vio_nsx_mgmt_subnet_mask
-          name: "VIO NSX Management Subnet Mask"
-          optional: 0
-        - id: vio_nsx_mgmt_gw
-          name: "VIO NSX Management Gateway"
-          optional: 0
-        - id: vio_nsx_mgmt_dns_server
-          name: "VIO NSX Management DNS Server"
-          optional: 0
-      - "Network (VIO-API)":
-        - id: vio_net_api_dvpg
-          name: "VIO API Portgroup"
-          optional: 0
-        - id: vio_nsx_api_ip_range_start
-          name: "VIO NSX API IP range START"
-          optional: 0
-        - id: vio_nsx_api_ip_range_end
-          name: "VIO NSX API IP range END"
-          optional: 0
-        - id: vio_nsx_api_subnet_mask
-          name: "VIO NSX API Subnet Mask"
-          optional: 0
-        - id: vio_nsx_api_gw
-          name: "VIO NSX API Gateway"
-          optional: 0
-        - id: vio_nsx_api_dns_server
-          name: "VIO NSX API DNS Server"
-          optional: 0
-      - "Keystone - Local DB":
-        - id: vio_local_admin
-          name: "VIO local Administrator name"
-          optional: 1
-        - id: vio_local_admin_pwd
-          name: "VIO local Administrator password"
-          optional: 1
           input: password
-      - "Keystone - AD":
-        - id: vio_ad_encryption
+      - "VIO Project User":
+        - id: vio_val_user_name
+          name: "Name Openstack project user"
+          help: "If you are using keystone you will need to create users this will create a user to add to the validation project"
+          optional: 0
+          default: "demo_user01"
+        - id: vio_val_user_pass
+          name: "Project User Password"
+          help: "This will be the password for the above user to access VIO"
+          input: password
+          optional: 0
+          default: "VMware1!"
+    - "VIO AD":
+      - "VIO Active Directory Information":
+        - id: vio_use_ad
+          name: "Use Active Directory"
+          help: "Select for using Active Directory Authentication"
+          optional: 0
+          default: "0"
+          input: checkbox
+        - id: vio_authentication_ad_encryption
           name: "Encryption"
-          optional: 1
+          help: "Select the Type of Encryption defaults to None"
+          optional: 0
+          default: "NONE"
           input: dropdown
           options:
-            - id: "True"
-            - id: "False"
-        - id: vio_admin_tenant_name
-          name: "VIO Admin Tenant Name"
+            - id: "NONE"
+            - id: "SSL"
+        - id: vio_authentication_ad_dc_hostname
+          name: "Domain Controller FQDN"
+          help: "Input the hostname for the domain controller"
           optional: 0
-        - id: vio_addc_hostname
-          name: "AD Domain Controller"
+        - id: vio_authentication_ad_port
+          name: "LDAP Port"
+          optional: 0
+          hide: 1
+      - "VIO Openstack Bind User": 
+        - id: vio_authentication_ad_bind_user
+          name: "Bind User"
+          help: "Enter the valid active directory user to use as the bind user"
+          optional: 0
+        - id: vio_authentication_ad_bind_user_password
+          name: "Bind User Password"
+          help: "Enter the Bind users Password"
+          optional: 0
+          input: password
+      - "VIO Openstack Admin User":
+        - id: vio_authentication_ad_admin_user
+          name: "Openstack Admin User"
+          help: "Enter the valid active directory user to use as the admin user for openstack"
+          optional: 0
+        - id: vio_authentication_ad_admin_user_password
+          name: "Openstack Admin User Password"
+          help: "Enter the password for the Admin User"
+          optional: 0
+          input: password
+        - id: vio_authentication_ad_ldap_user_tree_dn
+          name: "LDAP User Tree DN"
+          help: "example OU=vio,dc=corp,dc=local"
+          optional: 0
+        - id: vio_authentication_ad_ldap_user_filter
+          name: "LDAP User Filter"
+          help: "example (&(objectCategory=person)(objectClass=user))"
           optional: 1
-        - id: vio_addc_port
-          name: "AD DC Port"
+          default: "(&(objectCategory=person)(objectClass=user))"
+        - id: vio_authentication_ad_ldap_user_objectclass
+          name: "LDAP User Object Class"
+          help: "example organizationalPerson"
           optional: 1
-          default: "636"
-        - id: vio_addc_username
-          name: "AD username"
+          default: "organizationalPerson"
+          hide: 1
+        - id: vio_authentication_ad_ldap_user_id_attribute
+          name: "LDAP User Id Attribute"
           optional: 1
-        - id: vio_addc_user_pwd
-          name: "AD user password"
+          default: "cn"
+          hide: 1
+        - id: vio_authentication_ad_ldap_user_name_attribute
+          name: "LDAP User Name Attribute"
           optional: 1
-        - id: vio_local_admin
-          name: "VIO local Administrator name"
+          default: "userPrincipalName"
+          hide: 1
+        - id: vio_authentication_ad_ldap_user_mail_attribute
+          name: "LDAP User Mail Attribute"
+          help: "example mail"
           optional: 1
-        - id: vio_local_admin_pwd
-          name: "VIO local Administrator password"
+          default: "mail"
+          hide: 1
+        - id: vio_authentication_ad_ldap_user_pass_attribute
+          name: "LDAP User Password Attribute"
+          help: "example userPassword"
           optional: 1
-        - id: vio_ad_user_tree_dn
-          name: "AD User Tree DN"
+          default: "userPassword"
+          hide: 1
+      - "VIO Group Settings":
+        - id: vio_authentication_ad_ldap_group_tree_dn
+          name: "LDAP Group Tree DN"
+          help: "This field is not optional example OU=vio,dc=corp,dc=local"
+          optional: 0
+        - id: vio_authentication_ad_ldap_group_filter
+          name: "LDAP Group Filter"
+          help: "example (&(objectCategory=group)(objectClass=group))"
           optional: 1
-        - id: vio_ad_user_filter
-          name: "AD User Filter"
+          default: "(&(objectCategory=group)(objectClass=group))"
+        - id: vio_authentication_ad_ldap_group_objectclass
+          name: "LDAP Group Object Class"
+          help: "example group"
           optional: 1
-        - id: vio_ad_user_object_class
-          name: "AD User objectClass"
+          default: "group"
+          hide: 1
+        - id: vio_authentication_ad_ldap_group_id_attribute
+          name: "LDAP Group Id Attribute"
+          help: "example "
           optional: 1
-        - id: vio_ad_user_id_attribute
-          name: "AD User ID Attribute"
+          default: "cn"
+          hide: 1
+        - id: vio_authentication_ad_ldap_group_name_attribute
+          name: "LDAP Group Name Attribute"
+          help: "example "
           optional: 1
-        - id: vio_ad_user_name_attribute
-          name: "AD User Name Attribute"
+          default: "sAMAccountName"
+          hide: 1
+        - id: vio_authentication_ad_ldap_group_member_attribute
+          name: "LDAP Group Memeber Attribute"
+          help: "example member"
           optional: 1
-        - id: vio_ad_user_mail_attribute
-          name: "AD User Mail Attribute"
+          default: "member"
+          hide: 1
+        - id: vio_authentication_ad_ldap_group_desc_attribute
+          name: "LDAP Group Description Attribute"
+          help: "example description"
           optional: 1
-        - id: vio_ad_user_pwd_attribute
-          name: "AD User Password Attribute"
-          optional: 1
-        - id: vio_ad_group_tree_dn
-          name: "AD Group Tree DN"
-          optional: 1
-        - id: vio_ad_group_filter
-          name: "AD Group Filter"
-          optional: 1
-        - id: vio_ad_group_object_class
-          name: "AD Group objectClass"
-          optional: 1
-        - id: vio_ad_group_id_attribute
-          name: "AD Group ID Attribute"
-          optional: 1
-        - id: vio_ad_group_name_attribute
-          name: "AD Group Name Attribute"
-          optional: 1
-        - id: vio_ad_group_member_attribute
-          name: "AD Group Member Attribute"
-          optional: 1
-        - id: vio_ad_group_description_attribute
-          name: "AD Group Description Attribute"
-          optional: 1
+          default: "description"
+          hide: 1
+      - "VIO Project User AD":
+        - id: vio_val_user_name_ad
+          name: "Name Openstack project user"
+          help: "If you are using AD you will need to input a user to add to the validation project"
+          optional: 0
+        - id: vio_val_user_pass_ad
+          name: "Project User Password"
+          help: "This will be the password for the above user to access VIO"
+          input: password
+          optional: 0
+    - "VIO Validation":
+      - "External Provider Configuration":
+        - id: vio_val_ext_net_name
+          name: "VIO External Provider Network Name"
+          help: "This will be the network providing the floating ips to instances"
+          optional: 0
+          default: "ext-net"
+        - id: vio_val_extnet_portgroup
+          name: "VIO External Network Portgroup"
+          help: "Select the portgroup for the external network"
+          optional: 0
+          input: dropdown
+          options: comp_vc_networks
+        - id: vio_val_ext_net_cidr
+          name: "VIO External Network CIDR"
+          help: "Input a valid network in cidr notation ex 192.168.0.0/24"
+          optional: 0
+        - id: vio_val_ext_net_gateway
+          name: "VIO External Network Gateway"
+          help: "input a valid IP within the above network for the gateway"
+          optional: 0
+        - id: vio_val_ext_net_pool_start
+          name: "VIO External Network Pool Start address"
+          help: "Enter a starting IP address for the start of the Floating ip pool"
+          optional: 0
+        - id: vio_val_ext_net_pool_end
+          name: "VIO External Network Pool End address"
+          help: "Enter an ending IP address for the end of the Floating ip pool"
+          optional: 0
+      - "Validation Project":
+        - id: vio_val_project_name
+          name: "Input a name for the Openstack Project to be created"
+          optional: 0
+          default: "demo-project"
+        - id: vio_val_heat_name
+          name: "Name of Heat stack"
+          optional: 0
+          default: "Heat001"
+          
+    - "VIO Upgrade":
+      - "Upgrade Information":
+        - id: vio_upgrade_status
+          name: "Upgrade VIO 2.0 to 2.01"
+          input: checkbox
+          optional: 0
+
+           
