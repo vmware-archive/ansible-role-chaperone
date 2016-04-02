@@ -1,68 +1,192 @@
   - "NFV vCloud Reference Architecture":
+    - "ESX Management Cluster":
+      - "Host Information":
+        - id: mgmt_host_1_fqdn
+          name: "ESX Server IP or FQDN"
+          optional: 0
+          default: "10.112.227.225"
+        - id: mgmt_host_1_username
+          name: "ESX Server username"
+          optional: 0
+          default: "root"
+        - id: mgmt_host_1_password
+          name: "ESX Server User password"
+          optional: 0
+          default: "ca$hc0w"
+          input: password
+      - "Host Information":
+        - id: mgmt_host_2_fqdn
+          name: "ESX Server IP or FQDN"
+          optional: 0
+        - id: mgmt_host_2_username
+          name: "ESX Server username"
+          optional: 0
+        - id: mgmt_host_2_password
+          name: "ESX Server User password"
+          optional: 0
+          input: password
+    - "ESX Edge Cluster":
+      - "Host Information":
+        - id: edge_host_1_fqdn
+          name: "ESX Server IP or FQDN"
+          optional: 0
+        - id: edge_host_1_username
+          name: "ESX Server username"
+          optional: 0
+        - id: edge_host_1_password
+          name: "ESX Server User password"
+          optional: 0
+          input: password
+    - "ESX Resource Cluster":
+      - "Host Information":
+        - id: res_host_1_fqdn
+          name: "ESX Server IP or FQDN"
+          optional: 0
+        - id: res_host_1_username
+          name: "ESX Server username"
+          optional: 0
+        - id: res_host_1_password
+          name: "ESX Server User password"
+          optional: 0
+          input: password
+      - "Host Information":
+        - id: res_host_2_fqdn
+          name: "ESX Server IP or FQDN"
+          optional: 0
+        - id: res_host_2_username
+          name: "ESX Server username"
+          optional: 0
+        - id: res_host_2_password
+          name: "ESX Server User password"
+          optional: 0
+          input: password
+      - "Host Information":
+        - id: res_host_3_fqdn
+          name: "ESX Server IP or FQDN"
+          optional: 0
+        - id: res_host_3_username
+          name: "ESX Server username"
+          optional: 0
+        - id: res_host_3_password
+          name: "ESX Server User password"
+          optional: 0
+          input: password
     - "Management vCenter Server":
-      - Installation:
-        - id: vcenter_appliance_count
-          name: "Number of vCenter appliances to deploy"
+      - vCenter Installation:
+        - id: vcenter_vm_name
+          name: "vCenter Virtual Machine Name"
           optional: 0
-          default: "1"
-        - id: psc_appliance_count
-          name: "Number of PSC appliances to deploy"
-          optional: 0
-          default: "2"
-        - id: link_mgmt_psc
-          name: "Link PSC to PSC"
-          input: checkbox
-          optional: 0
-          default: "1"
-          help: "This Links 2 PSCs together."
-        - id: link_mgmt_psc_vcenter
-          name: "Link vCenter to PSC"
-          input: checkbox
-          optional: 0
-          default: "1"
-          help: "This Links a vCenter to a PSC."
+          default: "Mgmt-vCenter"
         - id: vcenter_database_type
           name: "vCenter database type"
           optional: 0
           default: "embedded"
-        - id: local_datastore_esxi_fqdn
-          name: "ESXi FQDN to create a local datastore"
+        - id: datastore_name
+          name: "Datastore to be deployed on"
           optional: 0
-          help: "vCenter Server is deployed on the local datastore of this ESXi host."
-        - id: chaperone_vcenter_url
-          name: "Path to vCenter iso"
+          default: "LocalDatastore4_225"
+        - id: network_name
+          name: "Network to be deployed on"
           optional: 0
-          help: "URL to vCenter Installer ISO."
-      - General Configuration:
+          default: "Chaperone-Private"
+        - id: ip_mode
+          name: "IP address mode"
+          optional: 0
+          default: "static"
+        - id: vcenter_ip_address
+          name: "vCenter IP address"
+          optional: 0
+          default: "192.168.110.4"
+        - id: vcenter_ip_gateway
+          name: "Gateway address"
+          optional: 0
+          default: "192.168.110.1"
+        - id: vcenter_ip_dns
+          name: "DNS servers"
+          optional: 0
+          default: "192.168.110.3"
+      - PSC Installation:
+        - id: psc_vm_name
+          name: "PSC Virtual Machine Name"
+          optional: 0
+          default: "Mgmt-psc"
+        - id: psc_database_type
+          name: "PSC database type"
+          optional: 0
+          default: "embedded"
+        - id: psc_datastore_name
+          name: "Datastore to be deployed on"
+          optional: 0
+          default: "LocalDatastore4_225"
+        - id: psc_network_name
+          name: "Network to be deployed on"
+          optional: 0
+          default: "Chaperone-Private"
+        - id: psc_ip_mode
+          name: "IP address mode"
+          optional: 0
+          default: "static"
+        - id: psc_ip_address
+          name: "PSC IP address"
+          optional: 0
+          default: "192.168.110.6"
+        - id: psc_ip_gateway
+          name: "Gateway address"
+          optional: 0
+          default: "192.168.110.1"
+        - id: psc_ip_dns
+          name: "DNS servers"
+          optional: 0
+          default: "192.168.110.3"
+      - General vCenter Configuration:
         - id: mgmt_vcenter_fqdn
           name: "vCenter FQDN"
           optional: 0
+          default: "mgmt-vcenter.corp.local"
+        - id: mgmt_psc_fqdn
+          name: "PSC FQDN"
+          optional: 0
+          default: "mgmt-psc.corp.local"
+        - id: mgmt_psc_hostname
+          name: "PSC Hostname"
+          optional: 0
+          default: "mgmt-psc"
         - id: mgmt_vcenter_username
           name: "vCenter user name"
           optional: 0
+          default: "administrator@vsphere.local"
         - id: mgmt_vcenter_password
           name: "vCenter user password"
           optional: 0
+          default: "VMware1!"
           input: password
         - id: mgmt_vcenter_port
           name: "vCenter port"
           optional: 0
           default: "443"
+        - id: mgmt_vcenter_domain_name
+          name: "vCenter domain name"
+          optional: 0
+          default: "vsphere.local"
+        - id: mgmt_vcenter_site_name
+          name: "vCenter site name"
+          optional: 0
+          default: "default-site"
+        - id: mgmt_vcenter_deployment_type
+          name: "vCenter site name"
+          optional: 0
+          default: "management-tiny"
+      - Logical vCenter Configuration:
         - id: datacenter_name
           name: "Datacenter name"
           optional: 0
           default: "NFV_MGMT_DC"
           help: "Datacenter name to be created in vCenter inventory."
-      - Cluster Configuration:
         - id: cluster_name
           name: "Cluster name"
           optional: 0
           default: &cluster_name "NFV_MGMT_CLUSTER"
           help: "Cluster to be created in the Datacenter."
-        - id: add_hosts_to_cluster
-          name: "Add hosts to cluster"
-          optional: 0
-          help: "Currently comma seperated eg: host_fqdn_1,host_fqdn_2"
       - Cluster Configuration - VSAN:
         - id: configure_vsan
           name: "Enable vSAN on cluster"
@@ -75,10 +199,6 @@
           optional: 0
           default: *cluster_name
           help: "Cluster to be configured with vSAN."
-        - id: add_hosts_to_vsan_datastore
-          name: "Add hosts to vSAN datastore"
-          optional: 0
-          help: "Currently comma seperated eg: host_fqdn_1,host_fqdn_2.Add all the hosts specified in the vCenter Cluster."
         - id: vsan_datastore_name
           name: "vSAN datastore name"
           optional: 0
@@ -105,7 +225,7 @@
         - id: drs_automation_level
           name: "Automation Level"
           optional: 0
-          default: "Fully Automated"
+          default: "fullyAutomated"
         - id: drs_migration_threshold
           name: "Migration Threshold"
           optional: 0
@@ -158,7 +278,7 @@
           name: "Datastore Heart-beating"
           optional: 0
           default: "Automatically select datastores accessible from the host"
-      - Network Configuration - Infrastructure:
+      - VDS Configuration - Infra:
         - id: infra_vds_name
           name: "Infrastructure VDS"
           optional: 0
@@ -168,24 +288,24 @@
           name: "UpLink Ports"
           optional: 0
           default: "2"
-          help: "Add two physical Ethernet ports from each ESXi host as the uplinks for the VDS.Ensure the two Ethernet ports are from separate controllers on the ESXi hosts"
-        - id: infra_add_hosts_to_vds
-          name: "Add hosts to Infrastructure VDS"
+          help: "Number of physical ethernet ports to act as uplinks for this VDS."
+        - id: vmotion_port_group_name
+          name: "ESXi Management port group name"
           optional: 0
-          help: "Currently comma seperated eg: host_fqdn_1,host_fqdn_2.Add all the hosts specified in the vCenter Cluster."
-        - id: infra_vmkernel_port_group_esxi_mgmt
-          name: "vLan ID for ESXi Management vmkernel Port Group"
-          optional: 0
-          default: "20"
+          default: "NFV_MGMT_Infra_VMOTION"
         - id: infra_vmkernel_port_group_vmotion_network
           name: "vLan ID for vMotion Network vmkernel Port Group"
           optional: 0
           default: "30"
-        - id: infra_vmkernel_port_group_vsan_network
-          name: "vLan ID for Virtual SAN Network Port Group"
+        - id: esximgmt_port_group_name
+          name: "ESXi Management port group name"
+          optional: 0
+          default: "NFV_MGMT_Infra_ESXiMGMT"
+        - id: infra_vmkernel_port_group_esximgmt_network
+          name: "vLan ID for ESXi Management Port Group"
           optional: 0
           default: "40"
-      - Network Configuration - Tenant:
+      - VDS Configuration - Tenant:
         - id: tenant_vds_name
           name: "Tenant VDS"
           optional: 0
@@ -195,23 +315,15 @@
           name: "UpLink Ports"
           optional: 0
           default: "2"
-          help: "Add remaining two physical Ethernet ports from each ESXi host as the uplinks for this VDS.Ensure the two Ethernet ports are from separate controllers on the ESXi hosts"
-        - id: tenant_add_hosts_to_vds
-          name: "Add hosts to Tenant VDS"
+          help: "Number of physical ethernet ports to act as uplinks for this VDS."
+        - id: vmmgmt_port_group_name
+          name: "VM Management port group name"
           optional: 0
-          help: "Currently comma seperated eg: host_fqdn_1,host_fqdn_2.Add all the hosts specified in the vCenter Cluster."
+          default: "NFV_MGMT_Infra_VMMGMT"
         - id: tenant_vm_port_group_mgmt_vlan
           name: "vLan ID for Management VLAN virtual machine Port Group"
           optional: 0
           default: "50"
-        - id: tenant_vm_port_group_mgmt_vetp
-          name: "vLan ID for Management VTEP virtual machine Port Group"
-          optional: 0
-          default: "55"
-        - id: tenant_vm_port_group_external_network
-          name: "vLan ID for External Network virtual machine Port Group"
-          optional: 0
-          default: "80"
     - "Management NSX Manager":
       - Installation:
         - id: chaperone_nsx_url
@@ -389,180 +501,244 @@
           optional: 0
           default: "Unclear Deployment Steps"
     - "Resource vCenter Server":
-      - Installation:
-        - id: resource_vcenter_appliance_count
-          name: "Number of vCenter appliances to deploy"
+      - vCenter Installation:
+        - id: vcenter_res_vm_name
+          name: "vCenter Virtual Machine Name"
           optional: 0
-          default: "1"
-        - id: resource_psc_appliance_count
-          name: "Number of PSC appliances to deploy"
-          optional: 0
-          default: "2"
-        - id: link_psc
-          name: "Link PSC to PSC"
-          input: checkbox
-          optional: 0
-          default: 0
-        - id: link_psc_vcenter
-          name: "Link vCenter to PSC"
-          input: checkbox
-          optional: 0
-          default: 0
-        - id: resource_vcenter_database_type
+          default: "Res-vCenter"
+        - id: vcenter_res_database_type
           name: "vCenter database type"
           optional: 0
           default: "embedded"
-        - id: vsan_datastore
-          name: "Deploy appliance on vSAN datastore"
+        - id: datastore_res_name
+          name: "Datastore to be deployed on"
           optional: 0
-          default: "NFV_MGMT_VSAN_DS "
-          help: "vCenter Server is deployed on the local datastore of this ESXi host."
-        - id: chaperone_vcenter_url
-          name: "Path to vCenter iso"
+          default: "LocalDatastore4_225"
+        - id: network_res_name
+          name: "Network to be deployed on"
           optional: 0
-          help: "URL to vCenter Installer ISO."
-      - General Configuration:
-        - id: resource_datacenter_name
+          default: "Chaperone-Private"
+        - id: ip_res_mode
+          name: "IP address mode"
+          optional: 0
+          default: "static"
+        - id: vcenter_res_ip_address
+          name: "vCenter IP address"
+          optional: 0
+          default: "192.168.110.7"
+        - id: vcenter_ip_gateway
+          name: "Gateway address"
+          optional: 0
+          default: "192.168.110.1"
+        - id: vcenter_res_ip_dns
+          name: "DNS servers"
+          optional: 0
+          default: "192.168.110.3"
+      - PSC Installation:
+        - id: psc_res_vm_name
+          name: "PSC Virtual Machine Name"
+          optional: 0
+          default: "Res-psc"
+        - id: psc_res_database_type
+          name: "PSC database type"
+          optional: 0
+          default: "embedded"
+        - id: psc_res_datastore_name
+          name: "Datastore to be deployed on"
+          optional: 0
+          default: "LocalDatastore4_225"
+        - id: psc_res_network_name
+          name: "Network to be deployed on"
+          optional: 0
+          default: "Chaperone-Private"
+        - id: psc_res_ip_mode
+          name: "IP address mode"
+          optional: 0
+          default: "static"
+        - id: psc_res_ip_address
+          name: "PSC IP address"
+          optional: 0
+          default: "192.168.110.7"
+        - id: psc_res_ip_gateway
+          name: "Gateway address"
+          optional: 0
+          default: "192.168.110.1"
+        - id: psc_res_ip_dns
+          name: "DNS servers"
+          optional: 0
+          default: "192.168.110.3"
+      - General vCenter Configuration:
+        - id: res_vcenter_fqdn
+          name: "vCenter FQDN"
+          optional: 0
+          default: "res-vcenter.corp.local"
+        - id: res_psc_fqdn
+          name: "PSC FQDN"
+          optional: 0
+          default: "res-psc.corp.local"
+        - id: res_psc_hostname
+          name: "PSC Hostname"
+          optional: 0
+          default: "res-psc"
+        - id: res_vcenter_username
+          name: "vCenter user name"
+          optional: 0
+          default: "administrator@vsphere.local"
+        - id: res_vcenter_password
+          name: "vCenter user password"
+          optional: 0
+          default: "VMware1!"
+          input: password
+        - id: res_vcenter_port
+          name: "vCenter port"
+          optional: 0
+          default: "443"
+        - id: res_vcenter_domain_name
+          name: "vCenter domain name"
+          optional: 0
+          default: "vsphere.local"
+        - id: res_vcenter_site_name
+          name: "vCenter site name"
+          optional: 0
+          default: "default-site"
+        - id: res_vcenter_deployment_type
+          name: "vCenter site name"
+          optional: 0
+          default: "management-tiny"
+      - Logical vCenter Configuration:
+        - id: datacenter_name
           name: "Datacenter name"
           optional: 0
-          default: "NFV_RES_DC"
+          default: "NFV_MGMT_DC"
           help: "Datacenter name to be created in vCenter inventory."
-      - Cluster Configuration - Resource:
-        - id: resource_cluster_name
-          name: "Cluster name"
+        - id: res_cluster_name
+          name: "Resource Cluster name"
           optional: 0
-          default: &resource_cluster_name "NFV_RES_CLUSTER"
-          help: "Cluster to be created in the Datacenter."
-        - id: resource_add_hosts_to_cluster
-          name: "Add hosts to cluster"
+          default: &res_cluster_name "NFV_RES_CLUSTER"
+        - id: edge_cluster_name
+          name: "Edge Cluster name"
           optional: 0
-          help: "Currently comma seperated eg: host_fqdn_1,host_fqdn_2"
-      - Cluster Configuration(Resource) - VSAN:
-        - id: resource_configure_vsan
+          default: &edge_cluster_name "NFV_EDGE_CLUSTER"
+      - Resource Cluster Configuration - VSAN:
+        - id: res_configure_vsan
           name: "Enable vSAN on cluster"
           input: checkbox
           optional: 0
-          default: 0
+          default: "1"
           help: "Select if vSAN needs to be configured on the Resource Cluster"
-        - id: vsan_cluster_name
+        - id: res_vsan_cluster_name
           name: "Cluster name"
           optional: 0
-          default: *resource_cluster_name
+          default: *res_cluster_name
           help: "Cluster to be configured with vSAN."
-        - id: add_hosts_to_resource_vsan_datastore
-          name: "Add hosts to vSAN datastore"
-          optional: 0
-          help: "Currently comma seperated eg: host_fqdn_1,host_fqdn_2.Add all the hosts specified in the vCenter Cluster."
-        - id: resource_vsan_datastore_name
+        - id: res_vsan_datastore_name
           name: "vSAN datastore name"
           optional: 0
           default: "NFV_RES_VSAN_DS"
           help: "All the added ESXi hosts will be able to see the created vSAN Datastore."
-      - Cluster Configuration(Resource) - DRS:
-        - id: resource_configure_drs
-          name: "Enable DRS on cluster"
+        - id: res_migrate_hosts
+          name: "Migrate all the virtual machines from the local datastore to vSAN storage."
           input: checkbox
           optional: 0
           default: 0
-          help: "Select if DRS needs to be configured on the Resource Cluster"
-        - id: resource_drs_cluster_name
+          help: "Selecting this option will migrate all hosts from local datastore to vSAN datastore.Note: This will also delete any local datastores on ESXi hosts."
+      - Resource Cluster Configuration - DRS:
+        - id: configure_drs
+          name: "Enable DRS on cluster"
+          input: checkbox
+          optional: 0
+          default: "0"
+          help: "Select if DRS needs to be configured on the Management Cluster"
+        - id: res_drs_cluster_name
           name: "Cluster name"
           optional: 0
-          default: *resource_cluster_name
+          default: *res_cluster_name
           help: "Cluster to be configured with DRS."
-        - id: resource_drs_automation_level
+        - id: res_drs_automation_level
           name: "Automation Level"
           optional: 0
-          default: "Fully Automated"
-        - id: resource_drs_migration_threshold
+          default: "fullyAutomated"
+        - id: res_drs_migration_threshold
           name: "Migration Threshold"
           optional: 0
           default: "2"
-        - id: resource_drs_vm_automation
+        - id: res_drs_vm_automation
           name: "Virtual Machine Automation"
           optional: 0
           default: "Disabled"
-        - id: resource_drs_power_management
+        - id: res_drs_power_management
           name: "Power Management"
           optional: 0
           default: "Disabled"
-        - id: resource_drs_evc_mode
+        - id: res_drs_evc_mode
           name: "Enhanced vMotion Compatibility(EVC)"
           optional: 0
           default: "Enabled"
-      - Cluster Configuration(Resource) - HA:
-        - id: resource_configure_ha
+      - Resource Cluster Configuration - HA:
+        - id: res_configure_ha
           name: "Enable HA on cluster"
           input: checkbox
           optional: 0
           default: 0
           help: "Select if HA needs to be configured on the Resource Cluster"
-        - id: resource_ha_cluster_name
+        - id: res_ha_cluster_name
           name: "Cluster name"
           optional: 0
-          default: *resource_cluster_name
+          default: *res_cluster_name
           help: "Cluster to be configured with HA."
-        - id: resource_ha_host_monitoring
+        - id: res_ha_host_monitoring
           name: "Host Monitoring"
           optional: 0
           default: "Enabled"
-        - id: resource_ha_admission_control
+        - id: res_ha_admission_control
           name: "Admission Control"
           optional: 0
           default: "Enabled"
-        - id: resource_ha_admission_control_policy
+        - id: res_ha_admission_control_policy
           name: "Admission Control Policy"
           optional: 0
           default: "Host failures to tolerate same as Virtual SAN"
-        - id: resource_ha_vm_monitoring
+        - id: res_ha_vm_monitoring
           name: "VM Monitoring"
           optional: 0
           default: "Disabled"
-        - id: resource_ha_monitoring_sensitivity
+        - id: res_ha_monitoring_sensitivity
           name: "Monitoring Sensitivity"
           optional: 0
           default: "High"
-        - id: resource_ha_datastore_heart_beating
+        - id: res_ha_datastore_heart_beating
           name: "Datastore Heart-beating"
           optional: 0
           default: "Automatically select datastores accessible from the host"
-      - Cluster Configuration - Edge:
-        - id: edge_cluster_name
-          name: "Cluster name"
-          optional: 0
-          default: &edge_cluster_name "NFV_EDGE_CLUSTER"
-          help: "Cluster to be created in the Datacenter."
-        - id: edge_add_hosts_to_cluster
-          name: "Add hosts to cluster"
-          optional: 0
-          help: "Currently comma seperated eg: host_fqdn_1,host_fqdn_2"
-      - Cluster Configuration(Edge) - VSAN:
+      - Edge Cluster Configuration - VSAN:
         - id: edge_configure_vsan
           name: "Enable vSAN on cluster"
           input: checkbox
           optional: 0
           default: 0
           help: "Select if vSAN needs to be configured on the Edge Cluster"
-        - id: vsan_cluster_name
+        - id: edge_vsan_cluster_name
           name: "Cluster name"
           optional: 0
           default: *edge_cluster_name
           help: "Cluster to be configured with vSAN."
-        - id: add_hosts_to_edge_vsan_datastore
-          name: "Add hosts to vSAN datastore"
-          optional: 0
-          help: "Currently comma seperated eg: host_fqdn_1,host_fqdn_2.Add all the hosts specified in the vCenter Cluster."
         - id: edge_vsan_datastore_name
           name: "vSAN datastore name"
           optional: 0
           default: "NFV_EDGE_VSAN_DS"
           help: "All the added ESXi hosts will be able to see the created vSAN Datastore."
-      - Cluster Configuration(Edge) - DRS:
-        - id: edge_configure_drs
-          name: "Enable DRS on cluster"
+        - id: edge_migrate_hosts
+          name: "Migrate all the virtual machines from the local datastore to vSAN storage."
           input: checkbox
           optional: 0
           default: 0
+          help: "Selecting this option will migrate all hosts from local datastore to vSAN datastore.Note: This will also delete any local datastores on ESXi hosts."
+      - Edge Cluster Configuration - DRS:
+        - id: configure_drs
+          name: "Enable DRS on cluster"
+          input: checkbox
+          optional: 0
+          default: "0"
           help: "Select if DRS needs to be configured on the Edge Cluster"
         - id: edge_drs_cluster_name
           name: "Cluster name"
@@ -572,7 +748,7 @@
         - id: edge_drs_automation_level
           name: "Automation Level"
           optional: 0
-          default: "Fully Automated"
+          default: "fullyAutomated"
         - id: edge_drs_migration_threshold
           name: "Migration Threshold"
           optional: 0
@@ -589,15 +765,7 @@
           name: "Enhanced vMotion Compatibility(EVC)"
           optional: 0
           default: "Enabled"
-        - id: anti_affinity_rules
-          name: "Anti-Affinity Rules"
-          optional: 0
-          default: "NSX Controllers,NSX DLR,NSX Edge VNF routing"
-        - id: affinity_rules
-          name: "Affinity Rules"
-          optional: 0
-          default: "None"
-      - Cluster Configuration(Edge) - HA:
+      - Edge Cluster Configuration - HA:
         - id: edge_configure_ha
           name: "Enable HA on cluster"
           input: checkbox
@@ -607,7 +775,7 @@
         - id: edge_ha_cluster_name
           name: "Cluster name"
           optional: 0
-          default: *resource_cluster_name
+          default: *edge_cluster_name
           help: "Cluster to be configured with HA."
         - id: edge_ha_host_monitoring
           name: "Host Monitoring"
@@ -633,114 +801,98 @@
           name: "Datastore Heart-beating"
           optional: 0
           default: "Automatically select datastores accessible from the host"
-      - Network Configuration(Resource) - Infrastructure:
-        - id: resource_infra_vds_name
+      - Resource VDS Configuration - Infra:
+        - id: res_infra_vds_name
           name: "Infrastructure VDS"
           optional: 0
-          default: "NFV_RESOURCE_INFRA_VDS"
+          default: "NFV_RES_INFRA_VDS"
           help: "This dvSwitch will be created as the Infrastructure VDS."
-        - id: resource_infra_vds_uplink_ports
+        - id: res_infra_vds_uplink_ports
           name: "UpLink Ports"
           optional: 0
           default: "2"
-          help: "Add two physical Ethernet ports from each ESXi host as the uplinks for the VDS.Ensure the two Ethernet ports are from separate controllers on the ESXi hosts"
-        - id: resource_infra_add_hosts_to_vds
-          name: "Add hosts to Infrastructure VDS"
+          help: "Number of physical ethernet ports to act as uplinks for this VDS."
+        - id: res_vmotion_port_group_name
+          name: "ESXi Management port group name"
           optional: 0
-          help: "Currently comma seperated eg: host_fqdn_1,host_fqdn_2.Add all the hosts specified in the vCenter Cluster."
-        - id: resource_infra_vmkernel_port_group_esxi_mgmt
-          name: "vLan ID for ESXi Management vmkernel Port Group"
-          optional: 0
-          default: "20"
-        - id: resource_infra_vmkernel_port_group_vmotion_network
+          default: "NFV_RES_Infra_VMOTION"
+        - id: res_infra_vmkernel_port_group_vmotion_network
           name: "vLan ID for vMotion Network vmkernel Port Group"
           optional: 0
           default: "30"
-        - id: resource_infra_vmkernel_port_group_vsan_network
-          name: "vLan ID for Virtual SAN Network Port Group"
+        - id: res_esximgmt_port_group_name
+          name: "ESXi Management port group name"
+          optional: 0
+          default: "NFV_MGMT_Infra_ESXiMGMT"
+        - id: res_infra_vmkernel_port_group_esximgmt_network
+          name: "vLan ID for ESXi Resource Port Group"
           optional: 0
           default: "40"
-      - Network Configuration(Resource) - Tenant:
-        - id: resource_tenant_vds_name
+      - Resource VDS Configuration - Tenant:
+        - id: res_tenant_vds_name
           name: "Tenant VDS"
           optional: 0
-          default: "NFV_MGMT_TENANT_VDS"
+          default: "NFV_RES_TENANT_VDS"
           help: "This dvSwitch will be created as the Tenant VDS."
-        - id: resource_tenant_vds_uplink_ports
+        - id: res_tenant_vds_uplink_ports
           name: "UpLink Ports"
           optional: 0
           default: "2"
-          help: "Add remaining two physical Ethernet ports from each ESXi host as the uplinks for this VDS.Ensure the two Ethernet ports are from separate controllers on the ESXi hosts"
-        - id: resource_tenant_add_hosts_to_vds
-          name: "Add hosts to Tenant VDS"
+          help: "Number of physical ethernet ports to act as uplinks for this VDS."
+        - id: res_vmmgmt_port_group_name
+          name: "VM Management port group name"
           optional: 0
-          help: "Currently comma seperated eg: host_fqdn_1,host_fqdn_2.Add all the hosts specified in the vCenter Cluster."
-        - id: resource_tenant_vm_port_group_mgmt_vlan
+          default: "NFV_RES_Infra_VMMGMT"
+        - id: res_tenant_vm_port_group_mgmt_vlan
           name: "vLan ID for Management VLAN virtual machine Port Group"
           optional: 0
           default: "50"
-        - id: resource_tenant_vm_port_group_mgmt_vetp
-          name: "vLan ID for Management VTEP virtual machine Port Group"
-          optional: 0
-          default: "55"
-        - id: resource_tenant_vm_port_group_external_network
-          name: "vLan ID for External Network virtual machine Port Group"
-          optional: 0
-          default: "80"
-      - Network Configuration(Edge) - Infrastructure:
+      - Edge VDS Configuration - Infra:
         - id: edge_infra_vds_name
           name: "Infrastructure VDS"
           optional: 0
-          default: "NFV_RESOURCE_INFRA_VDS"
+          default: "NFV_EDGE_INFRA_VDS"
           help: "This dvSwitch will be created as the Infrastructure VDS."
         - id: edge_infra_vds_uplink_ports
           name: "UpLink Ports"
           optional: 0
           default: "2"
-          help: "Add two physical Ethernet ports from each ESXi host as the uplinks for the VDS.Ensure the two Ethernet ports are from separate controllers on the ESXi hosts"
-        - id: edge_infra_add_hosts_to_vds
-          name: "Add hosts to Infrastructure VDS"
+          help: "Number of physical ethernet ports to act as uplinks for this VDS."
+        - id: edge_vmotion_port_group_name
+          name: "ESXi Management port group name"
           optional: 0
-          help: "Currently comma seperated eg: host_fqdn_1,host_fqdn_2.Add all the hosts specified in the vCenter Cluster."
-        - id: edge_infra_vmkernel_port_group_esxi_mgmt
-          name: "vLan ID for ESXi Management vmkernel Port Group"
-          optional: 0
-          default: "20"
+          default: "NFV_RES_Infra_VMOTION"
         - id: edge_infra_vmkernel_port_group_vmotion_network
           name: "vLan ID for vMotion Network vmkernel Port Group"
           optional: 0
           default: "30"
-        - id: edge_infra_vmkernel_port_group_vsan_network
-          name: "vLan ID for Virtual SAN Network Port Group"
+        - id: edge_esximgmt_port_group_name
+          name: "ESXi Management port group name"
+          optional: 0
+          default: "NFV_MGMT_Infra_ESXiMGMT"
+        - id: edge_infra_vmkernel_port_group_esximgmt_network
+          name: "vLan ID for ESXi Resource Port Group"
           optional: 0
           default: "40"
-      - Network Configuration(Edge) - Tenant:
+      - Edge VDS Configuration - Tenant:
         - id: edge_tenant_vds_name
           name: "Tenant VDS"
           optional: 0
-          default: "NFV_MGMT_TENANT_VDS"
+          default: "NFV_RES_TENANT_VDS"
           help: "This dvSwitch will be created as the Tenant VDS."
         - id: edge_tenant_vds_uplink_ports
           name: "UpLink Ports"
           optional: 0
           default: "2"
-          help: "Add remaining two physical Ethernet ports from each ESXi host as the uplinks for this VDS.Ensure the two Ethernet ports are from separate controllers on the ESXi hosts"
-        - id: edge_tenant_add_hosts_to_vds
-          name: "Add hosts to Tenant VDS"
+          help: "Number of physical ethernet ports to act as uplinks for this VDS."
+        - id: edge_vmmgmt_port_group_name
+          name: "VM Management port group name"
           optional: 0
-          help: "Currently comma seperated eg: host_fqdn_1,host_fqdn_2.Add all the hosts specified in the vCenter Cluster."
+          default: "NFV_RES_Infra_VMMGMT"
         - id: edge_tenant_vm_port_group_mgmt_vlan
           name: "vLan ID for Management VLAN virtual machine Port Group"
           optional: 0
           default: "50"
-        - id: edge_tenant_vm_port_group_mgmt_vetp
-          name: "vLan ID for Management VTEP virtual machine Port Group"
-          optional: 0
-          default: "55"
-        - id: edge_tenant_vm_port_group_external_network
-          name: "vLan ID for External Network virtual machine Port Group"
-          optional: 0
-          default: "80"
     - "Resource NSX Manager":
       - Installation:
         - id: resource_chaperone_nsx_url
@@ -750,7 +902,7 @@
         - id: resource_nsx_cluster_name
           name: "Cluster name"
           optional: 0
-          default: *resource_cluster_name
+          default: *res_cluster_name
           help: "Cluster to which NSX manager will be deployed."
       - Configuration:
         - id: place_holder

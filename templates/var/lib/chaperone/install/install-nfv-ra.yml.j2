@@ -1,13 +1,29 @@
   - "Deploy vCloud Reference Architecture":
-    - id: install_management_cluster
-      name: "Provision and Configure Management Cluster"
+    - id: install_management_psc
+      name: "Provision Management PSC"
+      commands:
+        - "/opt/{{ django_app }}/{{ django_app }}_play_tags vcloud_nfv_mgmt.yml prereqs,deploy_psc_ova,cleanup"
+    - id: install_management_vcenter
+      name: "Provision Management vCenter Server"
+      commands:
+        - "/opt/{{ django_app }}/{{ django_app }}_play_tags vcloud_nfv_mgmt.yml prereqs,deploy_vcenter_psc_ova,deploy_vcenter_ova,cleanup"
+    - id: configure_management_vcenter
+      name: "Configure Management vCenter Server"
       commands:
         - "/opt/{{ django_app }}/{{ django_app }}_play_tags vcloud_nfv_mgmt.yml deploy_management_cluster"
+    - id: install_resource_psc
+      name: "Provision Resource PSC"
+      commands:
+        - "/opt/{{ django_app }}/{{ django_app }}_play_tags vcloud_nfv_mgmt.yml prereqs,deploy_psc_ova,cleanup"
+    - id: install_resource_vcenter
+      name: "Provision Resource vCenter Server"
+      commands:
+        - "/opt/{{ django_app }}/{{ django_app }}_play_tags vcloud_nfv_mgmt.yml prereqs,deploy_vcenter_psc_ova,deploy_vcenter_ova,cleanup"
+    - id: configure_resource_vcenter
+      name: "Configure Resource vCenter Server"
+      commands:
+        - "/opt/{{ django_app }}/{{ django_app }}_play_tags vcloud_nfv_mgmt.yml deploy_resource_cluster"
     - id: install_edge_cluster
-      name: "Provision and Configure Edge Cluster"
+      name: "Configure Edge Cluster"
       commands:
-        - "/opt/{{ django_app }}/{{ django_app }}_play_tags vcloud_nfv_edge.yml prereqs"
-    - id: install_resource_cluster
-      name: "Provision and Configure Resource Cluster"
-      commands:
-        - "/opt/{{ django_app }}/{{ django_app }}_play_tags vcloud_nfv_resource.yml prereqs"
+        - "/opt/{{ django_app }}/{{ django_app }}_play_tags vcloud_nfv_mgmt.yml deploy_edge_cluster"
