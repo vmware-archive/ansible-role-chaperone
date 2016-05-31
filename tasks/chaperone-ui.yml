@@ -35,7 +35,7 @@
     - rsync
 
 - name: recursively sync the ui code from local repos
-  sudo: no
+  become: no
   synchronize:
     src: "../../../ui/"
     dest: "/opt/{{ django_app }}/"
@@ -57,7 +57,7 @@
     - rsync
 
 - name: recursively sync the ansible playbooks from local repos
-  sudo: no
+  become: no
   synchronize:
     src: "../../../ansible/playbooks"
     dest: "/opt/{{ django_app }}-ansible/"
@@ -71,7 +71,7 @@
     - rsync
 
 - name: recursively sync the ansible roles from local repos
-  sudo: no
+  become: no
   synchronize:
     src: "../../../ansible/roles"
     dest: "/opt/{{ django_app }}-ansible/"
@@ -84,7 +84,7 @@
     - rsync
 
 - name: recursively sync the ansible library from local repos
-  sudo: no
+  become: no
   synchronize:
     src: "../../../ansible/library"
     dest: "/opt/{{ django_app }}-ansible/"
@@ -108,7 +108,7 @@
     - rsync
 
 - name: recursively sync the containers built by ansible from local repos
-  sudo: no
+  become: no
   synchronize:
     src: "../../../containers"
     dest: "/opt/"
@@ -205,7 +205,7 @@
   command: touch "/var/lib/{{ django_app }}/base.yml"
   args:
     creates: "/var/lib/{{ django_app }}/base.yml"
-  sudo: no
+  become: no
   tags:
     - rsync
 
@@ -223,7 +223,7 @@
   command: touch "{{ chaperone_answer_dir }}/answerfile.yml"
   args:
     creates: "{{ chaperone_answer_dir }}/answerfile.yml"
-  sudo: no
+  become: no
 
 - name: Create Prepare files directory
   file:
@@ -249,7 +249,7 @@
   command: touch "/opt/{{ django_app }}/{{ django_app }}.db"
   args:
     creates: "/opt/{{ django_app }}/{{ django_app }}.db"
-  sudo: no
+  become: no
   register: db
   tags:
     - db
@@ -270,7 +270,7 @@
   command: python manage.py syncdb --noinput
   args:
     chdir: "/opt/{{ django_app }}"
-  sudo: no
+  become: no
   when: db.changed or dbstat.stat.size == 0
   tags:
     - db

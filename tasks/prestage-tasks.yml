@@ -18,7 +18,7 @@
   command: touch "{{ vcenter_task_directory }}/{{ item }}"
   args:
     creates: "{{ vcenter_task_directory }}/{{ item }}"
-  sudo: no
+  become: no
   with_items:
     - create_ib_datacenter.yml
     - create_oob_datacenter.yml

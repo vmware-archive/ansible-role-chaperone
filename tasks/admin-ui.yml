@@ -35,13 +35,13 @@
     - rsync
 
 - name: recursively sync the admin ui code from local repos
-  sudo: no
+  become: no
   synchronize: src=../../../ui/ dest=/opt/{{ django_admin_app }}/ recursive=yes rsync_opts=--no-motd,--exclude=.git archive=no
   tags:
     - rsync
 
 - name: update the css template for admin UI
-  sudo: no
+  become: no
   template:
     src: ../../../ui/chaperone/static/chaperone/css/chaperone-admin.css.j2
     dest: /opt/chaperone-admin/chaperone/static/chaperone/css/chaperone.css
@@ -125,7 +125,7 @@
   command: touch "/opt/{{ django_admin_app }}/{{ django_admin_app }}.db"
   args:
     creates: "/opt/{{ django_admin_app }}/{{ django_admin_app }}.db"
-  sudo: no
+  become: no
   register: db
   tags:
     - db
@@ -146,7 +146,7 @@
   command: python manage.py syncdb --noinput
   args:
     chdir: "/opt/{{ django_admin_app }}"
-  sudo: no
+  become: no
   when: db.changed or dbstat.stat.size == 0
   tags:
     - db
