@@ -1,18 +1,15 @@
-  - "NFV vCloud Reference Architecture":
+  - "NFV vCloud POC Archirecture":
     - "ESX Management Cluster":
       - "Host Information":
         - id: mgmt_host_1_fqdn
           name: "ESX Server IP or FQDN"
           optional: 0
-          default: "10.112.227.225"
         - id: mgmt_host_1_username
           name: "ESX Server username"
           optional: 0
-          default: "root"
         - id: mgmt_host_1_password
           name: "ESX Server User password"
           optional: 0
-          default: "ca$hc0w"
           input: password
       - "Host Information":
         - id: mgmt_host_2_fqdn
@@ -84,11 +81,10 @@
         - id: datastore_name
           name: "Datastore to be deployed on"
           optional: 0
-          default: "LocalDatastore4_225"
+          default: &datastore_name
         - id: network_name
           name: "Network to be deployed on"
           optional: 0
-          default: "Chaperone-Private"
         - id: ip_mode
           name: "IP address mode"
           optional: 0
@@ -96,15 +92,12 @@
         - id: vcenter_ip_address
           name: "vCenter IP address"
           optional: 0
-          default: "192.168.110.4"
         - id: vcenter_ip_gateway
           name: "Gateway address"
           optional: 0
-          default: "192.168.110.1"
         - id: vcenter_ip_dns
           name: "DNS servers"
           optional: 0
-          default: "192.168.110.3"
       - PSC Installation:
         - id: psc_vm_name
           name: "PSC Virtual Machine Name"
@@ -117,11 +110,9 @@
         - id: psc_datastore_name
           name: "Datastore to be deployed on"
           optional: 0
-          default: "LocalDatastore4_225"
         - id: psc_network_name
           name: "Network to be deployed on"
           optional: 0
-          default: "Chaperone-Private"
         - id: psc_ip_mode
           name: "IP address mode"
           optional: 0
@@ -129,15 +120,12 @@
         - id: psc_ip_address
           name: "PSC IP address"
           optional: 0
-          default: "192.168.110.6"
         - id: psc_ip_gateway
           name: "Gateway address"
           optional: 0
-          default: "192.168.110.1"
         - id: psc_ip_dns
           name: "DNS servers"
           optional: 0
-          default: "192.168.110.3"
       - General vCenter Configuration:
         - id: mgmt_vcenter_fqdn
           name: "vCenter FQDN"
@@ -158,7 +146,6 @@
         - id: mgmt_vcenter_password
           name: "vCenter user password"
           optional: 0
-          default: "VMware1!"
           input: password
         - id: mgmt_vcenter_port
           name: "vCenter port"
@@ -180,7 +167,7 @@
         - id: datacenter_name
           name: "Datacenter name"
           optional: 0
-          default: "NFV_MGMT_DC"
+          default: &datacenter_name "NFV_MGMT_DC"
           help: "Datacenter name to be created in vCenter inventory."
         - id: cluster_name
           name: "Cluster name"
@@ -204,12 +191,12 @@
           optional: 0
           default: "NFV_MGMT_VSAN_DS"
           help: "All the added ESXi hosts will be able to see the created vSAN Datastore."
-        - id: migrate_hosts
-          name: "Migrate all the virtual machines from the local datastore to vSAN storage."
+        - id: vsan_autoclaim_storage
+          name: "Auto Claim Storage"
           input: checkbox
           optional: 0
-          default: 0
-          help: "Selecting this option will migrate all hosts from local datastore to vSAN datastore.Note: This will also delete any local datastores on ESXi hosts."
+          default: 1
+          help: "Autoclaims all storage added to cluster"
       - Cluster Configuration - DRS:
         - id: configure_drs
           name: "Enable DRS on cluster"
@@ -278,7 +265,7 @@
           name: "Datastore Heart-beating"
           optional: 0
           default: "Automatically select datastores accessible from the host"
-      - VDS Configuration - Infra:
+      - VDS Configuration:
         - id: infra_vds_name
           name: "Infrastructure VDS"
           optional: 0
@@ -290,288 +277,181 @@
           default: "2"
           help: "Number of physical ethernet ports to act as uplinks for this VDS."
         - id: vmotion_port_group_name
-          name: "ESXi Management port group name"
+          name: "Port Group - vMotion"
           optional: 0
-          default: "NFV_MGMT_Infra_VMOTION"
-        - id: infra_vmkernel_port_group_vmotion_network
-          name: "vLan ID for vMotion Network vmkernel Port Group"
+          default: &vmotion_port_group_name "vDS-vMotionNetwork"
+        - id: vmotion_port_group_id
+          name: "vLan ID for vMotion Portgroup"
+          default: &vmotion_port_group_id "2094"
           optional: 0
-          default: "30"
-        - id: esximgmt_port_group_name
-          name: "ESXi Management port group name"
+        - id: replication_port_group_name
+          name: "Port Group - Replication"
           optional: 0
-          default: "NFV_MGMT_Infra_ESXiMGMT"
-        - id: infra_vmkernel_port_group_esximgmt_network
-          name: "vLan ID for ESXi Management Port Group"
+          default: &replication_port_group_name "vDS-vSphereReplication"
+        - id: replication_port_group_id
+          name: "vLan ID for Replication Portgroup"
           optional: 0
-          default: "40"
-      - VDS Configuration - Tenant:
-        - id: tenant_vds_name
-          name: "Tenant VDS"
+          default: &replication_port_group_id "2096"
+        - id: esx_mgmt_port_group_name
+          name: "Port Group - ESX Management"
           optional: 0
-          default: "NFV_MGMT_TENANT_VDS"
-          help: "This dvSwitch will be created as the Tenant VDS."
-        - id: tenant_vds_uplink_ports
-          name: "UpLink Ports"
+          default: &esx_mgmt_port_group_name "vDS-ESXiMGMTNetwork"
+        - id: esx_mgmt_port_group_id
+          name: "vLan ID for ESX Management Portgroup"
           optional: 0
-          default: "2"
-          help: "Number of physical ethernet ports to act as uplinks for this VDS."
-        - id: vmmgmt_port_group_name
-          name: "VM Management port group name"
+          default: &esx_mgmt_port_group_id "2093"
+        - id: vm_network_port_group_name
+          name: "Port Group - Management Network"
           optional: 0
-          default: "NFV_MGMT_Infra_VMMGMT"
-        - id: tenant_vm_port_group_mgmt_vlan
-          name: "vLan ID for Management VLAN virtual machine Port Group"
+          default: &vm_network_port_group_name "vDS-ManagementNetwork"
+        - id: vm_network_port_group_id
+          name: "vLan ID for VM Network Portgroup"
           optional: 0
-          default: "50"
-    - "Management NSX Manager":
-      - Installation:
-        - id: chaperone_nsx_url
-          name: "Path to NSX installer"
+          default: &vm_network_port_group_id "2084"
+    - "Management NSX Info":
+      - "NSX Network Information":
+        - id: deployMgmtIpAddress
+          name: "NSX Manager IP address"
           optional: 0
-          help: "URL to NSX Installer."
-        - id: nsx_cluster_name
-          name: "Cluster name"
+        - id: deployMgmtNetmask
+          name: "NSX Manager Subnet"
           optional: 0
-          default: *cluster_name
-          help: "Cluster to which NSX manager will be deployed."
-      - Configuration:
-        - id: nsx_controller_cluster_name
-          name: "NSX Controller cluster name"
+        - id: deployMgmtDefaultGateway
+          name: "NSX Manager Gateway"
           optional: 0
-          default: *cluster_name
-        - id: number_of_nsx_controllers
-          name: "Deploy Controllers"
+        - id: deployMgmtDnsServer
+          name: "NSX Manager DNS server"
           optional: 0
-          default: "3"
-        - id: vxlan_vtep_vlan_id
-          name: "Configure vxlan VTEP VLAN ID"
+        - id: deployMgmtDnsDomain
+          name: "NSX Manager Domain name"
           optional: 0
-        - id: vxlan_mtu
-          name: "Configure vxlan MTU"
+        - id: deployNtpServers
+          name: "NSX Manager NTP server ip address"
           optional: 0
-          default: "1600"
-        - id: vxlan_ip_pool
-          name: "Configure vxlan ip pool"
+      - "NSX VM Information":
+        - id: deployVmName
+          name: "NSX Manager Host Name"
           optional: 0
-          help: "Please provide IPs designated for VTEP network or create new IP pool"
-        - id: segment_id
-          name: "Configure segment ID pool"
+          default: "Mgmt-nsx"
+        - id: nsxCliPass
+          name: "NSX Manager cli password"
           optional: 0
-          default: "5000-10000"
-        - id: transport_zone
-          name: "Configure VXLAN / Universal Transport zone"
+          input: password
+        - id: nsxEnPass
+          name: "NSX Manager enable password"
           optional: 0
-          default: &transport_zone "MGMT_Transport_Zone"
-        - id: transport_zone_mode
-          name: "Configure VXLAN / Universal Transport zone mode"
+          input: password
+
+      - "NSX Edge Services Gateway":
+        - id: mgmt_edge_service_gateway_name
+          name: "Edge Service Gateway name"
           optional: 0
-          default: "unicast"
-      - Create Universal logical switch:
-        - id: universal_logical_switch_transport_zone
-          name: "Universal Transport zone"
+        - id: mgmt_edge_service_gateway_desc
+          name: "Edge Router description"
           optional: 0
-          default: *transport_zone
-        - id: deploy_universal_logical_switch
-          name: "Deploy Universal Logical Switch"
-          optional: 0
-          default: "MGMT_Universal_switch"
-        - id: deploy_second_universal_logical_switch
-          name: "Deploy second Universal Logical Switch"
-          optional: 0
-          default: "MGMT_Transport_Universal_switch"
-      - Deploy Universal Logical router:
-        - id: deploy_universal_distributed_logical_router
-          name: "Deploy Universal Distributed Logical router"
-          optional: 0
-          default: &deploy_universal_distributed_logical_router "MGMT_UDLR_ROUTER"
-        - id: deploy_router_in_Cluster
-          name: "Deploy router in cluster"
-          optional: 0
-          default: *cluster_name
-        - id: disable_firewall_on_router
-          name: "Disable firewall on this router"
-          input: checkbox
-          optional: 0
-          default: 1
-        - id: is_internal_interface
-          name: "Connect Interfaces of this router as an Internal interface"
-          input: checkbox
-          optional: 0
-          default: 1
-        - id: uplink_ip_address
-          name: "UpLink IP address"
-          optional: 0
-          default: ""
-          help: "Connect interfaces of this router to the Transport Universal Switch as an Uplink with appropriate IP."
-      - Deploy Edge Routers:
-        - id: deploy_routers_in_ha_mode
-          name: "Deploy Edge routers in HA mode"
-          input: checkbox
+          default: "Management Edge Services Gateway"
+        - id: mgmt_edge_vnic_index
+          name: "Mgmt Edge Router internal VNIC Index"
           optional: 0
           default: 0
-          help: "For RA, 4 routers are deployed in non HA mode."
-        - id: deploy_edge_routers_in_Cluster
-          name: "Deploy edge routers in cluster"
+        - id: mgmt_edge_vnic_name
+          name: "Mgmt Internal VNIC Name"
           optional: 0
-          default: *cluster_name
-        - id: disable_firewall_on_routers
-          name: "Disable firewall on routers"
-          input: checkbox
+          default: vnic0
+        - id: mgmt_edge_Switch_name
+          name: "Mgmt Edge Internal Switch Name"
           optional: 0
-          default: 1
-        - id: number_of_edge_routers
-          name: "Number of edge routers"
+          help: Uplink Switch name of DLR
+        - id: mgmt_edge_Switch_ip_address
+          name: "Mgmt Edge Internal Switch IP Address"
           optional: 0
-          default: &number_of_edge_routers "4"
-        - id: edge_router_for_ospf
-          name: "Suffix of Edge routers to configure with ospf"
+          default: 192.168.200.1
+        - id: mgmt_edge_Switch_subnet_prefix
+          name: "Mgmt Edge Internal Switch Subnet Prefix"
           optional: 0
-          default: &edge_router_for_ospf "MGMT_EDGE_Router"
-          help: "Each of the routers will be configured with OSPF"
-        - id: internal_edge_routers_ip_address
-          name: "Internal Edge routers IP address"
-          optional: 0
-          default: ""
-          help: "For each of the routers, connect the router interfaces the Transport Universal Switch as internal with appropriate IP."
-      - Configure Universal DLR for OSPF routing:
-        - id: configure_universal_distributed_logical_router
-          name: "Configure Universal Distributed Logical router"
-          optional: 0
-          default: *deploy_universal_distributed_logical_router
-        - id: enable_ecmp_mode
-          name: "Enable ECMP mode"
-          input: checkbox
+          default: 24
+        - id: mgmt_edge_uplink_vnic_index
+          name: "Mgmt Edge Router Uplink VNIC Index"
           optional: 0
           default: 1
-        - id: set_default_gateway
-          name: "Set default gateway"
+        - id: mgmt_edge_uplink_vnic_name
+          name: "Mgmt EdgeUplink VNIC Name"
           optional: 0
-          default: ""
-          help: "This would be MGMT_EDGE_Router1 internal IP address"
-        - id: set_mtu
-          name: "Set MTU"
+          default: vnic1
+        - id: mgmt_edge_uplink_switch_name
+          name: "Mgmt Edge Uplink Switch Name"
           optional: 0
-          default: "1500"
-        - id: set_router_ip
-          name: "Set Router IP"
+        - id: mgmt_edge_uplink_switch_ip_address
+          name: "Mgmt Edge Uplink Switch IP Address"
           optional: 0
-          default: ""
-          help: "Set router IP select from designed IP range"
-        - id: enable_ospf
-          name: "Enable OSPF"
-          input: checkbox
+        - id: mgmt_edge_uplink_subnet_prefix
+          name: "Mgmt Edge Uplink Switch Subnet Prefix"
           optional: 0
-          default: 1
-        - id: set_area_code
-          name: "Area Code"
-          optional: 0
-          default: "0"
-      - Configure Edge Routers for OSPF routing:
-        - id: edge_routers_to_configure_with_ospf
-          name: "Number of edge routers to configure with OSPF"
-          optional: 0
-          default: *number_of_edge_routers
-        - id: edge_router_to_configure_with_ospf
-          name: "Suffix of edge routers to configure with ospf"
-          optional: 0
-          default: *edge_router_for_ospf
-        - id: enable_ecmp_mode_for_edge_router
-          name: "Enable ECMP mode"
-          input: checkbox
-          optional: 0
-          default: 1
-        - id: set_default_gateway_for_edge_router
-          name: "Set default gateway"
-          optional: 0
-          default: ""
-          help: "This would be External IP range gateway address"
-        - id: set_mtu_for_edge_router
-          name: "Set MTU"
-          optional: 0
-          default: "1500"
-      - OSPF routing between Edge Routers and Physical Routers:
-        - id: unknown_automation_possiblity
-          name: "Create Logical router on both physical Switches ??? Can this be automated?"
-          optional: 0
-          default: "Create Logical router on both physical Switches ??? Can this be automated?"
-      - Deploy Edge router in HA mode for Load Balancing:
-        - id: place_holder_one
-          name: "Unclear Deployment Steps"
-          optional: 0
-          default: "Unclear Deployment Steps"
+
+
     - "Resource vCenter Server":
       - vCenter Installation:
-        - id: vcenter_res_vm_name
+        - id: res_vcenter_vm_name
           name: "vCenter Virtual Machine Name"
           optional: 0
-          default: "Res-vCenter"
-        - id: vcenter_res_database_type
+          default: &res_vcenter_vm_name "Res-vCenter"
+        - id: res_vcenter_database_type
           name: "vCenter database type"
           optional: 0
           default: "embedded"
-        - id: datastore_res_name
+        - id: res_datastore_name
           name: "Datastore to be deployed on"
           optional: 0
-          default: "LocalDatastore4_225"
-        - id: network_res_name
+        - id: res_network_name
           name: "Network to be deployed on"
           optional: 0
-          default: "Chaperone-Private"
-        - id: ip_res_mode
+        - id: res_ip_mode
           name: "IP address mode"
           optional: 0
           default: "static"
-        - id: vcenter_res_ip_address
+        - id: res_vcenter_ip_address
           name: "vCenter IP address"
           optional: 0
-          default: "192.168.110.7"
-        - id: vcenter_ip_gateway
+          default: &res_vcenter_ip_address
+        - id: res_vcenter_ip_gateway
           name: "Gateway address"
           optional: 0
-          default: "192.168.110.1"
-        - id: vcenter_res_ip_dns
+        - id: res_vcenter_ip_dns
           name: "DNS servers"
           optional: 0
-          default: "192.168.110.3"
       - PSC Installation:
-        - id: psc_res_vm_name
+        - id: res_psc_vm_name
           name: "PSC Virtual Machine Name"
           optional: 0
           default: "Res-psc"
-        - id: psc_res_database_type
+        - id: res_psc_database_type
           name: "PSC database type"
           optional: 0
           default: "embedded"
-        - id: psc_res_datastore_name
+        - id: res_psc_datastore_name
           name: "Datastore to be deployed on"
           optional: 0
-          default: "LocalDatastore4_225"
-        - id: psc_res_network_name
+        - id: res_psc_network_name
           name: "Network to be deployed on"
           optional: 0
-          default: "Chaperone-Private"
-        - id: psc_res_ip_mode
+        - id: res_psc_ip_mode
           name: "IP address mode"
           optional: 0
           default: "static"
-        - id: psc_res_ip_address
+        - id: res_psc_ip_address
           name: "PSC IP address"
           optional: 0
-          default: "192.168.110.7"
-        - id: psc_res_ip_gateway
+        - id: res_psc_ip_gateway
           name: "Gateway address"
           optional: 0
-          default: "192.168.110.1"
-        - id: psc_res_ip_dns
+        - id: res_psc_ip_dns
           name: "DNS servers"
           optional: 0
-          default: "192.168.110.3"
       - General vCenter Configuration:
         - id: res_vcenter_fqdn
           name: "vCenter FQDN"
           optional: 0
-          default: "res-vcenter.corp.local"
+          default: &res_vcenter_fqdn "res-vcenter.corp.local"
         - id: res_psc_fqdn
           name: "PSC FQDN"
           optional: 0
@@ -583,11 +463,10 @@
         - id: res_vcenter_username
           name: "vCenter user name"
           optional: 0
-          default: "administrator@vsphere.local"
+          default: &res_vcenter_username "administrator@vsphere.local"
         - id: res_vcenter_password
           name: "vCenter user password"
           optional: 0
-          default: "VMware1!"
           input: password
         - id: res_vcenter_port
           name: "vCenter port"
@@ -606,25 +485,22 @@
           optional: 0
           default: "management-tiny"
       - Logical vCenter Configuration:
-        - id: datacenter_name
+        - id: res_datacenter_name
           name: "Datacenter name"
           optional: 0
-          default: "NFV_MGMT_DC"
+          default: &res_datacenter_name "NFV_RES_DC"
           help: "Datacenter name to be created in vCenter inventory."
         - id: res_cluster_name
-          name: "Resource Cluster name"
+          name: "Cluster name"
           optional: 0
           default: &res_cluster_name "NFV_RES_CLUSTER"
-        - id: edge_cluster_name
-          name: "Edge Cluster name"
-          optional: 0
-          default: &edge_cluster_name "NFV_EDGE_CLUSTER"
-      - Resource Cluster Configuration - VSAN:
+          help: "Cluster to be created in the Datacenter."
+      - Cluster Configuration - VSAN:
         - id: res_configure_vsan
           name: "Enable vSAN on cluster"
           input: checkbox
           optional: 0
-          default: "1"
+          default: 0
           help: "Select if vSAN needs to be configured on the Resource Cluster"
         - id: res_vsan_cluster_name
           name: "Cluster name"
@@ -636,19 +512,19 @@
           optional: 0
           default: "NFV_RES_VSAN_DS"
           help: "All the added ESXi hosts will be able to see the created vSAN Datastore."
-        - id: res_migrate_hosts
-          name: "Migrate all the virtual machines from the local datastore to vSAN storage."
+        - id: res_vsan_autoclaim_storage
+          name: "Auto Claim Storage"
           input: checkbox
           optional: 0
-          default: 0
-          help: "Selecting this option will migrate all hosts from local datastore to vSAN datastore.Note: This will also delete any local datastores on ESXi hosts."
-      - Resource Cluster Configuration - DRS:
-        - id: configure_drs
+          default: 1
+          help: "Autoclaims all storage added to cluster"
+      - Cluster Configuration - DRS:
+        - id: res_configure_drs
           name: "Enable DRS on cluster"
           input: checkbox
           optional: 0
-          default: "0"
-          help: "Select if DRS needs to be configured on the Management Cluster"
+          default: 0
+          help: "Select if DRS needs to be configured on the Resource Cluster"
         - id: res_drs_cluster_name
           name: "Cluster name"
           optional: 0
@@ -674,7 +550,7 @@
           name: "Enhanced vMotion Compatibility(EVC)"
           optional: 0
           default: "Enabled"
-      - Resource Cluster Configuration - HA:
+      - Cluster Configuration - HA:
         - id: res_configure_ha
           name: "Enable HA on cluster"
           input: checkbox
@@ -710,234 +586,433 @@
           name: "Datastore Heart-beating"
           optional: 0
           default: "Automatically select datastores accessible from the host"
-      - Edge Cluster Configuration - VSAN:
-        - id: edge_configure_vsan
-          name: "Enable vSAN on cluster"
-          input: checkbox
-          optional: 0
-          default: 0
-          help: "Select if vSAN needs to be configured on the Edge Cluster"
-        - id: edge_vsan_cluster_name
-          name: "Cluster name"
-          optional: 0
-          default: *edge_cluster_name
-          help: "Cluster to be configured with vSAN."
-        - id: edge_vsan_datastore_name
-          name: "vSAN datastore name"
-          optional: 0
-          default: "NFV_EDGE_VSAN_DS"
-          help: "All the added ESXi hosts will be able to see the created vSAN Datastore."
-        - id: edge_migrate_hosts
-          name: "Migrate all the virtual machines from the local datastore to vSAN storage."
-          input: checkbox
-          optional: 0
-          default: 0
-          help: "Selecting this option will migrate all hosts from local datastore to vSAN datastore.Note: This will also delete any local datastores on ESXi hosts."
-      - Edge Cluster Configuration - DRS:
-        - id: configure_drs
-          name: "Enable DRS on cluster"
-          input: checkbox
-          optional: 0
-          default: "0"
-          help: "Select if DRS needs to be configured on the Edge Cluster"
-        - id: edge_drs_cluster_name
-          name: "Cluster name"
-          optional: 0
-          default: *edge_cluster_name
-          help: "Cluster to be configured with DRS."
-        - id: edge_drs_automation_level
-          name: "Automation Level"
-          optional: 0
-          default: "fullyAutomated"
-        - id: edge_drs_migration_threshold
-          name: "Migration Threshold"
-          optional: 0
-          default: "2"
-        - id: edge_drs_vm_automation
-          name: "Virtual Machine Automation"
-          optional: 0
-          default: "Disabled"
-        - id: edge_drs_power_management
-          name: "Power Management"
-          optional: 0
-          default: "Disabled"
-        - id: edge_drs_evc_mode
-          name: "Enhanced vMotion Compatibility(EVC)"
-          optional: 0
-          default: "Enabled"
-      - Edge Cluster Configuration - HA:
-        - id: edge_configure_ha
-          name: "Enable HA on cluster"
-          input: checkbox
-          optional: 0
-          default: 0
-          help: "Select if HA needs to be configured on the Edge Cluster"
-        - id: edge_ha_cluster_name
-          name: "Cluster name"
-          optional: 0
-          default: *edge_cluster_name
-          help: "Cluster to be configured with HA."
-        - id: edge_ha_host_monitoring
-          name: "Host Monitoring"
-          optional: 0
-          default: "Enabled"
-        - id: edge_ha_admission_control
-          name: "Admission Control"
-          optional: 0
-          default: "Enabled"
-        - id: edge_ha_admission_control_policy
-          name: "Admission Control Policy"
-          optional: 0
-          default: "Host failures to tolerate same as Virtual SAN"
-        - id: edge_ha_vm_monitoring
-          name: "VM Monitoring"
-          optional: 0
-          default: "Disabled"
-        - id: edge_ha_monitoring_sensitivity
-          name: "Monitoring Sensitivity"
-          optional: 0
-          default: "High"
-        - id: edge_ha_datastore_heart_beating
-          name: "Datastore Heart-beating"
-          optional: 0
-          default: "Automatically select datastores accessible from the host"
-      - Resource VDS Configuration - Infra:
-        - id: res_infra_vds_name
-          name: "Infrastructure VDS"
+      - VDS Configuration:
+        - id: res_vds_name
+          name: "Resource VDS"
           optional: 0
           default: "NFV_RES_INFRA_VDS"
-          help: "This dvSwitch will be created as the Infrastructure VDS."
-        - id: res_infra_vds_uplink_ports
+          help: "This dvSwitch will be created as the Resource VDS."
+        - id: res_vds_uplink_ports
           name: "UpLink Ports"
           optional: 0
           default: "2"
           help: "Number of physical ethernet ports to act as uplinks for this VDS."
-        - id: res_vmotion_port_group_name
-          name: "ESXi Management port group name"
+        - id: vsan_port_group_name
+          name: "Port Group - vSAN"
           optional: 0
-          default: "NFV_RES_Infra_VMOTION"
-        - id: res_infra_vmkernel_port_group_vmotion_network
-          name: "vLan ID for vMotion Network vmkernel Port Group"
+          default: &vsan_port_group_name "vDS-vSANNetwork"
+        - id: vsan_vlan_id
+          name: "vSAN vLan ID"
           optional: 0
-          default: "30"
-        - id: res_esximgmt_port_group_name
-          name: "ESXi Management port group name"
+          default: &vsan_vlan_id "2095"
+        - id: res_esx_mgmt_port_group_name
+          name: "Port Group - ESX Management"
           optional: 0
-          default: "NFV_MGMT_Infra_ESXiMGMT"
-        - id: res_infra_vmkernel_port_group_esximgmt_network
-          name: "vLan ID for ESXi Resource Port Group"
+          default: *esx_mgmt_port_group_name
+        - id: res_esx_mgmt_port_group_id
+          name: "vLan ID for ESX Management Portgroup"
           optional: 0
-          default: "40"
-      - Resource VDS Configuration - Tenant:
-        - id: res_tenant_vds_name
-          name: "Tenant VDS"
+          default: *esx_mgmt_port_group_id
+        - id: res_vm_network_port_group_name
+          name: "Port Group - Management Network"
           optional: 0
-          default: "NFV_RES_TENANT_VDS"
-          help: "This dvSwitch will be created as the Tenant VDS."
-        - id: res_tenant_vds_uplink_ports
-          name: "UpLink Ports"
+          default: *vm_network_port_group_name
+        - id: res_vm_network_port_group_id
+          name: "vLan ID for VM Network Portgroup"
           optional: 0
-          default: "2"
-          help: "Number of physical ethernet ports to act as uplinks for this VDS."
-        - id: res_vmmgmt_port_group_name
-          name: "VM Management port group name"
+          default: *vm_network_port_group_id
+    - "NSX Configuration":
+      - "NSX Network Information":
+        - id: deployResIpAddress
+          name: "NSX Manager IP address"
           optional: 0
-          default: "NFV_RES_Infra_VMMGMT"
-        - id: res_tenant_vm_port_group_mgmt_vlan
-          name: "vLan ID for Management VLAN virtual machine Port Group"
+        - id: deployResNetmask
+          name: "NSX Manager Subnet"
           optional: 0
-          default: "50"
-      - Edge VDS Configuration - Infra:
-        - id: edge_infra_vds_name
-          name: "Infrastructure VDS"
+        - id: deployResDefaultGateway
+          name: "NSX Manager Gateway"
           optional: 0
-          default: "NFV_EDGE_INFRA_VDS"
-          help: "This dvSwitch will be created as the Infrastructure VDS."
-        - id: edge_infra_vds_uplink_ports
-          name: "UpLink Ports"
+        - id: deployResDnsServer
+          name: "NSX Manager DNS server"
           optional: 0
-          default: "2"
-          help: "Number of physical ethernet ports to act as uplinks for this VDS."
-        - id: edge_vmotion_port_group_name
-          name: "ESXi Management port group name"
+        - id: deployResDnsDomain
+          name: "NSX Manager Domain name"
           optional: 0
-          default: "NFV_RES_Infra_VMOTION"
-        - id: edge_infra_vmkernel_port_group_vmotion_network
-          name: "vLan ID for vMotion Network vmkernel Port Group"
+        - id: deployResNtpServers
+          name: "NSX Manager NTP server ip address"
           optional: 0
-          default: "30"
-        - id: edge_esximgmt_port_group_name
-          name: "ESXi Management port group name"
+      - "NSX VM Information":
+        - id: deployResVmName
+          name: "NSX Manager Host Name"
           optional: 0
-          default: "NFV_MGMT_Infra_ESXiMGMT"
-        - id: edge_infra_vmkernel_port_group_esximgmt_network
-          name: "vLan ID for ESXi Resource Port Group"
+          default: "Res-nsx"
+        - id: nsxResCliPass
+          name: "NSX Manager cli password"
           optional: 0
-          default: "40"
-      - Edge VDS Configuration - Tenant:
-        - id: edge_tenant_vds_name
-          name: "Tenant VDS"
+          input: password
+        - id: nsxResEnPass
+          name: "NSX Manager enable password"
           optional: 0
-          default: "NFV_RES_TENANT_VDS"
-          help: "This dvSwitch will be created as the Tenant VDS."
-        - id: edge_tenant_vds_uplink_ports
-          name: "UpLink Ports"
+          input: password
+      - "NSX Configure vCenter Information":
+        - id: resvcHostname
+          name: "vCenter Hostname"
+          default: *res_vcenter_fqdn
           optional: 0
-          default: "2"
-          help: "Number of physical ethernet ports to act as uplinks for this VDS."
-        - id: edge_vmmgmt_port_group_name
-          name: "VM Management port group name"
+        - id: resvcIpAddress
+          name: "vCenter Ip address"
           optional: 0
-          default: "NFV_RES_Infra_VMMGMT"
-        - id: edge_tenant_vm_port_group_mgmt_vlan
-          name: "vLan ID for Management VLAN virtual machine Port Group"
+          default: *res_vcenter_ip_address
+        - id: resvcUser
+          name: "vCenter Username"
+          default: *res_vcenter_username
           optional: 0
-          default: "50"
-    - "Resource NSX Manager":
-      - Installation:
-        - id: resource_chaperone_nsx_url
-          name: "Path to NSX installer"
+        - id: resvcPassword
+          name: "vCenter Password"
           optional: 0
-          help: "URL to NSX Installer."
-        - id: resource_nsx_cluster_name
-          name: "Cluster name"
+          input: password
+      - "NSX Configure vCenter SSO":
+        - id: resvcSsoHostname
+          name: "vCenter SSO hostname"
+          optional: 0
+        - id: resvcSsoUser
+          name: "vCenter SSO Username"
+          optional: 0
+        - id: resvcSsoPassword
+          name: "vCenter SSO password"
+          optional: 0
+          input: password
+      - "NSX Configure Controller vCenter Information":
+        - id: targetDatacenterName
+          name: "NSX Controller Datacenter"
+          optional: 0
+          default: *res_datacenter_name
+        - id: nsxControllerVcCluster
+          name: "NSX Controller Cluster"
           optional: 0
           default: *res_cluster_name
-          help: "Cluster to which NSX manager will be deployed."
-      - Configuration:
-        - id: place_holder
-          name: "Place Holders"
+        - id: targetVdsName
+          name: "NSX Controller vds name"
           optional: 0
-          default: "TODO"
-          help: "TODO"
-    - "vCloud Director Setup":
-      - vCD Database:
-        - id: aag_deployed
-          name: "Deployed and configured MSSQL AAG"
-          input: checkbox
+        - id: nsxControllerPortGroup
+          name: "NSX Controller Portgroup"
+          optional: 0
+        - id: nsxControllerDatastore
+          name: "NSX Controller Datastore"
+          optional: 0
+          default: *datastore_name
+        - id: controllerDeploySize
+          name: "NSX Controller Deployment Size"
+          optional: 0
+          input: dropdown
+          options:
+            - id: "small"
+            - id: "medium"
+            - id: "large"
+          default: "large"
+          hide: 1
+        - id: numControllers
+          name: "Number of Controllers"
+          optional: 0
+          input: dropdown
+          options:
+            - id: 3
+            - id: 1
+          default: "3"
+        - id: controllerPassword
+          name: "Controller Password"
+          optional: 0
+          input: password
+          help: "Password must be at least 12 chars and have a 1 Upper 1 special and 1 number"
+      - "NSX Controller IP Pool Information":
+        - id: controllerIPpoolStartAddr
+          name: "Controller IP Pool Start Address"
+          optional: 0
+          help: "Enter the START ip range for the controller ip pool"
+        - id: controllerIPpoolEndAddr
+          name: "Controller IP Pool End Address"
+          optional: 0
+          help: "Enter the END ip range for the controller ip pool"
+        - id: controllerIPpoolPrefix
+          name: "Controller IP Pool Prefix"
+          optional: 0
+          help: "Enter the network prefix ex: 24 for a /24"
+        - id: controllerIPpoolGateway
+          name: "Controller IP Pool Gateway"
+          optional: 0
+          help: "Enter the controller ip pool gateway"
+        - id: controllerIPpoolSecondDns
+          name: "Controller IP Pool Secondary DNS"
+          optional: 0
+          help: "Enter the Secondary DNS server"
+      - "Prepare Host Cluster":
+        - id: host_prepare_datacenter_name
+          name: Datacenter Name
+          optional: 0
+        - id: host_prepare_res_cluster_name
+          name: "RES Cluster Name"
+          optional: 0
+        - id: host_prepare_edge_cluster_name
+          name: "EDGE Cluster Name"
+          optional: 0
+      - "NSX VTEP IP Pool Information - EDGE Cluster":
+        - id: vtepIPpoolStartAddr
+          name: "VTEP Ip Pool Start Address"
+          optional: 0
+          help: "Enter the START address for the VTEP IP Pool"
+        - id: vtepIPpoolEndAddr
+          name: "VTEP Ip Pool END Address"
+          optional: 0
+          help: "Enter the END address for the VTEP IP Pool"
+        - id: vtepIPpoolPrefix
+          name: "VTEP Ip Pool Prefix"
+          optional: 0
+          help: "Enter the network prefix ex: 24 for a /24"
+        - id: vtepIPpoolGateway
+          name: "VTEP Ip Pool Gateway"
+          optional: 0
+          help: "Enter the VTEP Ip pool gateway"
+        - id: vtepIPpoolPrimDns
+          name: "VTEP IP Pool Primary DNS"
+          optional: 0
+          help: "Enter the Primary DNS server"
+        - id: vtepIPpoolSecondDns
+          name: "VTEP IP Pool Secondary DNS"
+          optional: 0
+          help: "Enter the Secondary DNS server"
+        - id: vtepIPpoolVxlanID
+          name: "VLAN ID"
+          optional: 0
+          help: "Enter VLAN ID"
+
+      - "NSX VTEP IP Pool Information - RES Cluster":
+        - id: res_vtepIPpoolStartAddr
+          name: "VTEP Ip Pool Start Address"
+          optional: 0
+          help: "Enter the START address for the VTEP IP Pool"
+        - id: res_vtepIPpoolEndAddr
+          name: "VTEP Ip Pool END Address"
+          optional: 0
+          help: "Enter the END address for the VTEP IP Pool"
+        - id: res_vtepIPpoolPrefix
+          name: "VTEP Ip Pool Prefix"
+          optional: 0
+          help: "Enter the network prefix ex: 24 for a /24"
+        - id: res_vtepIPpoolGateway
+          name: "VTEP Ip Pool Gateway"
+          optional: 0
+          help: "Enter the VTEP Ip pool gateway"
+        - id: res_vtepIPpoolPrimDns
+          name: "VTEP IP Pool Primary DNS"
+          optional: 0
+          help: "Enter the Primary DNS server"
+        - id: res_vtepIPpoolSecondDns
+          name: "VTEP IP Pool Secondary DNS"
+          optional: 0
+          help: "Enter the Secondary DNS server"
+        - id: res_vtepIPpoolVxlanID
+          name: "VLAN ID"
+          optional: 0
+          help: "Enter VLAN ID"
+
+      - "NSX Transport Zone":
+        - id: transportZoneName
+          name: "Transport Zone Name"
+          optional: 0
+          help: "Enter the name for the transport zone"
+        - id: transportZoneDescription
+          name: "Transport Zone Description"
+          optional: 0
+          help: "Description for the Transport Zone being created"
+        - id: defaultControllPlaneMode
+          name: "Default Control Plane Mode"
+          optional: 0
+          default: "UNICAST_MODE"
+          hide: 1
+          input: dropdown
+          options:
+            - id: "HYBRID_MODE"
+            - id: "MULTICAST_MODE"
+            - id: "UNICAST_MODE"
+      - "NSX Segment ID":
+        - id: segmentIdPoolStart
+          name: "Segment ID Pool Start"
+          optional: 0
+          help: "Enter a Segment ID Pool Start: 5000-16777216"
+        - id: segmentIdPoolEnd
+          name: "Segment ID Pool End"
+          optional: 0
+          help: "Enter a Segment ID Pool End: 5000-16777216"
+        - id: mcastIsEnabled
+          name: "Enable MULTICAST Addressing"
           optional: 0
           default: 0
-          help: "Deploy two Windows 2012 Enterprise VMs with AAG configuration in the NFV management Cluster and select this option."
-      - vCD Cell Installation:
-        - id: listener_ip_address
-          name: "Listener IP address of MSSQL AAG"
-          optional: 0
-          help: "Please specify the FQDN of the MSSQL AAG Database."
-        - id: rhel_template_location
-          name: "Path to RHEL Template Location"
-          optional: 0
-          help: "Path to RHEL Template Location to install vCD Cells"
-        - id: vcd_installer_location
-          name: "Path to vCD installer Location"
-          optional: 0
-        - id: cluster_to_deploy_vcd_in
-          name: "Cluster to deploy vCD"
-          optional: 0
-          default: *cluster_name
-      - vCD Cell Configuration:
-        - id: configure_resource_vc_with_nsx_manager
-          name: "Configure Resource VC along with NSX manager "
+          hide: 1
           input: checkbox
+          help: "Multicast addresses are required only for Hybrid and Multicast control plane modes"
+        - id: mcastAddrStart
+          name: "Enter Multicast Address Start"
+          optional: 1
+          hide: 1
+          help: "Multicast addresses are required only for Hybrid and Multicast control plane modes: ex: 239.0.0.0"
+        - id: mcastAddrEnd
+          name: "Enter Multicast Address End"
+          optional: 1
+          hide: 1
+          help: "Multicas addresses are required only for Hybrid and Multicast control plane modes: ex: 239.255.255.255"
+      - "NSX Logical Switches":
+        - id: logicalSwitchName_1
+          name: "Nsx Logical Switch 1"
+          optional: 0
+          default: &logicalSwitchName_1 "internal-switch"
+        - id: logicalSwitchDescription_1
+          name: "Logical Switch description 1"
+          optional: 0
+        - id: logicalSwitchName_2
+          name: "Nsx Logical Switch 2"
+          optional: 0
+          default: &logicalSwitchName_2 "uplink-switch"
+        - id: logicalSwitchDescription_2
+          name: "Logical Switch description 2"
+          optional: 0
+      - "NSX Logical Distributed Router":
+        - id: ldrName
+          name: "LDR name"
+          optional: 0
+        - id: ldrDescription
+          name: "LDR description"
+          optional: 0
+        - id: LdrPortgroupName
+          name: "LDR Management Portgroup Name"
+          optional: 0
+        - id: ldrInternalInterfaceName
+          name: "Internal Interface Name"
+          optional: 0
+          default: internal
+        - id: ldrInternalSwitchName
+          name: "Internal Switch Name"
+          optional: 0
+          default: *logicalSwitchName_1
+        - id: ldrInternalSwitchIPAddress
+          name: "Internal Switch IP Address"
+          optional: 0
+          default: 192.168.100.1
+        - id: ldrInternalSwitchSubnetMask
+          name: "Internal Switch Subnet Mask"
+          optional: 0
+          default: 255.255.255.0
+        - id: ldrUplinkInterfaceName
+          name: "Uplink Interface Name"
+          optional: 0
+          default: uplink
+        - id: ldrUplinkSwitchName
+          name: "Uplink Switch Name"
+          optional: 0
+          default: *logicalSwitchName_2
+        - id: ldrUplinkSwitchIPAddress
+          name: "Uplink Switch IP Address"
+          optional: 0
+          default: &ldrUplinkSwitchIPAddress "192.168.200.10"
+        - id: ldrUplinkSwitchSubnetMask
+          name: "Uplink Switch Subnet Mask"
+          optional: 0
+          default: 255.255.255.0
+
+      - "Configure OSPF Logical Distributed Router":
+        - id: protocol_address
+          name: "Protocol Address"
+          optional: 0
+          default: 192.168.200.11
+          help: In range of Uplink Switch IP Address
+
+      - "NSX Edge Services Gateway":
+        - id: EdgeRouterName
+          name: "Edge Router name"
+          optional: 0
+        - id: EdgeRouterDescription
+          name: "Edge Router description"
+          optional: 0
+        - id: EdgeInternalVnicIndex
+          name: "Edge Router internal VNIC Index"
           optional: 0
           default: 0
-          help: "This configures resource vCenter along with NSX manager."
+        - id: EdgeInternalVnicName
+          name: "Internal VNIC Name"
+          optional: 0
+          default: vnic0
+        - id: EdgeInternalSwitchName
+          name: "Edge Internal Switch Name"
+          optional: 0
+          default: *logicalSwitchName_2
+          help: Uplink Switch name of DLR
+        - id: EdgeInternalSwitchIPAddress
+          name: "Edge Internal Switch IP Address"
+          optional: 0
+          default: 192.168.200.1
+        - id: ldrInternalSwitchSubnetPrefix
+          name: "Edge Internal Switch Subnet Prefix"
+          optional: 0
+          default: 24
+        - id: EdgeUplinkVnicIndex
+          name: "Edge Router Uplink VNIC Index"
+          optional: 0
+          default: 1
+        - id: EdgeUplinkVnicName
+          name: "EdgeUplink VNIC Name"
+          optional: 0
+          default: vnic1
+        - id: EdgeUplinkSwitchName
+          name: "Edge Uplink Switch Name"
+          optional: 0
+        - id: EdgeUplinkSwitchIPAddress
+          name: "Edge Uplink Switch IP Address"
+          optional: 0
+        - id: EdgeUplinkSwitchSubnetPrefix
+          name: "Edge Uplink Switch Subnet Prefix"
+          optional: 0
+
+      - "Second NSX Edge Services Gateway":
+        - id: EdgeRouterName_1
+          name: "Edge Router name"
+          optional: 0
+        - id: EdgeRouterDescription_1
+          name: "Edge Router description"
+          optional: 0
+        - id: EdgeInternalVnicIndex_1
+          name: "Edge Router internal VNIC Index"
+          optional: 0
+          default: 0
+        - id: EdgeInternalVnicName_1
+          name: "Internal VNIC Name"
+          optional: 0
+          default: vnic0
+        - id: EdgeInternalSwitchName_1
+          name: "Edge Internal Switch Name"
+          optional: 0
+          default: *logicalSwitchName_2
+          help: Uplink Switch name of DLR
+        - id: EdgeInternalSwitchIPAddress_1
+          name: "Edge Internal Switch IP Address"
+          optional: 0
+          default: 192.168.200.2
+        - id: ldrInternalSwitchSubnetPrefix_1
+          name: "Edge Internal Switch Subnet Prefix"
+          optional: 0
+          default: 24
+        - id: EdgeUplinkVnicIndex_1
+          name: "Edge Router Uplink VNIC Index"
+          optional: 0
+          default: 1
+        - id: EdgeUplinkVnicName_1
+          name: "EdgeUplink VNIC Name"
+          optional: 0
+          default: vnic1
+        - id: EdgeUplinkSwitchName_1
+          name: "Edge Uplink Switch Name"
+          optional: 0
+        - id: EdgeUplinkSwitchIPAddress_1
+          name: "Edge Uplink Switch IP Address"
+          optional: 0
+        - id: EdgeUplinkSwitchSubnetPrefix_1
+          name: "Edge Uplink Switch Subnet Prefix"
+          optional: 0
