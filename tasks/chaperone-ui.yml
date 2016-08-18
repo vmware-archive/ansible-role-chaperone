@@ -121,43 +121,23 @@
   tags:
     - rsync
 
-- name: create playbook convenience script
+- name: create playbook execution harnesses and inventory creation scripts
   template:
-    src: "opt/chaperone_play.j2"
-    dest: "/opt/{{ django_app }}/{{ django_app }}_play"
+    src: "{{ item.src }}"
+    dest: "{{ item.dest }}"
     owner: "{{ ansible_ssh_user }}"
     group: "{{ ansible_ssh_user }}"
     mode: "0700"
-  tags:
-    - rsync
-
-- name: create playbook convenience script for tags
-  template:
-    src: "opt/chaperone_play_tags.j2"
-    dest: "/opt/{{ django_app }}/{{ django_app }}_play_tags"
-    owner: "{{ ansible_ssh_user }}"
-    group: "{{ ansible_ssh_user }}"
-    mode: "0700"
-  tags:
-    - rsync
-
-- name: create playbook convenience script for non-default inventory
-  template:
-    src: "opt/chaperone_play_inventory.j2"
-    dest: "/opt/{{ django_app }}/{{ django_app }}_play_inventory"
-    owner: "{{ ansible_ssh_user }}"
-    group: "{{ ansible_ssh_user }}"
-    mode: "0700"
-  tags:
-    - rsync
-
-- name: create custom variables script
-  template:
-    src: "opt/prepare_variables.py.j2"
-    dest: "/opt/{{ django_app }}/prepare_variables.py"
-    owner: "{{ ansible_ssh_user }}"
-    group: "{{ ansible_ssh_user }}"
-    mode: "0700"
+  with_items:
+    - { src: 'opt/chaperone_kubernetes_play_inventory.j2', dest: '/opt/{{ django_app }}/{{ django_app }}_kubernetes_play_inventory' }
+    - { src: 'opt/chaperone_kubernetes_play_tags_inventory.j2', dest: '/opt/{{ django_app }}/{{ django_app }}_kubernetes_play_tags_inventory' }
+    - { src: 'opt/chaperone_photon_play_inventory.j2', dest: '/opt/{{ django_app }}/{{ django_app }}_photon_play_inventory' }
+    - { src: 'opt/chaperone_play_inventory.j2', dest: '/opt/{{ django_app }}/{{ django_app }}_play_inventory' }
+    - { src: 'opt/chaperone_play_tags.j2', dest: '/opt/{{ django_app }}/{{ django_app }}_play_tags' }
+    - { src: 'opt/chaperone_play.j2', dest: '/opt/{{ django_app }}/{{ django_app }}_play' }
+    - { src: 'opt/prepare_kubernetes_targets.py.j2', dest: '/opt/{{ django_app }}/prepare_kubernetes_targets.py' }
+    - { src: 'opt/prepare_photon_targets.py.j2', dest: '/opt/{{ django_app }}/prepare_photon_targets.py' }
+    - { src: 'opt/prepare_variables.py.j2', dest: '/opt/prepare_variables.py.j2' }
   tags:
     - rsync
 
@@ -190,16 +170,6 @@
     mode: 0755
   tags:
     - rsync
-
-# - name: Create dummy Chaperone UI base.yml
-#   file:
-#     dest: "/var/lib/{{ django_app }}/base.yml"
-#     state: file
-#     owner: "{{ ansible_ssh_user }}"
-#     group: "{{ ansible_ssh_user }}"
-#     mode: 0755
-#   tags:
-#     - rsync
 
 - name: Create dummy Chaperone UI base.yml
   command: touch "/var/lib/{{ django_app }}/base.yml"

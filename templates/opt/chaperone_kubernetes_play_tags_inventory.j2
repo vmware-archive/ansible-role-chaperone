@@ -1,0 +1,31 @@
+#!/bin/bash
+#
+#  Copyright 2015 VMware, Inc.
+#
+#  Licensed under the Apache License, Version 2.0 (the "License");
+#  you may not use this file except in compliance with the License.
+#  You may obtain a copy of the License at
+#
+#      http://www.apache.org/licenses/LICENSE-2.0
+#
+#  Unless required by applicable law or agreed to in writing, software
+#  distributed under the License is distributed on an "AS IS" BASIS,
+#  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+#  See the License for the specific language governing permissions and
+#  limitations under the License.
+#
+# Arguments:
+# $1: inventory file to use for the play
+# $2: playbook (YAML) file
+# $3: tags
+
+inventory="${1}"
+playbook="${2}"
+tags="${3}"
+
+cd /opt/{{ django_app }}-ansible/playbooks/{{ django_app }}
+python /opt/{{ django_app }}/prepare_kubernetes_targets.py
+echo "------------------------------------------------------------------------"
+echo "Running: ansible-playbook -i $inventory -vvvv $playbook --tags $tags"
+echo "------------------------------------------------------------------------"
+ansible-playbook -i "$inventory" -vvvv "$playbook" --tags "$tags"

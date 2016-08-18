@@ -1,0 +1,20 @@
+  - "Cloud Native Applications":
+    - id: configure_photonos
+      name: "Configure PhotonOS"
+      commands:
+        - "/opt/{{ django_app }}/{{ django_app }}_photon_play_inventory examples/inventory-photon_os os.yml"
+        - "/opt/{{ django_app }}/{{ django_app }}_photon_play_inventory examples/inventory-photon_base base.yml"
+    - id: install_kubernetes
+      name: "Install Kubernetes"
+      commands: 
+        - "/opt/{{ django_app }}/{{ django_app }}_kubernetes_play_tags_inventory examples/inventory-kubernetes photon_kube.yml kube_master_installation"
+        - "/opt/{{ django_app }}/{{ django_app }}_kubernetes_play_tags_inventory examples/inventory-kubernetes photon_kube.yml kube_node_installation"
+    - id: install_dashboard
+      name: "Deploy Kubernetes dashboard"
+      commands:
+        - "/opt/{{ django_app }}/{{ django_app }}_kubernetes_play_tags_inventory examples/inventory-kubernetes photon_kube.yml kube_pod-web_ui_dashboard"
+    - id: install_elk
+      name: "Deploy ELK"
+      commands:
+        - "/opt/{{ django_app }}/{{ django_app }}_kubernetes_play_tags_inventory examples/inventory-kubernetes photon_kube.yml kube_pod-elk"
+

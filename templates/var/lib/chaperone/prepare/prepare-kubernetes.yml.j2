@@ -1,0 +1,43 @@
+  - "Cloud-Native Applications":
+    - "PhotonOS":
+      - "Targets":
+{% set PHOTONOSCOUNT = photonos_instance_count|int %}
+{% for n in range(PHOTONOSCOUNT) %}        
+        - id: photon_target-{{n}}
+          name: "PhotonOS Target"
+          optional: 0
+          help: "DNS A record or IP addresses assigned to the PhotonOS instance"
+        - id: photon_targets_root_password
+          name: "Root password"
+          input: password
+          optional: 0
+          default: vmware
+          help: "Password for the root account for all targets."
+{% endfor %}
+    - "Kubernetes Configuration":
+      - "Services Design":
+        - id: kubernetes_master_node_uri
+          name: "Master node IP or DNS A record"
+          optional: 0
+{% set PHOTONOSCOUNT = (photonos_instance_count|int) - 1 %}
+{% for n in range(PHOTONOSCOUNT) %}
+        - id: kubelet_target-{{n}}_uri
+          name: "Kubelet node IP or DNS A record"
+          optional: 0
+{% endfor %}
+      - "Network Design":
+        - id: flannel_subnet
+          name: "Subnet for use by flannel"
+          optional: 1
+          default: "10.254.0.0/16"
+    - "Service Provisioning":
+      - "Pod/Service Deployment":
+        - id: pod_to_deploy
+          name: "Select the service or pod to deploy"
+          optional: 1
+          hide: 1
+          input: dropdown
+          options:
+            - "Kubernetes Web Dashboard"
+            - "ElasticSearch Logstash Kibana"
+

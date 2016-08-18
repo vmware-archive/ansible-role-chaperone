@@ -64,8 +64,9 @@
           input: checkbox
           help: "Select if you want to both deploy and configure NSX Manager. If General>Enable out-of-band vCenter is checked NSX manager will be deployed to the out of band vcenter and registed to the inband vcenter"
       - "Cloud Management Platforms":
-        - id: deploy_cna
-          name: "Cloud-Native Applications"
+        # Includes PhotonOS, Kubernetes, and Consul
+        - id: deploy_kubernetes
+          name: "Kubernetes"
           optional: 1
           input: checkbox
         - id: deploy_vio
@@ -106,7 +107,7 @@
             - id: Embedded
             - id: Dedicated
       # Network IP Scheme is hidden as of now as it not applicable until later releases
-      - "Network IP Scheme":
+#      - "Network IP Scheme":
         - id: network_ip_scheme
           name: "Select the IP scheme (where applicable)"
           input: dropdown
@@ -181,6 +182,12 @@
           options:
             - id: "In Band vCenter"
             - id: "Out of Band vCenter"
+    - "Cloud Native Applications":
+      - "Kubernetes":
+        - id: photonos_instance_count
+          name: "Number of PhotonOS instances to configure for Kubernetes use"
+          default: 1
+          optional: 0
 - Install:
   - Chaperone Configuration:
     - id: config_chaperone

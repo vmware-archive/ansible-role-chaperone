@@ -1,0 +1,48 @@
+#!/usr/bin/env/python
+#
+#  Copyright 2015 VMware, Inc.
+#
+#  Licensed under the Apache License, Version 2.0 (the "License");
+#  you may not use this file except in compliance with the License.
+#  You may obtain a copy of the License at
+#
+#      http://www.apache.org/licenses/LICENSE-2.0
+#
+#  Unless required by applicable law or agreed to in writing, software
+#  distributed under the License is distributed on an "AS IS" BASIS,
+#  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+#  See the License for the specific language governing permissions and
+#  limitations under the License.
+#
+from jinja2 import Template
+import yaml
+import hiyapyco
+
+playbooks = [ 'photon' ]
+answerfile = "{{ chaperone_answer_dir }}/answerfile.yml"
+admin_answerfile = "{{ chaperone_admin_answer_dir }}/answerfile.yml"
+
+if __name__ == "__main__":
+  print "Building the PhotonOS inventories"
+  context = hiyapyco.load(answerfile,admin_answerfile)
+
+  photon_instance_ct = len([v for v in context.keys() if 'photon_target-' in v])
+  
+  context['photon_os_targets'] = []
+  for n in range(photon_instance_ct):
+    try:
+      host = {}
+      host['uri'] = context.get('photon_target-%d' % n)
+    except KeyError:
+      pass
+    else:
+      context['photon_os_targets'].append(host)
+
+  for playbook in playbooks:
+    template_os = Template(file("/opt/{{ django_app }}-ansible/playbooks/%s/templates/inventory-photon_os.j2" % playbook).read())
+    file("/opt/{{ django_app }}-ansible/playbooks/%s/examples/inventory-photon_os" % playbook,'w').write(template_os.render(context))
+
+    template_base = Template(file("/opt/{{ django_app }}-ansible/playbooks/%s/templates/inventory-photon_base.j2" % playbook).read())
+    file("/opt/{{ django_app }}-ansible/playbooks/%s/examples/inventory-photon_base" % playbook,'w').write(template_base.render(context))
+
+  print "PhotonOS inventories built successfully"
