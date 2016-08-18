@@ -26,6 +26,6 @@ tags="${3}"
 cd /opt/{{ django_app }}-ansible/playbooks/{{ django_app }}
 python /opt/{{ django_app }}/prepare_kubernetes_targets.py
 echo "------------------------------------------------------------------------"
-echo "Running: ansible-playbook -i $inventory -vvvv $playbook --tags $tags"
+echo "Running: ansible-playbook -i $inventory -{{ ansible_log_level }} $playbook --tags $tags"
 echo "------------------------------------------------------------------------"
-ansible-playbook -i "$inventory" -vvvv "$playbook" --tags "$tags"
+ansible-playbook -i "$inventory" -{{ ansible_log_level }} "$playbook" --tags "$tags"

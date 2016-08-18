@@ -69,6 +69,7 @@
     delete: yes
   tags:
     - rsync
+    - rsync_ansible_only
 
 - name: recursively sync the ansible roles from local repos
   become: no
@@ -82,7 +83,8 @@
     archive: no
   tags:
     - rsync
-
+    - rsync_ansible_only
+    
 - name: recursively sync the ansible library from local repos
   become: no
   synchronize:
@@ -96,7 +98,8 @@
     delete: yes
   tags:
     - rsync
-
+    - rsync_ansible_only
+    
 - name: create application directory
   file:
     dest: "/opt/containers"
@@ -129,12 +132,7 @@
     group: "{{ ansible_ssh_user }}"
     mode: "0700"
   with_items:
-    - { src: 'opt/chaperone_kubernetes_play_inventory.j2', dest: '/opt/{{ django_app }}/{{ django_app }}_kubernetes_play_inventory' }
-    - { src: 'opt/chaperone_kubernetes_play_tags_inventory.j2', dest: '/opt/{{ django_app }}/{{ django_app }}_kubernetes_play_tags_inventory' }
-    - { src: 'opt/chaperone_photon_play_inventory.j2', dest: '/opt/{{ django_app }}/{{ django_app }}_photon_play_inventory' }
-    - { src: 'opt/chaperone_play_inventory.j2', dest: '/opt/{{ django_app }}/{{ django_app }}_play_inventory' }
-    - { src: 'opt/chaperone_play_tags.j2', dest: '/opt/{{ django_app }}/{{ django_app }}_play_tags' }
-    - { src: 'opt/chaperone_play.j2', dest: '/opt/{{ django_app }}/{{ django_app }}_play' }
+    - { src: 'opt/chaperone-admin_play_tags.j2', dest: '/opt/{{ django_app }}/{{ django_app }}-admin_play_tags' }
     - { src: 'opt/prepare_kubernetes_targets.py.j2', dest: '/opt/{{ django_app }}/prepare_kubernetes_targets.py' }
     - { src: 'opt/prepare_photon_targets.py.j2', dest: '/opt/{{ django_app }}/prepare_photon_targets.py' }
     - { src: 'opt/prepare_variables.py.j2', dest: '/opt/{{ django_app }}/prepare_variables.py' }

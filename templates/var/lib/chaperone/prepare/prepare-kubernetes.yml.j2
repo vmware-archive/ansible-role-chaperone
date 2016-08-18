@@ -1,4 +1,4 @@
-  - "Cloud-Native Applications":
+  - "Cloud-Native Infrastructure":
     - "PhotonOS":
       - "Targets":
 {% set PHOTONOSCOUNT = photonos_instance_count|int %}
@@ -15,25 +15,22 @@
           help: "Password for the root account for all targets."
 {% endfor %}
     - "Kubernetes Configuration":
+      - "General":
+        - id: kube_internal_dns_domain
+          name: "DNS Domain for intra-container name resolution"
+          optional: 0
+          default: "kube.local"
       - "Management Topology":
         - id: kubernetes_master_node_uri
           name: "Master node IP or DNS A record"
           optional: 0
-{% if PHOTONOSCOUNT > 1 %}          
-        - id: enable_kubelet_on_master
-          name: "Enable minion services on master"
-          optional: 1
-          default: 0
-          input: checkbox
-          help: "Configures the Kubernetes master to also host containers"
-{% elif PHOTONOSCOUNT == 1 %}
         - id: enable_kubelet_on_master
           name: "Enable minion services on master"
           optional: 1
           default: 1
+          hide: 1
           input: checkbox
           help: "Configures the Kubernetes master to also host containers"
-{% endif %}
 {% set PHOTONOSCOUNT = (photonos_instance_count|int) - 1 %}
 {% for n in range(PHOTONOSCOUNT) %}
         - id: kubelet_target-{{n}}_uri
@@ -41,12 +38,6 @@
           optional: 0
 {% endfor %}
       - "Network Design":
-        - id: enable_kube_host_iptables
-          name: "Enable iptables for hosts"
-          optional: 0
-          input: checkbox
-          default: 0
-          help: "Enables iptables filtering on the hosts"
         - id: flannel_network_type
           name: "Flannel network type (backend)"
           optional: 0
@@ -86,6 +77,7 @@
         - id: flannel_vxlan_gbp
           name: "Enable VXLAN Group Based Policy"
           optional: 1
+          hide: 1
           input: checkbox
           help: "Selection required only when VXLAN is selected as the backend"
         - id: flannel_awsvpc_routeableid
@@ -93,17 +85,5 @@
           optional: 1
           hide: 1
           help: "Selection required only when AWS-VPC is selected as the backend"
-    - "Application Provisioning":
-      - "Deployment":
-        - id: deploy_kube_web_dash_app
-          name: "Deploy Web UI Dashboard"
-          optional: 1
-          default: 0
-          input: checkbox
-        - id: deploy_elk_app
-          name: "Deploy ELK Cluster"
-          optional: 1
-          default: 0
-          input: checkbox
 
 

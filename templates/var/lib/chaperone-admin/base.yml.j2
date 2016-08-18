@@ -33,6 +33,17 @@
         - id: dns_domain_name
           name: DNS Domain Name
           optional: 0
+      - "Ansible":
+        - id:  ansible_log_level
+          name: "Ansible Log Level"
+          optional: 0
+          default: "v"
+          input: dropdown
+          options:
+            - id: "v"
+            - id: "vv"
+            - id: "vvv"
+            - id: "vvvv"
     - "Apps & Services":
       - "Multiple Services":
         - id: deploy_phase1
@@ -205,4 +216,4 @@
     - id: config_chaperone
       name: Save Chaperone config
       commands:
-        - "/opt/{{ django_app }}/{{ django_app }}_play_tags primaryweb.yml uiconfig"
+        - "/opt/{{ django_app }}/{{ django_app }}-admin_play_tags primaryweb.yml uiconfig"

@@ -19,6 +19,6 @@
 
 cd /opt/{{ django_app }}-ansible/playbooks/{{ django_app }}
 echo "------------------------------------------------------------------------"
-echo "Running: ansible-playbook -i inventory -v $@"
+echo "Running: ansible-playbook -i inventory -{{ ansible_log_level }} $@"
 echo "------------------------------------------------------------------------"
-ansible-playbook -i inventory -v "$@"
+ansible-playbook -i inventory -{{ ansible_log_level }} "$@"

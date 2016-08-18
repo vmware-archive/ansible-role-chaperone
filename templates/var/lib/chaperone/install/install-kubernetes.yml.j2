@@ -1,10 +1,12 @@
   - "Cloud Native Infrastructure - Kubernetes":
     - id: configure_kube_platform
-      name: "Deploy Kubernetes Platform"
+      name: "Deploy Kubernetes platform"
       commands:
         - "/opt/{{ django_app }}/{{ django_app }}_photon_play_inventory examples/inventory-photon_os os.yml"
         - "/opt/{{ django_app }}/{{ django_app }}_photon_play_inventory examples/inventory-photon_base base.yml"
+        - "/opt/{{ django_app }}/{{ django_app }}_kubernetes_play_tags_inventory examples/inventory-kubernetes photon_kube.yml kube_reset_installation"
         - "/opt/{{ django_app }}/{{ django_app }}_kubernetes_play_tags_inventory examples/inventory-kubernetes photon_kube.yml kube_master_installation"
+        - "/opt/{{ django_app }}/{{ django_app }}_kubernetes_play_tags_inventory examples/inventory-kubernetes photon_kube.yml kube_addons_installation"
         - "/opt/{{ django_app }}/{{ django_app }}_kubernetes_play_tags_inventory examples/inventory-kubernetes photon_kube.yml kube_node_installation"
     - id: configure_photonos
       name: "Configure Photon OS only"
@@ -12,16 +14,28 @@
         - "/opt/{{ django_app }}/{{ django_app }}_photon_play_inventory examples/inventory-photon_os os.yml"
         - "/opt/{{ django_app }}/{{ django_app }}_photon_play_inventory examples/inventory-photon_base base.yml"
     - id: install_kubernetes_all
-      name: "Install Kubernetes Master and Nodes only"
+      name: "Reset & install Kubernetes master and minions only"
       commands: 
+        - "/opt/{{ django_app }}/{{ django_app }}_kubernetes_play_tags_inventory examples/inventory-kubernetes photon_kube.yml kube_reset_installation"
         - "/opt/{{ django_app }}/{{ django_app }}_kubernetes_play_tags_inventory examples/inventory-kubernetes photon_kube.yml kube_master_installation"
+        - "/opt/{{ django_app }}/{{ django_app }}_kubernetes_play_tags_inventory examples/inventory-kubernetes photon_kube.yml kube_addons_installation"
         - "/opt/{{ django_app }}/{{ django_app }}_kubernetes_play_tags_inventory examples/inventory-kubernetes photon_kube.yml kube_node_installation"
     - id: install_kubernetes_master
-      name: "Install Kubernetes Master only"
+      name: "Reset & install Kubernetes master only"
       commands: 
+        - "/opt/{{ django_app }}/{{ django_app }}_kubernetes_play_tags_inventory examples/inventory-kubernetes photon_kube.yml kube_reset_installation"
         - "/opt/{{ django_app }}/{{ django_app }}_kubernetes_play_tags_inventory examples/inventory-kubernetes photon_kube.yml kube_master_installation"
+        - "/opt/{{ django_app }}/{{ django_app }}_kubernetes_play_tags_inventory examples/inventory-kubernetes photon_kube.yml kube_addons_installation"
     - id: install_kubernetes_nodes
-      name: "Install Kubernetes Nodes only"
+      name: "(Re)Install Kubernetes minions only"
       commands: 
         - "/opt/{{ django_app }}/{{ django_app }}_kubernetes_play_tags_inventory examples/inventory-kubernetes photon_kube.yml kube_node_installation"
+    - id: install_kubernetes_addons
+      name: "(Re)Install Kubernetes addons only"
+      commands: 
+        - "/opt/{{ django_app }}/{{ django_app }}_kubernetes_play_tags_inventory examples/inventory-kubernetes photon_kube.yml kube_addons_installation"
+    - id: reset_kubernetes
+      name: "Reset Kubernetes to default state only"
+      commands: 
+        - "/opt/{{ django_app }}/{{ django_app }}_kubernetes_play_tags_inventory examples/inventory-kubernetes photon_kube.yml kube_reset_installation"
 

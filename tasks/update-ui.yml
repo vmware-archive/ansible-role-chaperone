@@ -21,6 +21,23 @@
   tags:
     - uiconfig
 
+- name: create playbook execution harnesses and inventory creation scripts
+  template:
+    src: "{{ item.src }}"
+    dest: "{{ item.dest }}"
+    owner: "{{ ansible_ssh_user }}"
+    group: "{{ ansible_ssh_user }}"
+    mode: "0700"
+  with_items:
+    - { src: 'opt/chaperone_kubernetes_play_inventory.j2', dest: '/opt/{{ django_app }}/{{ django_app }}_kubernetes_play_inventory' }
+    - { src: 'opt/chaperone_kubernetes_play_tags_inventory.j2', dest: '/opt/{{ django_app }}/{{ django_app }}_kubernetes_play_tags_inventory' }
+    - { src: 'opt/chaperone_photon_play_inventory.j2', dest: '/opt/{{ django_app }}/{{ django_app }}_photon_play_inventory' }
+    - { src: 'opt/chaperone_play_inventory.j2', dest: '/opt/{{ django_app }}/{{ django_app }}_play_inventory' }
+    - { src: 'opt/chaperone_play_tags.j2', dest: '/opt/{{ django_app }}/{{ django_app }}_play_tags' }
+    - { src: 'opt/chaperone_play.j2', dest: '/opt/{{ django_app }}/{{ django_app }}_play' }
+  tags:
+    - uiconfig
+
 - name: Update the Chaperone UI
   template:
     src: "var/lib/chaperone/base.yml.j2"
@@ -39,7 +56,7 @@
     - useruiconfig
     
 - name: Configure the Chaperone user UI yaml
-  command: ansible-playbook -i examples/inventory  primaryweb.yml --tags uiconfig
+  command: ansible-playbook -i examples/inventory primaryweb.yml --tags uiconfig
   args:
     chdir: /opt/chaperone-ansible/playbooks/chaperone
   when: chaperone_admin_answerfile.stat.exists

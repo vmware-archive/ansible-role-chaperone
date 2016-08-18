@@ -24,6 +24,6 @@ shift
 cd /opt/{{ django_app }}-ansible/playbooks/photon
 python /opt/{{ django_app }}/prepare_photon_targets.py
 echo "------------------------------------------------------------------------"
-echo "Running: ansible-playbook -i ${inventory} -vvv $@"
+echo "Running: ansible-playbook -i ${inventory} -{{ ansible_log_level }} $@"
 echo "------------------------------------------------------------------------"
-ansible-playbook -i "$inventory" -vvv "$@"
+ansible-playbook -i "$inventory" -{{ ansible_log_level }} "$@"

@@ -1,0 +1,8 @@
+  - "{{ install_section_header }}"
+{% set INSTALLACTIONCOUNT = install_actions|int %}
+{% for n in range(INSTALLACTIONCOUNT) %}
+    - id: "{{ action_id }}"
+      name: "{{ action_name }}"
+      commands:
+        - "/opt/chaperone/chaperone_play_inventory_tags {{ actions_playbook }} {{ actions_tags }}"
+{% endfor %}

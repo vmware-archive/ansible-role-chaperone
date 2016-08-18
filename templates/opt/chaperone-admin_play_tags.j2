@@ -18,12 +18,13 @@
 # $1: inventory file to use for the play
 # $2: playbook (YAML) file
 
-inventory="${1}"
-shift
 
-cd /opt/{{ django_app }}-ansible/playbooks/chaperone
-python /opt/{{ django_app }}/prepare_kubernetes_targets.py
+playbook="${1}"
+tags="${2}"
+
+cd /opt/{{ django_app }}-ansible/playbooks/{{ django_app }}
+python /opt/{{ django_app }}/prepare_variables.py
 echo "------------------------------------------------------------------------"
-echo "Running: ansible-playbook -i ${inventory} -{{ ansible_log_level }} $@"
+echo "Running: ansible-playbook -i examples/inventory $playbook --tags $tags"
 echo "------------------------------------------------------------------------"
-ansible-playbook -i "$inventory" -{{ ansible_log_level }} "$@"
+ansible-playbook -i examples/inventory "$playbook" --tags "$tags"

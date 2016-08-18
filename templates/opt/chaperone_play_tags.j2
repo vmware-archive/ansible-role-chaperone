@@ -25,6 +25,6 @@ tags="${2}"
 cd /opt/{{ django_app }}-ansible/playbooks/{{ django_app }}
 python /opt/{{ django_app }}/prepare_variables.py
 echo "------------------------------------------------------------------------"
-echo "Running: ansible-playbook -i examples/inventory -v $playbook --tags $tags"
+echo "Running: ansible-playbook -i examples/inventory -{{ ansible_log_level }} $playbook --tags $tags"
 echo "------------------------------------------------------------------------"
-ansible-playbook -i examples/inventory -v "$playbook" --tags "$tags"
+ansible-playbook -i examples/inventory -{{ ansible_log_level }} "$playbook" --tags "$tags"

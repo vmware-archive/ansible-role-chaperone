@@ -43,6 +43,7 @@
 
 {% if (deploy_phase1 == '0') and (deploy_kubernetes == '1') -%}
 {% include 'prepare/prepare-kubernetes.yml.j2' %}
+{% include 'prepare/prepare-apps-on-kubernetes.yml.j2' %}
 {% endif -%}
 
 {% if (deploy_phase1 == '0') and (deploy_vrops == '1') -%}
@@ -102,6 +103,7 @@
 {% if (deploy_phase1 == '0') and (deploy_kubernetes == '1') -%}
 {% include 'install/install-kubernetes.yml.j2' %}
 {% include 'install/install-apps-on-kubernetes.yml.j2' %}
+{% include 'install/install-kube_with_demo_app.yml.j2' %}
 {% endif -%}
 
 {% if (deploy_phase1 == '0') and (deploy_vra == '1') -%}

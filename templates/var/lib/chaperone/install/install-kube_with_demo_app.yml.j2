@@ -1,0 +1,11 @@
+  - "CNI + CNA":
+    - id: configure_kube_platform
+      name: "Deploy Kubernetes platform with demo LAMP app"
+      commands:
+        - "/opt/{{ django_app }}/{{ django_app }}_photon_play_inventory examples/inventory-photon_os os.yml"
+        - "/opt/{{ django_app }}/{{ django_app }}_photon_play_inventory examples/inventory-photon_base base.yml"
+        - "/opt/{{ django_app }}/{{ django_app }}_kubernetes_play_tags_inventory examples/inventory-kubernetes photon_kube.yml kube_reset_installation"
+        - "/opt/{{ django_app }}/{{ django_app }}_kubernetes_play_tags_inventory examples/inventory-kubernetes photon_kube.yml kube_master_installation"
+        - "/opt/{{ django_app }}/{{ django_app }}_kubernetes_play_tags_inventory examples/inventory-kubernetes photon_kube.yml kube_addons_installation"
+        - "/opt/{{ django_app }}/{{ django_app }}_kubernetes_play_tags_inventory examples/inventory-kubernetes photon_kube.yml kube_node_installation"
+        - "/opt/{{ django_app }}/{{ django_app }}_kubernetes_play_tags_inventory examples/inventory-kubernetes photon_kube.yml deploy_apps_in_kube"

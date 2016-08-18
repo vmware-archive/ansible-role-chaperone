@@ -1,0 +1,62 @@
+  - "Cloud-Native Applications":
+    - "Application Provisioning":
+      - "Remote Docker Registry":
+        - id: kube_docker_registry_secret_name
+          name: "Name of Kubernetes secret"
+          optional: 1
+          help: "The value specified should match imagePullSecrets.name property value"
+        - id: kube_docker_registry_server
+          name: "Docker Registry URL"
+          optional: 1
+        - id: kube_docker_registry_username
+          name: "Docker Registry User"
+          optional: 1
+        - id: kube_docker_registry_pwd
+          name: "Docker Registry Password"
+          optional: 1
+          input: password
+        - id: kube_docker_registry_email
+          name: "Docker Registry Email Address"
+          optional: 1
+    - "Demo App":
+      - "Apache Controller Configuration":
+        - id: apache_image_uri
+          name: "Container Image URI"
+          optional: 0
+          help: "Needs to be resolvable Docker container URL (e.g. index.docker.io/httpd)"
+        - id: apache_image_pull_policy
+          name: "Image Pull Policy"
+          optional: 0
+          input: dropdown
+          options:
+            - id: Always
+            - id: Never
+          help: "Determines whether the image specified above should always be retrieved or an existing local image can be used"
+        - id: apache_replicas
+          name: "Number of Apache Replicas"
+          optional: 1
+          default: 1
+      - "Apache Service Configuration":
+        - id: apache_external_nodeport
+          name: "External Node Port"
+          optional: 0
+          help: "TCP port over which external access to the Apache service will be made (from 30000 to 32767)"
+      - "MySQL Controller Configuration":
+        - id: mysql_image_uri
+          name: "Container Image URI"
+          optional: 0
+          help: "Needs to be resolvable Docker container URL (e.g. index.docker.io/mysql)"
+        - id: mysql_image_pull_policy
+          name: "Image Pull Policy"
+          optional: 0
+          input: dropdown
+          options:
+            - id: Always
+            - id: Never
+          help: "Determines whether the image specified above should always be retrieved or an existing local image can be used"
+        - id: mysql_replicas
+          name: "Number of MySQL Replicas"
+          optional: 1
+          default: 1
+
+
