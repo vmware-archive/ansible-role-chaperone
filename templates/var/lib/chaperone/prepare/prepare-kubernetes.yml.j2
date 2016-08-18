@@ -15,10 +15,25 @@
           help: "Password for the root account for all targets."
 {% endfor %}
     - "Kubernetes Configuration":
-      - "Services Design":
+      - "Management Topology":
         - id: kubernetes_master_node_uri
           name: "Master node IP or DNS A record"
           optional: 0
+{% if PHOTONOSCOUNT > 1 %}          
+        - id: enable_kubelet_on_master
+          name: "Enable minion services on master"
+          optional: 1
+          default: 0
+          input: checkbox
+          help: "Configures the Kubernetes master to also host containers"
+{% elif PHOTONOSCOUNT == 1 %}
+        - id: enable_kubelet_on_master
+          name: "Enable minion services on master"
+          optional: 1
+          default: 1
+          input: checkbox
+          help: "Configures the Kubernetes master to also host containers"
+{% endif %}
 {% set PHOTONOSCOUNT = (photonos_instance_count|int) - 1 %}
 {% for n in range(PHOTONOSCOUNT) %}
         - id: kubelet_target-{{n}}_uri
@@ -26,18 +41,69 @@
           optional: 0
 {% endfor %}
       - "Network Design":
-        - id: flannel_subnet
+        - id: enable_kube_host_iptables
+          name: "Enable iptables for hosts"
+          optional: 0
+          input: checkbox
+          default: 0
+          help: "Enables iptables filtering on the hosts"
+        - id: flannel_network_type
+          name: "Flannel network type (backend)"
+          optional: 0
+          input: dropdown
+          options:
+            - id: "alloc"
+#            - id: "aws-vpc"
+#            - id: "gce"
+            - id: "host-gw"
+            - id: "vxlan"
+            - id: "udp"
+        - id: flannel_network_with_vlsm
           name: "Subnet for use by flannel"
           optional: 1
           default: "10.254.0.0/16"
-    - "Service Provisioning":
-      - "Pod/Service Deployment":
-        - id: pod_to_deploy
-          name: "Select the service or pod to deploy"
+        - id: flannel_vlsm_subscope
+          name: "Subnet mask for individual per-host networks"
+          optional: 1
+          default: "24"
+        - id: flannel_subnet_min
+          name: "Beginning IP range for subnet allocation"
+          optional: 1
+          default: "10.254.10.0"
+        - id: flannel_subnet_max
+          name: "Ending IP range for subnet allocation"
+          optional: 1
+          default: "10.254.200.0"
+        - id: flannel_service_port
+          name: "Firewall port used to forward UDP or VXLAN traffic"
+          optional: 1
+          help: "Input required only when UDP or VXLAN is selected as the backend. UDP is normally 8285 and VXLAN is normally 8472"
+        - id: flannel_vxlan_vni
+          name: "VXLAN VNI"
+          optional: 1
+          default: "1"
+          help: "Input required only when VXLAN is selected as the backend"
+        - id: flannel_vxlan_gbp
+          name: "Enable VXLAN Group Based Policy"
+          optional: 1
+          input: checkbox
+          help: "Selection required only when VXLAN is selected as the backend"
+        - id: flannel_awsvpc_routeableid
+          name: "AWS VPC route table ID"
           optional: 1
           hide: 1
-          input: dropdown
-          options:
-            - "Kubernetes Web Dashboard"
-            - "ElasticSearch Logstash Kibana"
+          help: "Selection required only when AWS-VPC is selected as the backend"
+    - "Application Provisioning":
+      - "Deployment":
+        - id: deploy_kube_web_dash_app
+          name: "Deploy Web UI Dashboard"
+          optional: 1
+          default: 0
+          input: checkbox
+        - id: deploy_elk_app
+          name: "Deploy ELK Cluster"
+          optional: 1
+          default: 0
+          input: checkbox
+
 

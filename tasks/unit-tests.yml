@@ -1,0 +1,67 @@
+#
+#  Copyright 2015 VMware, Inc.
+#
+#  Licensed under the Apache License, Version 2.0 (the "License");
+#  you may not use this file except in compliance with the License.
+#  You may obtain a copy of the License at
+#
+#      http://www.apache.org/licenses/LICENSE-2.0
+#
+#  Unless required by applicable law or agreed to in writing, software
+#  distributed under the License is distributed on an "AS IS" BASIS,
+#  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+#  See the License for the specific language governing permissions and
+#  limitations under the License.
+#
+# These tasks expect that the user UI cfg has already been set in /var/lib/chaperone/answerfile
+---
+- name: Deploy Kubernetes Platform
+  command: "{{ item }}"
+  args:
+    chdir: "/opt/{{ django_app }}/"
+  with_items:
+    - "/opt/{{ django_app }}/{{ django_app }}_photon_play_inventory examples/inventory-photon_os os.yml"
+    - "/opt/{{ django_app }}/{{ django_app }}_photon_play_inventory examples/inventory-photon_base base.yml"
+    - "/opt/{{ django_app }}/{{ django_app }}_kubernetes_play_tags_inventory examples/inventory-kubernetes photon_kube.yml kube_master_installation"
+    - "/opt/{{ django_app }}/{{ django_app }}_kubernetes_play_tags_inventory examples/inventory-kubernetes photon_kube.yml kube_node_installation"
+  tags:
+    - ut_deploy_kube_platform
+    
+- name: Configure Photon OS only
+  command: "{{ item }}"
+  args:
+    chdir: "/opt/{{ django_app }}/"
+  with_items:
+    - "/opt/{{ django_app }}/{{ django_app }}_photon_play_inventory examples/inventory-photon_os os.yml"
+    - "/opt/{{ django_app }}/{{ django_app }}_photon_play_inventory examples/inventory-photon_base base.yml"
+  tags:
+    - ut_cfg_photon_os
+    
+- name: Install Kubernetes Master and Nodes only
+  command: "{{ item }}"
+  args:
+    chdir: "/opt/{{ django_app }}/"
+  with_items:
+    - "/opt/{{ django_app }}/{{ django_app }}_kubernetes_play_tags_inventory examples/inventory-kubernetes photon_kube.yml kube_master_installation"
+    - "/opt/{{ django_app }}/{{ django_app }}_kubernetes_play_tags_inventory examples/inventory-kubernetes photon_kube.yml kube_node_installation"
+  tags:
+    - ut_install_kube_all
+    
+- name: Install Kubernetes Master only
+  command: "{{ item }}"
+  args:
+    chdir: "/opt/{{ django_app }}/"
+  with_items:
+    - "/opt/{{ django_app }}/{{ django_app }}_kubernetes_play_tags_inventory examples/inventory-kubernetes photon_kube.yml kube_master_installation"
+  tags:
+    - ut_install_kube_master
+    
+- name: Install Kubernetes Minions only
+  command: "{{ item }}"
+  args:
+    chdir: "/opt/{{ django_app }}/"
+  with_items:
+    - "/opt/{{ django_app }}/{{ django_app }}_kubernetes_play_tags_inventory examples/inventory-kubernetes photon_kube.yml kube_node_installation"
+  tags:
+    - ut_install_kube_minion
+  

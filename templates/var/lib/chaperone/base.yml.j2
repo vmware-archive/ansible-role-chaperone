@@ -101,6 +101,7 @@
 
 {% if (deploy_phase1 == '0') and (deploy_kubernetes == '1') -%}
 {% include 'install/install-kubernetes.yml.j2' %}
+{% include 'install/install-apps-on-kubernetes.yml.j2' %}
 {% endif -%}
 
 {% if (deploy_phase1 == '0') and (deploy_vra == '1') -%}
