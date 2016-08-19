@@ -1,29 +1,60 @@
   - "Deploy vCloud Reference Architecture":
     - id: install_management_psc
-      name: "Provision Management PSC"
+      name: "Install MGMT PSC"
       commands:
+        - "/opt/{{ django_app }}/{{ django_app }}_play_tags vcloud_nfv_mgmt.yml create_vc_vars_files"
         - "/opt/{{ django_app }}/{{ django_app }}_play_tags vcloud_nfv_mgmt.yml prereqs,deploy_psc_ova,cleanup"
     - id: install_management_vcenter
-      name: "Provision Management vCenter Server"
+      name: "Install MGMT vCenter"
       commands:
-        - "/opt/{{ django_app }}/{{ django_app }}_play_tags vcloud_nfv_mgmt.yml prereqs,deploy_vcenter_psc_ova,deploy_vcenter_ova,cleanup"
+        - "/opt/{{ django_app }}/{{ django_app }}_play_tags vcloud_nfv_mgmt.yml create_vc_vars_files"
+        - "/opt/{{ django_app }}/{{ django_app }}_play_tags vcloud_nfv_mgmt.yml prereqs,deploy_vcenter_psc_ova,cleanup"
     - id: configure_management_vcenter
-      name: "Configure Management vCenter Server"
+      name: "Configure MGMT Cluster for HA,DRS"
       commands:
         - "/opt/{{ django_app }}/{{ django_app }}_play_tags vcloud_nfv_mgmt.yml deploy_management_cluster"
+    - id: configure_management_nsx
+      name: "Install MGMT NSX Manager"
+      commands:
+        - "/opt/{{ django_app }}/{{ django_app }}_play_tags vcloud_nfv_mgmt.yml create_mgmt_vars_files"
+        - "/opt/{{ django_app }}/{{ django_app }}_play_tags vcloud_nfv_mgmt.yml deploy_nsx_manager"
+        - "/opt/{{ django_app }}/{{ django_app }}_play_tags vcloud_nfv_mgmt.yml nsx_vc_registration"
     - id: install_resource_psc
-      name: "Provision Resource PSC"
+      name: "Install RES PSC"
       commands:
-        - "/opt/{{ django_app }}/{{ django_app }}_play_tags vcloud_nfv_mgmt.yml prereqs,deploy_psc_ova,cleanup"
+        - "/opt/{{ django_app }}/{{ django_app }}_play_tags vcloud_nfv_mgmt.yml create_vc_vars_files"
+        - "/opt/{{ django_app }}/{{ django_app }}_play_tags vcloud_nfv_mgmt.yml prereqs,deploy_res_psc_ova,cleanup"
     - id: install_resource_vcenter
-      name: "Provision Resource vCenter Server"
+      name: "Install RES vCenter"
       commands:
-        - "/opt/{{ django_app }}/{{ django_app }}_play_tags vcloud_nfv_mgmt.yml prereqs,deploy_vcenter_psc_ova,deploy_vcenter_ova,cleanup"
+        - "/opt/{{ django_app }}/{{ django_app }}_play_tags vcloud_nfv_mgmt.yml create_vc_vars_files"
+        - "/opt/{{ django_app }}/{{ django_app }}_play_tags vcloud_nfv_mgmt.yml prereqs,deploy_res_vcenter_psc_ova,cleanup"
+    - id: install_edge_cluster
+      name: "Create Edge Cluster"
+      commands:
+        - "/opt/{{ django_app }}/{{ django_app }}_play_tags vcloud_nfv_mgmt.yml create_vars_files"
+        - "/opt/{{ django_app }}/{{ django_app }}_play_tags vcloud_nfv_mgmt.yml deploy_edge_cluster"
     - id: configure_resource_vcenter
-      name: "Configure Resource vCenter Server"
+      name: "Configure RES Cluster for vSAN"
       commands:
         - "/opt/{{ django_app }}/{{ django_app }}_play_tags vcloud_nfv_mgmt.yml deploy_resource_cluster"
-    - id: install_edge_cluster
-      name: "Configure Edge Cluster"
+    - id: configure_resource_nsx
+      name: "Install RES NSX Manager"
       commands:
-        - "/opt/{{ django_app }}/{{ django_app }}_play_tags vcloud_nfv_mgmt.yml deploy_edge_cluster"
+        - "/opt/{{ django_app }}/{{ django_app }}_play_tags vcloud_nfv_mgmt.yml create_res_vars_files"
+        - "/opt/{{ django_app }}/{{ django_app }}_play_tags vcloud_nfv_mgmt.yml nsx_res_vc_registration"
+    - id: deploy_nsx_controller
+      name: "Deploy NSX Controllers"
+      commands:
+        - "/opt/{{ django_app }}/{{ django_app }}_play_tags vcloud_nfv_mgmt.yml create_res_vars_files"
+        - "/opt/{{ django_app }}/{{ django_app }}_play_tags vcloud_nfv_mgmt.yml res_vsphere_facts,edge_controller_moid,deploy_edge_controllers"
+    - id: prepare_host
+      name: "Host Prepare RES & EDGE Cluster for NSX"
+      commands:
+        - "/opt/{{ django_app }}/{{ django_app }}_play_tags vcloud_nfv_mgmt.yml create_res_vars_files"
+        - "/opt/{{ django_app }}/{{ django_app }}_play_tags vcloud_nfv_mgmt.yml prepare_hosts_facts,prepare_hosts"
+    - id: configure_nsx_networking
+      name: "Logical Network Preparation"
+      commands:
+        - "/opt/{{ django_app }}/{{ django_app }}_play_tags vcloud_nfv_mgmt.yml create_res_vars_files"
+        - "/opt/{{ django_app }}/{{ django_app }}_play_tags vcloud_nfv_mgmt.yml res_vsphere_facts,edge_vsphere_facts,ldr_vsphere_facts,configure_nsx_networking"
