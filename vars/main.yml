@@ -51,6 +51,7 @@ django_pip_packages:
   - virtualenv
   - shade
   - netaddr
+  - nsxramlclient
 
 django_pip_versioned_packages:
   - { name: "django", version: "1.8.5" }
