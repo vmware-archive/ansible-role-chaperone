@@ -137,7 +137,7 @@
     - { src: 'opt/chaperone_play.j2', dest: '/opt/{{ django_app }}/{{ django_app }}_play' }
     - { src: 'opt/prepare_kubernetes_targets.py.j2', dest: '/opt/{{ django_app }}/prepare_kubernetes_targets.py' }
     - { src: 'opt/prepare_photon_targets.py.j2', dest: '/opt/{{ django_app }}/prepare_photon_targets.py' }
-    - { src: 'opt/prepare_variables.py.j2', dest: '/opt/prepare_variables.py.j2' }
+    - { src: 'opt/prepare_variables.py.j2', dest: '/opt/{{ django_app }}/prepare_variables.py' }
   tags:
     - rsync
 

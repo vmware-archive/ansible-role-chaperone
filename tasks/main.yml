@@ -19,3 +19,4 @@
 - include: admin-ui.yml
 - include: update-ui.yml
 - include: prestage-tasks.yml
+- include: unit-tests.yml

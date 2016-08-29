@@ -30,3 +30,18 @@
   notify: Restart apache2
   tags:
     - uiconfig
+
+- name: Check if the chaperone-admin answerfile exists
+  stat:
+    path: /var/lib/chaperone-admin/answerfile
+  register: chaperone_admin_answerfile
+  tags:
+    - useruiconfig
+    
+- name: Configure the Chaperone user UI yaml
+  command: ansible-playbook -i examples/inventory  primaryweb.yml --tags uiconfig
+  args:
+    chdir: /opt/chaperone-ansible/playbooks/chaperone
+  when: chaperone_admin_answerfile.stat.exists
+  tags:
+    - useruiconfig
