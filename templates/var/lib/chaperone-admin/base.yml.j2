@@ -185,17 +185,17 @@
     - "Cloud Native Infrastructure":
       - "Package Installation":
         - id: install_flannel_from_src
-          name: "Install latest Flannel version from source package"
+          name: "Install Flannel from source package"
           optional: 1
           input: checkbox
-          hekp: "If enabled the latest source package will be used for installation vs. the package manager version"
+          hekp: "If enabled the source package will be used for installation vs. the package manager"
         - id: flannel_src_ver
           name: "Flannel source package version"
           optional: 1
           default: "e.g. 0.6.1"
-          help: "Required only if 'Install latest Flannel version from source package' is enabled. The version entered will be downloaded and in installed"      
+          help: "Required only if 'Install Flannel from source package' is enabled. The version entered will be downloaded and in installed"      
         - id: install_kube_from_src
-          name: "Install latest Kubernetes version from source package"
+          name: "Install Kubernetes from source package"
           optional: 1
           default: 0
           input: checkbox
@@ -204,13 +204,13 @@
           name: "Kubernetes source package version"
           optional: 1
           default: "e.g. 1.3.5"
-          help: "Required only if 'Install latest Kubernetes version from source package' is enabled. The version entered will be downloaded and in installed"
+          help: "Required only if 'Install Kubernetes from source package' is enabled. The version entered will be downloaded and in installed"
       - "Kubernetes":
         - id: photonos_instance_count
-          name: "Number of PhotonOS instances to configure for Kubernetes use"
+          name: "Number of Photon OS instances"
           default: 1
           optional: 0
-          help: "Entering '1' will configure Kubernetes to run both master and minion services on the same instance"
+          help: "This is the total number of Photon OS instances to configure for Kubernetes use - including the Master and all Minions"
 - Install:
   - Chaperone Configuration:
     - id: config_chaperone

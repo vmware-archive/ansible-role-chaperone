@@ -1,14 +1,14 @@
-  - "Cloud-Native Infrastructure":
-    - "PhotonOS":
+  - "Cloud Native Infrastructure":
+    - "Photon OS":
       - "Targets":
 {% set PHOTONOSCOUNT = photonos_instance_count|int %}
 {% for n in range(PHOTONOSCOUNT) %}        
         - id: photon_target-{{n}}
-          name: "PhotonOS Target"
+          name: "Photon OS Target"
           optional: 0
           help: "DNS A record or IP addresses assigned to the PhotonOS instance"
         - id: photon_targets_root_password
-          name: "Root password"
+          name: "Root Password"
           input: password
           optional: 0
           default: vmware
@@ -17,9 +17,10 @@
     - "Kubernetes Configuration":
       - "General":
         - id: kube_internal_dns_domain
-          name: "DNS Domain for intra-container name resolution"
+          name: "Intra-cluster DNS domain name"
           optional: 0
           default: "kube.local"
+          help: "This is the domain name that will be assigned as the root DNS domain name to all containers."
       - "Management Topology":
         - id: kubernetes_master_node_uri
           name: "Master node IP or DNS A record"
@@ -39,7 +40,7 @@
 {% endfor %}
       - "Network Design":
         - id: flannel_network_type
-          name: "Flannel network type (backend)"
+          name: "Flannel backend network type"
           optional: 0
           input: dropdown
           options:
