@@ -18,6 +18,8 @@ apache_ui_port: 80
 apache_admin_ui_port: 8080
 apache_listen_port: 81
 
+ansible_log_level: 'v'
+
 allowed_hosts:
   - '*.vmware.local'
   - '*.vmware.com'
