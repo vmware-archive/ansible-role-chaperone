@@ -18,45 +18,11 @@
         - id: kube_docker_registry_email
           name: "Docker Registry Email Address"
           optional: 1
-    - "Demo App":
-      - "Apache Controller Configuration":
-        - id: apache_image_uri
-          name: "Container Image URI"
-          optional: 0
-          help: "Needs to be resolvable Docker container URL (e.g. index.docker.io/httpd)"
-        - id: apache_image_pull_policy
-          name: "Image Pull Policy"
-          optional: 0
-          input: dropdown
-          options:
-            - id: Always
-            - id: Never
-          help: "Determines whether the image specified above should always be retrieved or an existing local image can be used"
-        - id: apache_replicas
-          name: "Number of Apache Replicas"
-          optional: 1
-          default: 1
-      - "Apache Service Configuration":
-        - id: apache_external_nodeport
-          name: "External Node Port"
-          optional: 0
-          help: "TCP port over which external access to the Apache service will be made (from 30000 to 32767)"
-      - "MySQL Controller Configuration":
-        - id: mysql_image_uri
-          name: "Container Image URI"
-          optional: 0
-          help: "Needs to be resolvable Docker container URL (e.g. index.docker.io/mysql)"
-        - id: mysql_image_pull_policy
-          name: "Image Pull Policy"
-          optional: 0
-          input: dropdown
-          options:
-            - id: Always
-            - id: Never
-          help: "Determines whether the image specified above should always be retrieved or an existing local image can be used"
-        - id: mysql_replicas
-          name: "Number of MySQL Replicas"
-          optional: 1
-          default: 1
-
-
+      - "Application Files":
+{% set KUBEAPPFILES = kube_app_file_count|int %}
+{% for n in range(KUBEAPPFILES) %}
+        - id: kube_app_file-{{n}}
+          name: "Application File"
+          input: file
+          help: "To upload a file click the checkbox, then the 'File' button. NOTE - THESE FILES ARE NOT UPLOADED TO KUBERNETES IN ORDER"
+{% endfor %}

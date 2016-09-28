@@ -188,12 +188,12 @@
           name: "Install Flannel from source package"
           optional: 1
           input: checkbox
-          hekp: "If enabled the source package will be used for installation vs. the package manager"
+          help: "If enabled the source package will be used for installation vs. the package manager"
         - id: flannel_src_ver
           name: "Flannel source package version"
           optional: 1
           default: "e.g. 0.6.1"
-          help: "Required only if 'Install Flannel from source package' is enabled. The version entered will be downloaded and in installed"      
+          help: "Required only if 'Install Flannel from source package' is enabled. The version entered will be downloaded and in installed"
         - id: install_kube_from_src
           name: "Install Kubernetes from source package"
           optional: 1
@@ -211,6 +211,13 @@
           default: 1
           optional: 0
           help: "This is the total number of Photon OS instances to configure for Kubernetes use - including the Master and all Minions"
+    - "Cloud Native Applications":
+      - "Application Design":
+        - id: kube_app_file_count
+          name: "Number of files required to deploy an application in Kubernetes"
+          default: 1
+          optional: 0
+          help: "This is the total number of files that will be uploaded in the user interface. For example, a single application could require separate files for the replication controller and the service, therefore the total number would be two."
 - Install:
   - Chaperone Configuration:
     - id: config_chaperone
