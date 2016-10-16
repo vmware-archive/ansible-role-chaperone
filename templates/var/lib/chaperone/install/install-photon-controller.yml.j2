@@ -13,17 +13,13 @@
    See the License for the specific language governing permissions and
    limitations under the License.
 #}
-  - "vRealize Log Insight":
-    - id: install_vrli
-      name: "Deploy OVAs"
+  - "Photon Controller":
+    - id: deploy_pc_installer
+      name: "Deploy Installer Only"
       commands:
-        - "/opt/{{ django_app }}/{{ django_app }}_play vrli.yml"
-    - id: configure_vlri
-      name: "Configure vRealize Log Insight"
+        - "/opt/ {{django_app }}/{{ django_app }}_topic_play pp inventory pc.yml --skip-tags deploy_pc"
+    - id: deploy_pc
+      name: "Deploy Controller"
       commands:
-        - "/opt/{{ django_app }}/{{ django_app }}_play configure_vrli.yml"
-    - id: install_content_packs
-      name: "Install Content Packs"
-      commands:
-       - "/opt/{{ django_app }}/{{ django_app }}_play content_packs_vrli.yml"
+        - "/opt/{{ django_app }}/{{ django_app }}_topic_play pp inventory pc.yml"
 

@@ -1,0 +1,43 @@
+  - "ESX (Photon Controller)":
+    - "Users":
+      - "Full Access User":
+        - id: esxi_full_access_users
+          name: "Full Access User"
+          default: 'root'
+          optional: 1
+          help: "User id for full rights on the ESXi hosts."
+    - "Host Settings":
+      - "UI Fling":
+        - id: esxui_fling
+          name: "UI Fling"
+          default: "esxui-4355717.vib"
+          optional: 1
+          help: "Filename of UI Fling (vib) to Lost on ESXi Hosts."
+      - "Firewall":
+        - id: esxi_firewall_enabled
+          name: "Enable Firewall"
+          default: no
+          input: dropdown
+          options:
+            - id: 'no'
+            - id: 'yes'
+          optional: 1
+          help: "Whether to enable the host firewall."
+        - id: esxi_firewall_services
+          name: "Firewall Services Always Enabled"
+          default: "syslog sshClient ntpClient updateManager httpClient netdump"
+          optional: 1
+          help: "Firewall service names, separated by spaces, to always allow when firewall is enabled."
+    - "PXE":
+      - "Kickstart":
+        - id: esxi_kickstart_target
+          name: "Kickstart Directory"
+          default: "vpod"
+          optional: 1
+          help: "Directory containing kickstart files."
+        - id: esxi_kickstart_template
+          name: "Template"
+          default: "ESX_VPOD_KS.CFG.j2"
+          optional: 1
+          help: "Template name to use for the kickstart file generation."
+

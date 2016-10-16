@@ -61,8 +61,12 @@
           name: "Ambient Services (NTP/DNS/PXE/etc.)"
           optional: 1
           input: checkbox
-        - id: deploy_esx
-          name: "ESX"
+        - id: deploy_esx_autodeploy
+          name: "ESX (AutoDeploy)"
+          optional: 1
+          input: checkbox
+        - id: deploy_esx_dnsmasq
+          name: "ESX (via DNSmasq)"
           optional: 1
           input: checkbox
         - id: deploy_vcenter
@@ -78,6 +82,10 @@
         # Includes PhotonOS, Kubernetes, and Consul
         - id: deploy_kubernetes
           name: "Kubernetes"
+          optional: 1
+          input: checkbox
+        - id: deploy_photon_controller
+          name: "VMware Photon Controller"
           optional: 1
           input: checkbox
         - id: deploy_vio

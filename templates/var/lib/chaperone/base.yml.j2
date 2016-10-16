@@ -20,8 +20,12 @@
 {% include 'prepare/prepare-vcenter.yml.j2' %}
 {% endif %}
 
-{% if (deploy_phase1 == '0') and (deploy_esx == '1') -%}
-{% include 'prepare/prepare-esx.yml.j2' %}
+{% if (deploy_phase1 == '0') and (deploy_esx_autodeploy == '1') -%}
+{% include 'prepare/prepare-esx-autodeploy.yml.j2' %}
+{% endif -%}
+
+{% if (deploy_phase1 == '0') and (deploy_esx_dnsmasq == '1') -%}
+{% include 'prepare/prepare-esx-dnsmasq.yml.j2' %}
 {% endif -%}
 
 {% if (deploy_phase1 == '0') and (deploy_ra == '1') -%}
@@ -39,6 +43,10 @@
 
 {% if (deploy_phase1 == '0') and (deploy_vio == '1') -%}
 {% include 'prepare/prepare-vio.yml.j2' %}
+{% endif -%}
+
+{% if (deploy_phase1 == '0') and (deploy_photon_controller == '1') -%}
+{% include 'prepare/prepare-photon-controller.yml.j2' %}
 {% endif -%}
 
 {% if (deploy_phase1 == '0') and (deploy_kubernetes == '1') -%}
@@ -71,8 +79,12 @@
 {% include 'install/install-ambient.yml.j2' %}
 {% endif -%}
 
-{% if (deploy_phase1 == '0') and (deploy_esx == '1') -%}
-{% include 'install/install-esx.yml.j2' %}
+{% if (deploy_phase1 == '0') and (deploy_esx_autodeploy == '1') -%}
+{% include 'install/install-esx-autodeploy.yml.j2' %}
+{% endif -%}
+
+{% if (deploy_phase1 == '0') and (deploy_esx_dnsmasq == '1') -%}
+{% include 'install/install-esx-dnsmasq.yml.j2' %}
 {% endif -%}
 
 {% if (deploy_phase1 == '0') and (deploy_ra == '1') -%}
@@ -94,6 +106,10 @@
 
 {% if (deploy_phase1 == '0') and (deploy_vrli == '1') -%}
 {% include 'install/install-vrli.yml.j2' %}
+{% endif -%}
+
+{% if (deploy_phase1 == '0') and (deploy_photon_controller == '1') -%}
+{% include 'install/install-photon-controller.yml.j2' %}
 {% endif -%}
 
 {% if (deploy_phase1 == '0') and (deploy_vio == '1') -%}

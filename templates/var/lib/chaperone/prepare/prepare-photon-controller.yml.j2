@@ -1,0 +1,201 @@
+  - "Photon Controller":
+    - "Deployment Limits":
+      - "Management Cluster":
+        - id: pc_management_cpus
+          name: "CPU Allocation"
+          default: '4'
+          input: dropdown
+          optional: 1
+          options:
+            - id: '2'
+            - id: '4'
+          help: "The number of CPUS to allocate to the controller VMs"
+        - id: pc_management_memory
+          name: "Management VM Memory"
+          default: '4096'
+          input: dropdown
+          optional: 1
+          options:
+            - id: '2048'
+            - id: '3072'
+            - id: '4096'
+          help: "The memory to allocate, in Megabytes, to the controller VMs"
+        - id: pc_management_disk
+          name: "Management VM Memory"
+          default: '40'
+          input: dropdown
+          optional: 1
+          options:
+            - id: '40'
+            - id: '50'
+            - id: '60'
+            - id: '70'
+            - id: '80'
+          help: "The disk space to allocate, in Gigabytes, to the controller VMs"
+    - "Ancillary Services":
+      - "Lightwave":
+        - id: pc_auth_enabled
+          name: "Enable Lightwave"
+          default: 0
+          input: checkbox
+          optional: 1
+          help: "Select (check) to deploy and use lightwave identity management."
+        - id: pc_oauth_tenant
+          name: "Tenant"
+          default: 'docna'
+          optional: 1
+          help: "The OAuth Tenant to use for administrator privileges."
+        - id: pc_oauth_username
+          name: "Administrator User"
+          default: 'admin'
+          optional: 1
+          help: "The OAuth User to use for administrator privileges."
+        - id: pc_oauth_password
+          name: "Password"
+          default: 'vmware'
+          input: password
+          optional: 1
+          help: "The OAuth User to use for administrator privileges."
+      - "NTP Server":
+        - id: pc_ntp_endpoint
+          name: "NTP Server"
+          default: "{{ ntp_server }}"
+          optional: 1
+          help: "NTP Server to use for Photon Controller Servers."
+#      - "Syslog Server":
+#        - id: pc_syslog_endpoint
+#          name: "Syslog Server"
+#          default: "{{ syslog_server }}"
+#          optional: 1
+#          help: "Select (check) to deploy and use lightwave identity management."
+    - "Installer VM":
+      - "Networking":
+        - id: pc_installer_ip_address
+          name: "IP Address"
+          default: "10.10.0.4"
+          optional: 1
+          help: "The IP Address to set and use."
+        - id: pc_installer_netmask
+          name: "Netmask Address"
+          default: "255.255.0.0"
+          optional: 1
+          help: "The IP Netmask to set and use."
+        - id: pc_installer_gateway
+          name: "Default Gateway"
+          default: "10.10.0.2"
+          optional: 1
+          help: "The default gateway IP address."
+        - id: pc_installer_ntp_server
+          name: "NTP Server"
+          default: "{{ ntp_server }}"
+          optional: 1
+          help: "The NTP server IP address to use."
+        - id: pc_installer_dns_server
+          name: "DNS Server"
+          default: "10.10.0.2"
+          optional: 1
+          help: "The primary DNS server IP address to use."
+        - id: pc_installer_vm_network_name
+          name: "VM Network"
+          default: "VM Network"
+          optional: 1
+          help: "The Port Group (network) to use."
+      - "VM Storage":
+        - id: pc_installer_datastore
+          name: "Data Store"
+          default: "image"
+          input: dropdown
+          optional: 1
+          options:
+            - id: 'cloud'
+            - id: 'image'
+          help: "Datastore onto which to place the installer."
+    - "Management  VMs":
+      - "Networking":
+        - id: pc_management_vm_ips
+          name: "IP Addresses"
+          default: "10.10.0.5-10.10.0.7"
+          optional: 1
+          help: "The (contiguous) IP Addresses to set and use (format is StartAddress-EndAddress)."
+        - id: pc_management_network_netmask
+          name: "Netmask Address"
+          default: "255.255.0.0"
+          optional: 1
+          help: "The IP Netmask to set and use."
+        - id: pc_management_network_gateway
+          name: "Default Gateway"
+          default: "10.10.0.2"
+          optional: 1
+          help: "The default gateway IP address."
+        - id: pc_installer_ntp_server
+          name: "NTP Server"
+          default: "{{ ntp_server }}"
+          optional: 1
+          help: "The NTP server IP address to use."
+        - id: pc_management_network_dns_server
+          name: "DNS Server"
+          default: "10.10.0.2"
+          optional: 1
+          help: "The primary DNS server IP address to use."
+        - id: pc_management_portgroup
+          name: "VM Network"
+          default: "VM Network"
+          optional: 1
+          help: "The Port Group (network) to use."
+      - "VM Storage":
+        - id: pc_management_datastore
+          name: "Data Store"
+          default: "cloud"
+          input: dropdown
+          optional: 1
+          options:
+            - id: 'cloud'
+            - id: 'image'
+          help: "VM storage onto which to place the installer."
+    - "ESXi Hosts":
+      - "Management":
+        - id: pc_management_addresses
+          name: "IP Addresses"
+          default: "192.168.10.10-192.168.10.12"
+          optional: 1
+          help: "The (contiguous) IP Addresses to set and use (format is StartAddress-EndAddress)."
+        - id: pc_management_esxi_username
+          name: "Administrator User"
+          default: 'root'
+          optional: 1
+          help: "The username on the ESXi hosts with admin privileges."
+        - id: pc_management_esxi_password
+          name: "Administrator Password"
+          default: 'vmware'
+          input: password
+          optional: 1
+          help: "The password for the ESXi user with admin privileges."
+      - "Management":
+        - id: pc_cloud_addresses
+          name: "IP Addresses"
+          default: "192.168.10.13-192.168.10.15"
+          optional: 1
+          help: "The (contiguous) IP Addresses to set and use (format is StartAddress-EndAddress)."
+        - id: pc_cloud_esxi_username
+          name: "Administrator User"
+          default: 'root'
+          optional: 1
+          help: "The username on the ESXi hosts with admin privileges."
+        - id: pc_cloud_esxi_password
+          name: "Administrator Password"
+          default: 'vmware'
+          input: password
+          optional: 1
+          help: "The password for the ESXi user with admin privileges."
+    - "Data Stores":
+      - "Management":
+        - id: pc_image_datastores
+          name: "Data Store for VM Images"
+          default: "image"
+          optional: 1
+          input: dropdown
+          options:
+            - id: 'cloud'
+            - id: 'image'
+          help: "The data stores to use for replicated VM base images (comma separated)."
+

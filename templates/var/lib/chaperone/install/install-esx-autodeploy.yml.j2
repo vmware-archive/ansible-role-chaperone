@@ -13,17 +13,3 @@
    See the License for the specific language governing permissions and
    limitations under the License.
 #}
-  - "vRealize Log Insight":
-    - id: install_vrli
-      name: "Deploy OVAs"
-      commands:
-        - "/opt/{{ django_app }}/{{ django_app }}_play vrli.yml"
-    - id: configure_vlri
-      name: "Configure vRealize Log Insight"
-      commands:
-        - "/opt/{{ django_app }}/{{ django_app }}_play configure_vrli.yml"
-    - id: install_content_packs
-      name: "Install Content Packs"
-      commands:
-       - "/opt/{{ django_app }}/{{ django_app }}_play content_packs_vrli.yml"
-
